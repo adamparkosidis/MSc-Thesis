@@ -32,7 +32,7 @@ Paper: [Planet Hunters TESS IV: a massive, compact hierarchical triple star syst
 
 * TIC 470710327 is a compact, hierarchical triple system consisting of one O- and two B-type stars. The system, which shows large ETV and RV variations, contains an inner $\sim 1.1 d$ eclipsing binary and a massive O9.5-B0.5V  non transiting tertiary orbiting a common centre of mass in $\sim 52 d$ orbit.
 
-* The current configuration is dynamically stable $\frac{\alpha_{out}}{\alpha_{in}} > ( \frac{\alpha_{out}}{\alpha_{in}} )_{crit}$ . Furthermore, the effect of Lidov-Kozai mechanism is unlikely to be significant for the system due to $i_{mut} = 16.8\degree$
+* The current configuration is dynamically stable . Furthermore, the effect of Lidov-Kozai mechanism is unlikely to be significant for the system due to $i_{mut} = 16.8\degree$
 
 
 
