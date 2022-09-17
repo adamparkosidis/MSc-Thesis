@@ -8,9 +8,22 @@ Paper: [The evolution of hierarchical triple star-stystems](https://link.springe
 
 * To define a triple system at least 10 variables needed. The masses of the inner binary components $m_1, m_2$ and the mass of the outer star $m_3$. The semi-major axis $\alpha$ , the eccentricity $e$ and the argument of pericenter $g$ of both the inner and the outer orbit. The the mutual inclination $i_{mut}$ between the two orbits and the longitudes of the ascending nodes $h$, which do not affect the intrinsic dynamical evolution.
 
-* The orbital inner eccentricity $e_{in}$ and the mutual inclination $i_{mut}$ vary periodically due to the Lidov-Kozai mechanism, where $e_{in}$ = max when $i_{mut}$ = min.
+* There many stability criteria for systems : Paper: [Stability criteria for hierarchical triple systems](https://link.springer.com/content/pdf/10.1007/s10569-007-9109-2.pdf) , but the commonly used is <ins> Mardling and Aarseth stability criterion </ins> ,which indicates that when the ratio of the semi-major axes of the outer and inner orbit decreases sufficiently, the system enters sta instability regime (instability means the escape of one of the components). The criterion holds for arbitrary masses and inner and outer eccentricities, although only for coplanar prograde motion.
 
-* If the outer orbit is eccentric or if the stars in the inner binary have unequal masses the eccentic Lidov-Kozai mechanism can occur, which allows for a flip in the inclination such that the inner orbit flips from prograde to retrograde or vice versa.
+$$ \frac{\alpha_{out}}{\alpha_{in}} < (\frac{\alpha_{out}}{\alpha_{in}})_{crit}$$
+ 
+
+* The orbital inner eccentricity $e_{in}$ and the mutual inclination $i_{mut}$ vary periodically due to the Lidov-Kozai mechanism, where $e_{in}$ = max when $i_{mut}$ = min. If the outer orbit is eccentric or if the stars in the inner binary have unequal masses the eccentic Lidov-Kozai mechanism can occur, which allows for a flip in the inclination such that the inner orbit flips from prograde to retrograde or vice versa.
+
+* Tides and GW are dissipative processes and act to circulize the orbit and shrink the orbital seperation.
+
+* The combination of the Lidov-Kozai mechanism with tidal friction (LKCTF) can lead to an enhanced formation of close binaries or with GW emission to an enhanced rate of mergers and RLOF.
+
+* In case of massive stars strong winds remove large amounts of mass and can widen the inner and outer orbits. Initially $\frac{\dot{\alpha_{in}}}{\alpha_{in}} < \frac{\dot{\alpha_{out}}}{\alpha_{out}}$, but the the effect of LKCTF can leade to a faster expansion of the outer orbit making the triple dynamically stable.
+
+* RLOF in eccentric binaries (due to the Lidov-Kozai mechanism) differs from the simple picture of synchronization and circularisation before RLOF. In an eccentric orbit, the Roche lobe of a star at periastron may be significantly smaller than that in a binary that is circularized at the same distance. The modification of the Roche lobe affects the evolution of the mass transfer phase, e.g. the duration and the mass loss rate. SImualtions show that the mass transfer rate peaks just after the periastron and its evolution shows a Gaussian-like shape.
+
+
 
 
 <ins> Stability criteria for hierarchical triple systems </ins> 
@@ -19,9 +32,7 @@ Paper: [Stability criteria for hierarchical triple systems](https://link.springe
 
 Paper: [Tidal interactions in star cluster simulations](https://academic.oup.com/mnras/article/321/3/398/1096775)
 
-Mardling and Aarseth stability criterion indicates that when the ratio of the semi-major axes of the outer and inner orbit decreases sufficiently, the system enters sta instability regime (instability means the escape of one of the components). The criterion holds for arbitrary masses and inner and outer eccentricities, although only for coplanar prograde motion.
 
-$$ \frac{\alpha_{out}}{\alpha_{out}} < (\frac{\alpha_{out}}{\alpha_{out}})_{crit}$$
 
 
 
