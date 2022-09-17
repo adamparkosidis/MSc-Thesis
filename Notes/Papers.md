@@ -10,7 +10,7 @@ Paper: [The evolution of hierarchical triple star-stystems](https://link.springe
 
 * There many stability criteria for systems (review here: [Stability criteria for hierarchical triple systems](https://link.springer.com/content/pdf/10.1007/s10569-007-9109-2.pdf)) , but the commonly used is <ins> Mardling and Aarseth stability criterion </ins> (review here: [Tidal interactions in star cluster simulations](https://academic.oup.com/mnras/article/321/3/398/1096775)),which indicates that when the ratio of the semi-major axes of the outer and inner orbit decreases sufficiently, the system enters sta instability regime (instability means the escape of one of the components). The criterion holds for arbitrary masses and inner and outer eccentricities, although only for coplanar prograde motion.
 
-$$\frac{\alpha_{out}}{\alpha_{in}} < (\frac{\alpha_{out}}{\alpha_{in}})_{crit}$$
+$$\frac{\alpha_{out}}{\alpha_{in}} < \frac{\alpha_{out}}{\alpha_{in}}\bigg\rvert_{crit}$$
  
 
 * The orbital inner eccentricity $e_{in}$ and the mutual inclination $i_{mut}$ vary periodically if the Lidov-Kozai mechanism is active, where $e_{in}$ = max when $i_{mut}$ = min. The mechanism is active for triples with $i_{mut} \in [39.2\degree , 140.8\degree]$. If the outer orbit is eccentric or if the stars in the inner binary have unequal masses the eccentic Lidov-Kozai mechanism can occur, which allows for a flip in the inclination such that the inner orbit flips from prograde to retrograde or vice versa.
