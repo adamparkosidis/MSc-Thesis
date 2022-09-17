@@ -34,9 +34,11 @@ Paper: [Planet Hunters TESS IV: a massive, compact hierarchical triple star syst
 
 * The current configuration currently is dynamically stable $\frac{\alpha_{out}}{\alpha_{in}} > \frac{\alpha_{out}}{\alpha_{in}} \bigg\rvert_{crit}$  . Furthermore, the effect of Lidov-Kozai mechanism is unlikely to be significant for the system due to $i_{mut} = 16.8\degree$
 
+* The octupule term is within the range of relevance for the dynamical evolution of the system. Hence, the eccentric Lidov-Kozai mechanism could possibly give rise to more extreme eccentricity cycles under the assumption that the mass ratio of the inner binary is less than unity (full radial-velocity characterisation of the inner components  would provide constraints in the time-scale and amplitude of these cycles)
 
+* The observed mass ratio implies that the remainder of this system’s evolution will be driven by the evolution of the tertiary as this star will be the first to evolve off the MS. The tertiary star of $14-17 M_{\odot}$, is expected to fill its Roche lobe at an age of $\sim 13 Myr$, at which point it will start transferring mass towards the inner binary. The outcome of such process is a strictly hydrodynamical problem and depends on the nature of the mass transfer and the response of the inner binary.
 
-
+* If the compactness of the inner binary is high enough a circumbinary disk may form. Such a situation favors evolution toward equal mass inner binary stars by causing preferential accretion to the lowest mass component. On the other hand, friction may cause the inner orbit to shrink if the mass transfer stream crosses it, which might result in a contact system and/or a merger .
 
 
 
