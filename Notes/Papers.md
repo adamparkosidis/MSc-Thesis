@@ -26,7 +26,7 @@ $$\frac{\alpha_{out}}{\alpha_{in}} < \frac{\alpha_{out}}{\alpha_{in}}\bigg\rvert
 
 <ins> System TIC 470710327 </ins> 
 
-Paper: [Planet Hunters TESS IV: a massive, compact hierarchical triple star system TIC 470710327 ](https://academic.oup.com/mnras/article/511/4/4710/6540660?casa_token=YZNsKHONsZYAAAAA:67B9NEgTOIKOuIS7ILsO_6f2A0JULw7ZJ0xorQYhYujmC76c4u8F_Dq-_U6r-DFx5--0mJp66iYRZw)
+Paper: [Planet Hunters TESS IV: a massive, compact hierarchical triple star system TIC 470710327](https://academic.oup.com/mnras/article/511/4/4710/6540660?casa_token=YZNsKHONsZYAAAAA:67B9NEgTOIKOuIS7ILsO_6f2A0JULw7ZJ0xorQYhYujmC76c4u8F_Dq-_U6r-DFx5--0mJp66iYRZw)
 
 ![TIC 470710327 representation](/images/TIC_470710327_representation.png)
 
@@ -38,8 +38,14 @@ Paper: [Planet Hunters TESS IV: a massive, compact hierarchical triple star syst
 
 * The observed mass ratio implies that the remainder of this system’s evolution will be driven by the evolution of the tertiary as this star will be the first to evolve off the MS. The tertiary star of $14-17 M_{\odot}$, is expected to fill its Roche lobe at an age of $\sim 13 Myr$, at which point it will start transferring mass towards the inner binary. The outcome of such process is a strictly hydrodynamical problem and depends on the nature of the mass transfer and the response of the inner binary.
 
-* If the compactness of the inner binary is high enough a circumbinary disk may form. Such a situation favors evolution toward equal mass inner binary stars by causing preferential accretion to the lowest mass component. On the other hand, friction may cause the inner orbit to shrink if the mass transfer stream crosses it, which might result in a contact system and/or a merger .
+* If the compactness of the inner binary is high enough a circumbinary disk may form. Such a situation favors evolution toward equal mass inner binary stars by causing preferential accretion to the lowest mass component. On the other hand, friction may cause the inner orbit to shrink if the mass transfer stream crosses it, which might result in a contact system and/or a merger.
 
 
+Paper: [Mergers prompted by dynamics in compact, multiple-star systems: a stellar-reduction case for the massive triple TIC 470710327](https://academic.oup.com/mnrasl/article-abstract/515/1/L50/6620840)
 
+* The proposed ‘2 + 2’ orbital configuration results in ZLK oscillations that prompt the merger of the more massive binary, leading to the triple configuration we detect today
+
+* Slow rotation and high magnetic fields ($\sim 1–10 kG$) in the tertiary star of TIC 470710327 would support the proposed scenario.
+
+* This formation scenario predicts that highly inclined triple- and quadruple-star systems will experience stellar mergers and reduce to coplanar binary- and triple-star systems, respectively.
 
