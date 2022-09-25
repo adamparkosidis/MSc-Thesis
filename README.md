@@ -18,6 +18,7 @@ massive stars have a significant impact on galaxies’ physical, chemical, and m
 ture (Kennicutt [2005]). However, the physical mechanisms behind the birth, development, and
 demise of massive stars remain elusive in comparison with low-mass stars ([Zinnecker and Yorke,
 2007]).
+
 The fraction of systems with companions grows with mass ([Moe and Di Stefano, 2017]),
 as a result massive stars are seldomly formed in isolation. In contrast, most of massive stars are
 created in binary or higher order multiple systems with ∼ 50% of spectral type B stars be in
@@ -29,6 +30,7 @@ unusual objects that are difficult to be explained by binary evolution, triples 
 evolutionary pathways e.g. blue straglers (Winn et al. [2009]). Thus, a detailed examination of
 the evolution of triples demands a self consistent treatment of three-body dynamics and stellar
 evolution.
+
 A very interesting system is TIC 470710327. This massive compact hierarchical triple sys-
 tem, first discovered in data provided by the Transiting Exoplanet Survey Satellite (TESS) and
 confirmed with the HERMES spectrograph, was published by [Eisner et al., 2022]. TIC 470710327
@@ -41,13 +43,11 @@ ity of e = 0.3 and a mutual inclination of i = 16.8+4.2
 is relatively rare ([de Vries et al., 2014]) and TIC 470710327’s genesis is still an open question.
 One would anticipate that the more massive secondary star was the first to emerge since more
 massive stars have shorter Kelvin-Helmholtz timeframes than stars with lower masses. [Vigna-
-G ́omez et al., 2022] presented a progenitor scenario for TIC 470710327 in which 2 + 2 quadruple
-1195 words page 1 of 4
-Report
-Research Project Physics and Astronomy
+Gomez et al., 2022] presented a progenitor scenario for TIC 470710327 in which 2 + 2 quadruple
 dynamics resulted in Zeipel–Lidov–Kozai (ZKL) oscillations triggering the merger of the more
 massive binary either during late phases of star formation or several M yr after the zero-age
-main sequence (ZAMS)
+main sequence (ZAMS).
+
 Apart from the genesis of the system, also its future evolution is unknown. The measured
 mass ratio suggests that the 14–17M⊙ tertiary star, which will be the first star to develop off
 the MS, will be the one to drive the system’s further evolution. It is predicted to fill its Roche
@@ -62,6 +62,7 @@ tem and/or a merger ([de Vries et al., 2014]). Due to the merger’s rejuvenatin
 the accretion from the tertiary star, such a merger remnant may be regarded as a blue straggler.
 In the case of a merger, the triple will be reduced to a new binary system opening a new discus-
 sion about the possible fate of the system.
+
 In this project, we propose the massive compact hierarchical triple system TIC 470710327
 as our research target. We will use the Astrophysical Multipurpose Software Environment (AMUSE,
 [Portegies Zwart and McMillan, 2018]) to simulate the evolution the system and try to predict
