@@ -44,16 +44,16 @@ def new_working_directory():
     os.chdir(new_directory)
 
 def get_relative_velocity(total_mass, semimajor_axis, ecc):
+    '''
+    calculates and returns the relatice velocity of a star as ( GM *((1+e)/(1-e))/alpha )^0.5
+    '''
     return (constants.G * total_mass * ((1.0 + ecc)/(1.0 - ecc)) / semimajor_axis).sqrt()
 
-def set_up_initial_conditions():
-    stars = set_up_inner_binary()
-    giant = set_up_outer_star(stars.total_mass())
-    view_on_giant = stars.add_particle(giant)
-    stars.move_to_center()
-    return stars, view_on_giant
-
 def set_up_inner_binary():
+    '''
+    Sets the orbital parameters of the inner binary, moves the binary
+    to the center of mass of the three-body system and returns the binary
+    '''
     semimajor_axis = 0.133256133158 | units.AU
     eccentricity = 0
     masses = [3.2, 3.1] | units.MSun
@@ -72,6 +72,10 @@ def set_up_inner_binary():
     return stars
 
 def set_up_outer_star(inner_binary_mass):
+    '''
+    Set the orbital parameters of the tertiary, takes the inner binary mass to set 
+    the relative velocity of the tertiary with respect to the inner binary and returns the tertiary
+    '''
     semimajor_axis = 1.22726535008 | units.AU
     eccentricity = 0.15
     inclination = math.radians(9.0)
@@ -84,7 +88,27 @@ def set_up_outer_star(inner_binary_mass):
         semimajor_axis, eccentricity) * ([0, 1, 0] | units.none)
     return giant
 
+def set_up_initial_conditions():
+    '''
+    Sets up the initial conditions for the triple system by adding the tertiary to the system.
+    'stars' variable contains now the three stars but 'view_on_giant' is just the tertiary.
+    It also moves the system's coordinates in to the center of mass of the triple and returns the triple and
+    the tertiary alone. The local 'stars' variable is the 'triple' variable in the main code.
+    '''
+    stars = set_up_inner_binary()
+    giant = set_up_outer_star(stars.total_mass())
+    view_on_giant = stars.add_particle(giant) # This is just the tertiary and not the whole system
+    stars.move_to_center()
+    return stars, view_on_giant
+
 def estimate_roche_radius(triple, view_on_giant):
+    '''
+    Estimates and returns the Roche radius of the tertiary. In the calculation of the sami-major axis of the 
+    tertiary the inclination of the tertiary's orbit is also taken into account by the position
+    of the tertiary in the 3D space, but the the inner binay is 'seen' as a mass point by the
+    tertiary. Furthermore, it is assumed that the tertiary's orbit is circular in the calculation
+    of the Roche radius.
+    '''
     # 'mass ratio' of giant to inner binary
     q = (view_on_giant.mass / (triple-view_on_giant).total_mass())
     # Assume ~ circular orbit:
@@ -94,6 +118,11 @@ def estimate_roche_radius(triple, view_on_giant):
     return (a*(0.49*q23/(0.6*q23+math.log(1+q13)))).as_quantity_in(units.RSun)
 
 def evolve_stars(triple, view_on_giant, stellar_evolution_code, radius_factor):
+    '''
+    Stellar evolution of the stars: Evolves the three stars until the more massive star's (tertiary in this case) radius
+    becomes equal to the 'radius_factor' (in this case=1) * 'Roche radius'. It also return the evolved stars at the end of the 
+    evolution and the log of the choosen stellar evolution code.
+    '''
     stop_radius = radius_factor * estimate_roche_radius(triple, view_on_giant)
     stellar_evolution = stellar_evolution_code(redirection='file', redirect_file='stellar_evolution_code_out.log')
     se_giant = stellar_evolution.particles.add_particle(view_on_giant)
@@ -106,6 +135,11 @@ def evolve_stars(triple, view_on_giant, stellar_evolution_code, radius_factor):
     return stellar_evolution.particles, stellar_evolution
 
 def convert_giant_to_sph(view_on_se_giant, number_of_sph_particles):
+    '''
+    Converts the tertiary star to a collection of SPH particles based on the output of the stellar evolution code.
+    Thus, the collection of particles is characterized by the temperature, density etc profiles that characterize the evolved
+    tertiary at the moment when its radius is equal with its Roche radius. It returns the the collection of the particles.
+    '''
     giant_in_sph = convert_stellar_model_to_SPH(
         view_on_se_giant,
         number_of_sph_particles,
