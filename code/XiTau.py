@@ -45,14 +45,19 @@ def new_working_directory():
 
 def get_relative_velocity(total_mass, semimajor_axis, ecc):
     '''
-    calculates and returns the relatice velocity of a star as ( GM *((1+e)/(1-e))/alpha )^0.5
+    calculates and returns the relative velocity of a star as ( GM *((1+e)/(1-e))/alpha )^0.5
     '''
     return (constants.G * total_mass * ((1.0 + ecc)/(1.0 - ecc)) / semimajor_axis).sqrt()
 
 def set_up_inner_binary():
     '''
     Sets the orbital parameters of the inner binary, moves the binary
-    to the center of mass of the three-body system and returns the binary
+    to the center of mass of the three-body system:
+
+    particles.position -= particles.center_of_mass()
+    particles.velocity -= particles.center_of_mass_velocity()
+
+    and returns the binary
     '''
     semimajor_axis = 0.133256133158 | units.AU
     eccentricity = 0
@@ -68,13 +73,15 @@ def set_up_inner_binary():
     stars.velocity = [0.0, 0.0, 0.0] | units.km / units.s
     stars[0].x = semimajor_axis
     stars[0].vy = get_relative_velocity(stars.total_mass(), semimajor_axis, eccentricity)
-    stars.move_to_center()
+    stars.move_to_center()                                                                 # more info in /src/amuse/datamodel/particle_attributes.py
     return stars
 
 def set_up_outer_star(inner_binary_mass):
     '''
-    Set the orbital parameters of the tertiary, takes the inner binary mass to set 
-    the relative velocity of the tertiary with respect to the inner binary and returns the tertiary
+    Sets the orbital parameters of the tertiary, takes the inner binary mass to set 
+    the relative velocity of the tertiary with respect to the inner binary (the tertiary
+    gravitationaly 'sees' the inner binary as a star with mass = inner_binary_mass) 
+    and returns the tertiary
     '''
     semimajor_axis = 1.22726535008 | units.AU
     eccentricity = 0.15
@@ -103,11 +110,14 @@ def set_up_initial_conditions():
 
 def estimate_roche_radius(triple, view_on_giant):
     '''
-    Estimates and returns the Roche radius of the tertiary. In the calculation of the sami-major axis of the 
+    Estimates and returns the Roche radius of the tertiary. In the calculation of the semi-major axis of the 
     tertiary the inclination of the tertiary's orbit is also taken into account by the position
     of the tertiary in the 3D space, but the the inner binay is 'seen' as a mass point by the
     tertiary. Furthermore, it is assumed that the tertiary's orbit is circular in the calculation
-    of the Roche radius.
+    of the Roche radius. 
+    
+    --> At this point a correction can be made to include the eccenticity of the tertiary, in the calculation
+    of the Roche lobe 
     '''
     # 'mass ratio' of giant to inner binary
     q = (view_on_giant.mass / (triple-view_on_giant).total_mass())
@@ -119,13 +129,13 @@ def estimate_roche_radius(triple, view_on_giant):
 
 def evolve_stars(triple, view_on_giant, stellar_evolution_code, radius_factor):
     '''
-    Stellar evolution of the stars: Evolves the three stars until the more massive star's (tertiary in this case) radius
-    becomes equal to the 'radius_factor' (in this case=1) * 'Roche radius'. It also return the evolved stars at the end of the 
-    evolution and the log of the choosen stellar evolution code.
+    Stellar evolution of the stars: Evolves the three stars until the more massive star's (tertiary in this case) 
+    radius = 'radius_factor' (in this case=1) * 'Roche radius'. It also returns the evolved stars at the end of the 
+    evolution and the .log file of the choosen stellar evolution code.
     '''
-    stop_radius = radius_factor * estimate_roche_radius(triple, view_on_giant)
+    stop_radius = radius_factor * estimate_roche_radius(triple, view_on_giant)                                             
     stellar_evolution = stellar_evolution_code(redirection='file', redirect_file='stellar_evolution_code_out.log')
-    se_giant = stellar_evolution.particles.add_particle(view_on_giant)
+    se_giant = stellar_evolution.particles.add_particle(view_on_giant)                                                 # gives the tertiary into the stel. evol. code
     while (se_giant.radius < stop_radius):
         stellar_evolution.evolve_model(keep_synchronous = False)
     
@@ -136,30 +146,44 @@ def evolve_stars(triple, view_on_giant, stellar_evolution_code, radius_factor):
 
 def convert_giant_to_sph(view_on_se_giant, number_of_sph_particles):
     '''
+    Converting the 1D stellar evolution model to a gas particle distribution       # more info /src/amuse/ext/star_to_sph.py
+
     Converts the tertiary star to a collection of SPH particles based on the output of the stellar evolution code.
     Thus, the collection of particles is characterized by the temperature, density etc profiles that characterize the evolved
     tertiary at the moment when its radius is equal with its Roche radius. It returns the the collection of the particles.
     '''
     giant_in_sph = convert_stellar_model_to_SPH(
-        view_on_se_giant,
-        number_of_sph_particles,
-        with_core_particle = True,
-        target_core_mass  = 1.4 | units.MSun,
-        do_store_composition = False
+        view_on_se_giant,                                                              # Star particle to be converted to an SPH model
+        number_of_sph_particles,                                                       
+        with_core_particle = True,                                                     # Model the core as a heavy, non-sph particle
+        target_core_mass  = 1.4 | units.MSun,                                          # If (with_core_particle): target mass for the non-sph particle (in paper M = 2, ?)
+        do_store_composition = False                                                   # If set, store the local chemical composition on each particle 
     )
     return giant_in_sph
 
 def relax_in_isolation(giant_in_sph, sph_code, output_base_name):
-    total_mass = giant_in_sph.gas_particles.total_mass() + giant_in_sph.core_particle.mass
+    '''
+    Calculates the total mass of the star as the mass of the SPH particles representing the outer layers plus
+    the mass of a non-SPH particle representing the core. Calculates the total radius of the star as the position
+    of the most distant SPH particle. Calculates the dynamical evolution timescale which is used to calculate
+    the relaxation time scale of the system. The latter represent the time scale on which the global characteristics
+    (bulk system parameters and stellar orbital elements) of the system change.
+    
+
+     --> not sure why t_end = 10*t_dyn, if t_end is the t_relax then the constant 10 seems small based on the
+     t_relax = 0.138*(N/lnγN)*t_dyn, where in this code N=50000
+
+    '''
+    total_mass = giant_in_sph.gas_particles.total_mass() + giant_in_sph.core_particle.mass  
     total_radius = max(giant_in_sph.gas_particles.position.lengths_squared()).sqrt()
-    dynamical_timescale = (total_radius**3 / (2 * constants.G * total_mass)).sqrt().as_quantity_in(units.day)
-    t_end = (10.0 * dynamical_timescale).as_quantity_in(units.day)
+    dynamical_timescale = (total_radius**3 / (2 * constants.G * total_mass)).sqrt().as_quantity_in(units.day) 
+    t_end = (10.0 * dynamical_timescale).as_quantity_in(units.day)                                                  
     n_steps = 100
     hydro_code_options = dict(number_of_workers=2, redirection='file', redirect_file='hydrodynamics_code_relax_out.log')
-    
-    unit_converter = ConvertBetweenGenericAndSiUnits(total_radius, total_mass, t_end)
+
+    unit_converter = ConvertBetweenGenericAndSiUnits(total_radius, total_mass, t_end)           # more info in /src/amuse/units/generic_unit_converter.py
     hydrodynamics = sph_code(unit_converter, **hydro_code_options)
-    hydrodynamics.parameters.epsilon_squared = giant_in_sph.core_radius**2
+    hydrodynamics.parameters.epsilon_squared = giant_in_sph.core_radius**2                     # Softening removes the singularity in the inverse-square force
     hydrodynamics.parameters.max_size_timestep = t_end
     hydrodynamics.parameters.time_max = 1.1 * t_end
     hydrodynamics.parameters.time_limit_cpu = 7.0 | units.day
@@ -214,6 +238,10 @@ def load_giant_model(file_base_name):
     return giant_model
 
 def prepare_binary_system(dynamics_code, binary_particles):
+    '''
+    Prepares the binary system for the N-body code by specifing the units
+    for the code.
+    '''
     unit_converter = nbody_system.nbody_to_si(
         binary_particles.total_mass(),
         (binary_particles[0].position - binary_particles[1].position).length())
@@ -222,6 +250,10 @@ def prepare_binary_system(dynamics_code, binary_particles):
     return system
 
 def prepare_giant_system(sph_code, giant_model, view_on_giant, time_unit, n_steps):
+    '''
+    Prepares the tertiary for the SPH code by specifing the units
+    for the code.
+    '''
     hydro_code_options = dict(number_of_workers=2, 
         redirection='file', redirect_file='hydrodynamics_code_out.log')
     unit_converter = ConvertBetweenGenericAndSiUnits(
@@ -263,7 +295,11 @@ def calculate_orbital_elements(m1, m2, pos1, pos2, vel1, vel2, m3, pos3, vel3):
 
 def evolve_coupled_system(binary_system, giant_system, t_end, n_steps, 
         do_energy_evolution_plot, previous_data=None):
-    directsum = CalculateFieldForParticles(particles=giant_system.particles, gravity_constant=constants.G)
+    '''
+    
+    
+    '''    
+    directsum = CalculateFieldForParticles(particles=giant_system.particles, gravity_constant=constants.G)  # more info ./src/amuse/couple/bridge.py
     directsum.smoothing_length_squared = giant_system.parameters.gas_epsilon**2
     coupled_system = Bridge(timestep=(t_end / (2 * n_steps)), verbose=False, use_threading=True)
     coupled_system.add_system(binary_system, (directsum,), False)
@@ -495,7 +531,7 @@ def orbit_parameters_plot(semi_major_in,semi_major_out, time, par_symbol="a", pa
 if __name__ == "__main__":
     stellar_evolution_code = MESA
     sph_code = Gadget2
-    #dynamics_code = TwoBody
+    #dynamics_code = TwoBodyolve_stars
     dynamics_code = Huayno
 
     number_of_sph_particles = 50000
