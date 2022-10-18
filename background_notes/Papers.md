@@ -28,7 +28,7 @@ $$\frac{\alpha_{out}}{\alpha_{in}} < \frac{\alpha_{out}}{\alpha_{in}}\bigg\rvert
 
 Paper: [Planet Hunters TESS IV: a massive, compact hierarchical triple star system TIC 470710327](https://academic.oup.com/mnras/article/511/4/4710/6540660?casa_token=YZNsKHONsZYAAAAA:67B9NEgTOIKOuIS7ILsO_6f2A0JULw7ZJ0xorQYhYujmC76c4u8F_Dq-_U6r-DFx5--0mJp66iYRZw)
 
-![TIC 470710327 representation](/images/TIC_470710327_representation.png)
+![TIC 470710327 representation](background_notes/images/TIC_470710327_representation.png)
 
 * TIC 470710327 is a compact, hierarchical triple system consisting of one O- and two B-type stars. The system, which shows large ETV and RV variations, contains an inner $\sim 1.1 d$ eclipsing binary and a massive O9.5-B0.5V  non transiting tertiary orbiting a common centre of mass in $\sim 52 d$ orbit.
 
