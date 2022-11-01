@@ -23,6 +23,7 @@ $$\frac{\alpha_{out}}{\alpha_{in}} < \frac{\alpha_{out}}{\alpha_{in}}\bigg\rvert
 
 * RLOF in eccentric binaries (due to the Lidov-Kozai mechanism) differs from the simple picture of synchronization and circularisation before RLOF. In an eccentric orbit, the Roche lobe of a star at periastron may be significantly smaller than that in a binary that is circularized at the same distance. The modification of the Roche lobe affects the evolution of the mass transfer phase, e.g. the duration and the mass loss rate. SImualtions show that the mass transfer rate peaks just after the periastron and its evolution shows a Gaussian-like shape.
 
+Paper: [The evolution of triples with a Roche lobe filling outer star](https://academic.oup.com/mnras/article/438/3/1909/966818)
 
 <ins> System TIC 470710327 </ins> 
 
