@@ -27,6 +27,9 @@ from matplotlib import pyplot
 from amuse.plot import scatter, xlabel, ylabel, plot,loglog,semilogx,semilogy, sph_particles_plot
 from amuse.plot import pynbody_column_density_plot, HAS_PYNBODY
 
+##########################################
+##### Setting up directories for data ####
+##########################################
 
 def new_working_directory():
     i = 0
@@ -42,6 +45,10 @@ def new_working_directory():
     if not os.path.exists(os.path.join(current_directory, "giant_models")):
         os.mkdir(os.path.join(current_directory, "giant_models"))
     os.chdir(new_directory)
+
+##########################################
+# Phase one: Set up the triple system and evolve the components until the Roche lobe overflow 
+##########################################
 
 def get_relative_velocity(total_mass, semimajor_axis, ecc):
     '''
@@ -143,6 +150,10 @@ def evolve_stars(triple, view_on_giant, stellar_evolution_code, radius_factor):
     for particle in se_binary:
         particle.evolve_for(se_giant.age)
     return stellar_evolution.particles, stellar_evolution
+
+##########################################
+# Phase two: Convert the 1D stellar evolution model to a gas particle distribution 
+##########################################
 
 def convert_giant_to_sph(view_on_se_giant, number_of_sph_particles):
     '''
