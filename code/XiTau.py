@@ -123,9 +123,10 @@ def estimate_roche_radius(triple, view_on_giant):
     '''
     Estimates and returns the Roche radius of the tertiary. In the calculation of the semi-major axis of the 
     tertiary the inclination of the tertiary's orbit is also taken into account by the position
-    of the tertiary in the 3D space, but the the inner binay is 'seen' as a mass point by the
-    tertiary. Furthermore, it is assumed that the tertiary's orbit is circular in the calculation
-    of the Roche radius. 
+    of the tertiary in the 3D space. THe semi-major axis is calculated as the distance from the center of mass
+    of the inner binary. Hence, the inner binay is 'seen' as a point by the tertiary with the total mass of the binary.
+    Furthermore, it is assumed that the tertiary's orbit is circular in the calculation
+    of the Roche radius.  
     
     --> At this point a correction can be made to include the eccenticity of the tertiary, in the calculation
     of the Roche lobe 
