@@ -32,6 +32,10 @@ from amuse.plot import pynbody_column_density_plot, HAS_PYNBODY
 ##########################################
 
 def new_working_directory():
+    '''
+    Checks if the 'run_n' directory exists and creates a new 'run_n+1' directory for the new run, copies the python script in the new 'run_n+1' directory (so that
+    a run can continue in case of interruption), creates a directory for the giant models if it does not already exists and then moves to the newly created 'run_n+1' directory.
+    '''
     i = 0
     current_directory = os.getcwd()
     while os.path.exists(os.path.join(current_directory, "run_{0:=03}".format(i))):
@@ -70,10 +74,10 @@ def set_up_inner_binary():
     eccentricity = 0
     masses = [3.2, 3.1] | units.MSun
     orbital_period = (4 * numpy.pi**2 * semimajor_axis**3 / 
-        (constants.G * masses.sum())).sqrt().as_quantity_in(units.day)
+        (constants.G * masses.sum())).sqrt().as_quantity_in(units.day) # orbital_period in days
     
     print("   Initializing inner binary")
-    print("   Orbital period inner binary:", orbital_period)
+    print("   Orbital period inner binary:", orbital_period) 
     stars =  Particles(2)
     stars.mass = masses
     stars.position = [0.0, 0.0, 0.0] | units.AU
@@ -247,6 +251,10 @@ def load_giant_model(file_base_name):
         core_particle = gd_particles[0], 
         core_radius = core_radius)
     return giant_model
+
+##########################################
+# Phase three: Coupling hydrodynamics with gravity in the evolution model 
+##########################################
 
 def prepare_binary_system(dynamics_code, binary_particles):
     '''
