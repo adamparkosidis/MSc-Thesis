@@ -1,8 +1,29 @@
-\documentclass{uva-inf-article}
-\usepackage{float}
-\usepackage{amsmath}
+%\documentclass[twocolumn]{article}
+\documentclass[aps,prb,twocolumn,superscriptaddress,floatfix,longbibliography]{revtex4-2}
+\setcitestyle{sort,round,authoryear,semicolon}
+
+%\usepackage[a4paper,width=150mm,top=25mm,bottom=25mm,bindingoffset=0.6mm]{geometry}
+\usepackage{amsmath,amssymb} 
+\usepackage{bm}
+\usepackage{graphicx} 
+\usepackage{comment} 
+\usepackage{textcomp}
 \usepackage{subcaption}
-\numberwithin{equation}{section}
+\usepackage{float}
+\usepackage{dblfloatfix}
+\usepackage{comment}
+\usepackage[title]{appendix}
+\captionsetup[subfigure]{labelformat=simple,labelsep=colon}
+\renewcommand{\thesubfigure}{fig\arabic{subfigure}}
+
+
+\usepackage{enumitem}
+\setlist{noitemsep,leftmargin=*,topsep=0pt,parsep=0pt}
+
+\usepackage{xcolor} % \textcolor{red}{text} will be red for notes
+\definecolor{lightgray}{gray}{0.6}
+\definecolor{medgray}{gray}{0.4}
+
 \usepackage{hyperref}
 \hypersetup{
     colorlinks,
@@ -10,41 +31,67 @@
     citecolor={blue!100!black},
     urlcolor={blue!100!black}
 }
+
 \usepackage[noabbrev,capitalize,nameinlink]{cleveref}
 \urlstyle{same}
 
-\usepackage{natbib}
 
+% Code to add paragraph numbers and titles
+\newif\ifptitle
+\newif\ifpnumber
+\newcounter{para}
+\newcommand\ptitle[1]{\par\refstepcounter{para}
+{\ifpnumber{\noindent\textcolor{lightgray}{\textbf{\thepara}}\indent}\fi}
+{\ifptitle{\textbf{[{#1}]}}\fi}}
+\ptitletrue  % comment this line to hide paragraph titles
+\pnumbertrue  % comment this line to hide paragraph numbers
 
-\title{Project Proposal}
+% minimum font size for figures
+\newcommand{\minfont}{6}
 
-\assignment{Research Project Physics and Astronomy}
-\assignmenttype{Report}
-
-
-\authors{Adam Parkosidis}
-\uvanetids{13950742}
-
-\tutor{}
-\mentor{Silvia Toonen}
-\docent{}
-
-\course{}
-\courseid{5354RPP60Y}
-
-\date{\today}
-
+\newcommand{\mytitle}{Notes}
 
 \begin{document}
+
+\title{\mytitle}
+
+\author{Adam Parkosidis}
+\email[]{adam.parkosidis@student.uva.nl}
+\affiliation{Anton Pannekoek Institute for Astronomy, University of Amsterdam, Amsterdam 1098 XH, NL}
+
+\begin{abstract}
+abstract to be
+\end{abstract}
 \maketitle
 
+\section{Convection}
 
-\section{Convection Criteria}
+A temperature gradient is required for radiative diffusion to move energy externally. The larger the luminosity that has to be carried, the larger the temperature gradient required. However, there is an upper limit to the temperature gradient inside a star; This limit can be translated to the maximum luminosity that can be carried by radiation, inside a star in hydrostatic equilibrium
+
+\begin{equation}\label{eq:eddington_luminosity}
+    l < \frac{4 \pi G m}{\kappa} = l_{Edd}
+\end{equation}
+
+where $m$ is the enclosed mass at distance $r$ from the center of the star and $\kappa$ the opacity at this region. If this limit is surpassed, gas instability occurs.  This instability leads to cyclic macroscopic motions of the gas, known as convection. Convection is a sort of dynamical instability, however it does not have disruptive repercussions. It does not, in particular, result in an overall breach of hydrostatic equilibrium.
+
+
+\subsection{The Schwarzschild and Ledoux criteria}
+
+Assuming ideal gas, the stability criterion against convection is expressed by the {\it Ledoux criterion}
+
+\begin{equation}\label{eq:Ledoux_citerion}
+    \nabla_{rad} < \nabla_{ad} + \nabla_{\mu}
+\end{equation}
+
+where for chemically homogeneous layers $\nabla_{\mu} = 0$ and \cref{eq:Ledoux_citerion} reduces to the simple {\it Schwarzschild criterion} for stability against convection.
+
+Because nuclear processes create more and more heavy elements in deeper layers, the mean molecular weight generally rises inwards. As a result, typically $\nabla_{\mu} \geq 0$, indicating that a composition gradient has a stabilizing effect according to the Ledoux criterion. This is feasible because an upwardly displaced element would have a larger density than its surroundings, thus even if it is hotter than its new environment (which would render it unstable according to the Schwarzschild criterion), the buoyancy force will drive it back down.
 
 
 
-\bibliographystyle{plainnat}
-\bibliography{references}
+
+%\bibliographystyle{plainnat}
+%\bibliography{references}
 \end{document}
 
 
