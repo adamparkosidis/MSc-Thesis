@@ -64,6 +64,23 @@ abstract to be
 \end{abstract}
 \maketitle
 
+\section{Simualation}
+
+Physical processes like as stellar evolution, gravitational dynamics, and hydrodynamics all play essential roles in the evolution of outer RLOF triples. To address all of these physical processes in a self-consistent manner, we used the Astrophysical Multi-purpose Software Environment (AMUSE {\bf ref here}). To simulate the evolution of the outer star prior to RLOF, a stellar evolution algorithm is utilized (Section 3.1). We halt the stellar evolution simulation when the outer star nearly fills its Roche lobe and transform the one-dimensional stellar structure from the Henyey code to a three-dimensional hydrodynamical model (Section 3.2). This outer star's hydrodynamical model is relaxed (Section 3.3) and placed in orbit around the double star (Section 3.4). For numerous orbits of the outer star, the complicated hydrodynamics of mass transfer from the Roche lobe filled outer star to the inner binary are tracked, while the gravitational dynamics of the three stars and the hydrodynamics of the gas from the outer star are also tracked (Section 3.5).
+
+
+\section{Stellar evolution model}
+
+MESA is utilized to build the stellar structure models used in our study since the code provides information about the interior stellar structure at the time of RLOF. This is required in order to transform the stellar model to a hydrodynamical realization. We use solar metallicity in all simulations, however we investigate other factors that may affect the internal stellar structure  at the time of RLOF.
+
+
+The evolution of massive stars is known to be highly dependent on a variety of internal-mixing mechanisms. The most significant is undoubtedly convection, especially convective overshooting, or mixing at the edges of convective zones, which impacts the core masses and lives of massive stars at all stages of development. Semiconvection is another essential but poorly understood process that influences the timescale of mixing in layers with a stabilizing gradient in mean molecular weight. It controls the hydrogen/helium (H/He) gradient at the core-envelope contact in massive stars, regulating their post-main-sequence radius development. Finally, rotationally generated mixing may influence the development of massive stars, at least for the fraction of those that spin fast. These mixing processes will not only effect the evolution of massive stars' surface features, but will also dictate their internal structure, and are therefore vital for our analysis.
+
+\subsection{Overshooting}
+
+
+
+
 \section{Convection}
 
 A temperature gradient is required for radiative diffusion to move energy externally. The larger the luminosity that has to be carried, the larger the temperature gradient required. However, there is an upper limit to the temperature gradient inside a star; This limit can be translated to the maximum luminosity that can be carried by radiation, inside a star in hydrostatic equilibrium

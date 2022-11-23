@@ -1,0 +1,88 @@
+%\documentclass[twocolumn]{article}
+\documentclass[aps,prb,twocolumn,superscriptaddress,floatfix,longbibliography]{revtex4-2}
+\setcitestyle{sort,round,authoryear,semicolon}
+
+%\usepackage[a4paper,width=150mm,top=25mm,bottom=25mm,bindingoffset=0.6mm]{geometry}
+\usepackage{amsmath,amssymb} 
+\usepackage{bm}
+\usepackage{graphicx} 
+\usepackage{comment} 
+\usepackage{textcomp}
+\usepackage{subcaption}
+\usepackage{float}
+\usepackage{dblfloatfix}
+\usepackage{comment}
+\usepackage[title]{appendix}
+\captionsetup[subfigure]{labelformat=simple,labelsep=colon}
+\renewcommand{\thesubfigure}{fig\arabic{subfigure}}
+
+
+\usepackage{enumitem}
+\setlist{noitemsep,leftmargin=*,topsep=0pt,parsep=0pt}
+
+\usepackage{xcolor} % \textcolor{red}{text} will be red for notes
+\definecolor{lightgray}{gray}{0.6}
+\definecolor{medgray}{gray}{0.4}
+
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks,
+    linkcolor={blue!100!black},
+    citecolor={blue!100!black},
+    urlcolor={blue!100!black}
+}
+
+\usepackage[noabbrev,capitalize,nameinlink]{cleveref}
+\urlstyle{same}
+
+
+% Code to add paragraph numbers and titles
+\newif\ifptitle
+\newif\ifpnumber
+\newcounter{para}
+\newcommand\ptitle[1]{\par\refstepcounter{para}
+{\ifpnumber{\noindent\textcolor{lightgray}{\textbf{\thepara}}\indent}\fi}
+{\ifptitle{\textbf{[{#1}]}}\fi}}
+\ptitletrue  % comment this line to hide paragraph titles
+\pnumbertrue  % comment this line to hide paragraph numbers
+
+% minimum font size for figures
+\newcommand{\minfont}{6}
+
+% Uncomment this line if you prefer your vectors to appear as bold letters.
+% By default they will appear with arrows over them.
+% \renewcommand{\vec}[1]{\bm{#1}}
+
+% Allows to rewrite the same title in the supplement
+\newcommand{\mytitle}{Title to be}
+
+\begin{document}
+
+\title{\mytitle}
+
+\author{Adam Parkosidis}
+\email[]{adam.parkosidis@student.uva.nl}
+\affiliation{Anton Pannekoek Institute for Astronomy, University of Amsterdam, Amsterdam 1098 XH, NL}
+
+
+
+\begin{abstract}
+Abstract to be
+
+
+
+
+\end{abstract}
+\maketitle
+
+
+
+\input{Thesis/introduction.tex}
+
+
+\newpage
+\setcitestyle{numbers}
+\bibliographystyle{plainnat}
+\bibliography{references}
+\end{document}
+
