@@ -31,10 +31,7 @@ Paper: [The evolution of triples with a Roche lobe filling outer star](https://a
 
 a. Evolve the system until the tertiary fills its Roche Lobe, then stop the evolution and convert the 1D stellar evolution model to a mass particle distribution by inquiring the radial stellar structure profiles for density, temperature, mean molecular weight and radius from the stellar evolution code.
 
-b. In order to achieve higher resolution at the outer layers of the star, the core is simualted as one heavy, non-SPH mass particle ($M_{core} = \frac{M_{RLOF}}{3}$) without pressure or internal energy. It is then softened using a Plummer softenining to avoid the star's collapse
-
-
-“Once the radius of the outer star exceeds its Roche limit, the onedimensional Henyey stellar evolution model is converted to a set of smoothed particle hydrodynamics (SPH) particles. This is realized by inquiring the radial stellar structure profiles for density, temperature, mean molecular weight and radius from the stellar evolution code. Henyey codes divide a star into a set of spherical shells, represented by arrays in which these parameters are stored. Subsequently, we generate a kinematically cold set of N particles with mass MRLOF/N in a uniform spherical distribution. We now scale the particle positions radially to match the density profile of the star, up to its outer radius RRLOF. Each particle is subsequently assigned a specific internal energy derived from the temperature and mean molecular mass profiles, which came from the stellar evolution model.” ([Vries et al., 2014, p. 1911](zotero://select/library/items/3F4AV628)) ([pdf](zotero://open-pdf/library/items/ZYUXNXV6?page=3&annotation=JD5H54VX))
+b. In order to achieve higher resolution at the outer layers of the star, the core is simualted as one heavy, non-SPH mass particle ( $M_{core} = \frac{M_{RLOF}}{3}$ ) without pressure or internal energy. It is then softened using a Plummer softenining to avoid the star's collapse.
 
 
 
