@@ -73,6 +73,6 @@ Paper: [Mergers prompted by dynamics in compact, multiple-star systems: a stella
 <ins> Stellar evolution </ins> 
 
 
-The evolution of massive stars is strongly influenced by <h3>internal mixing<h3> processes such as semiconvection, convective core overshooting, and rotationally induced mixing. None of these processes are currently well constrained. We expolre these process:
+The evolution of massive stars is strongly influenced by **internal mixing** processes such as semiconvection, convective core overshooting, and rotationally induced mixing. None of these processes are currently well constrained. We expolre these process:
 
 Paper: [Constraining mixing in massive stars in the Small Magellanic Cloud](https://ui.adsabs.harvard.edu/abs/2019A%26A...625A.132S/abstract)
