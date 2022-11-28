@@ -31,7 +31,7 @@ Paper: [The evolution of triples with a Roche lobe filling outer star](https://a
 
 a. Evolve the system until the tertiary fills its Roche Lobe, then stop the evolution and convert the 1D stellar evolution model to a mass particle distribution by inquiring the radial stellar structure profiles for density, temperature, mean molecular weight and radius from the stellar evolution code.
 
-b. In order to achieve higher resolution at the outer layers of the star, the core is simualted as one heavy, non-SPH mass particle ( $M_{core} = \frac{M_{RLOF}}{3}$ ) without pressure or internal energy. It is then softened using a Plummer softenining to avoid the star's collapse.
+b. In order to achieve higher resolution at the outer layers of the star, the core is simualted as one heavy, non-SPH mass particle ( $M_{core} = M_{RLOF}/3$ ) without pressure or internal energy. It is then softened using a Plummer softenining to avoid the star's collapse.
 
 
 
