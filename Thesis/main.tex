@@ -1,0 +1,243 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% University of Amsterdam master thesis title page 
+% LaTeX Template
+%
+% Version 1.2 (14/02/14) (fixed cursive mode under titlepage)
+%
+% This template was made for the UvA by Ludo Nieuwenhuizen
+% 
+% 
+% Instructions for using this template:
+%
+% I've done my best to make this template self-explanatory. The only thing (apart from
+% finishing your thesis) is that wherever you see the percentage sign after some LaTeX
+% commands, you have to insert some text (except for this
+% introductory part, of course)l this is also explicitly stated.
+%
+% This title page can be compiled as is. This is not useful for 
+% including it in another document. To do this, you have two options: 
+%
+% 1) Copy/paste everything between \begin{document} and \end{document} 
+% starting at \begin{titlepage} and paste this into another LaTeX file where you 
+% want your title page.
+% OR
+% 2) Remove everything outside the \begin{titlepage} and \end{titlepage} and 
+% move this file to the same directory as the LaTeX file you wish to add it to. 
+% Then add \input{./titlepage_master_thesis.tex} to your LaTeX file where you want your
+% title page.
+%
+% The layout is quite vulnerable for changes. If you for instance remove the logo at the
+% bottom, the last line 'Department Research institute...' will get higher up the page. In this 
+% case it is safer to insert a blank image or fix it in a different way.
+%
+% Any questions can be sent to me (L.G.Nieuwenhuizen@gmail.com)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[11pt,twoside,a4paper,fleqn]{report}
+
+\usepackage{graphicx}
+\usepackage{graphics}
+\usepackage[english]{babel}
+\usepackage[hcentering,bindingoffset=8mm]{geometry}
+\usepackage[utf8]{inputenc}
+% \usepackage[en-US]{datetime2}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{natbib}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+\usepackage{caption}
+\usepackage{tocloft}
+\usepackage{amsfonts}
+\usepackage[section]{placeins}
+\usepackage{fancyhdr}
+% \usepackage{siunitx}
+\usepackage{subcaption}
+\usepackage{listings}
+\usepackage{acro}
+% \usepackage{abbriv}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{tablefootnote}
+\usepackage{epigraph}
+
+\graphicspath{{folder/}{../figures/}}
+
+\pagestyle{fancy}
+\fancyhead[RO]{\fancyplain{}{\nouppercase{\leftmark}}}
+\renewcommand\sectionmark[1]{\markboth{\MakeUppercase{#1}}{}}
+\fancyhead[LO]{}
+\fancyhead[LE]{\fancyplain{}{\nouppercase{\leftmark}}}
+\renewcommand\sectionmark[1]{\markboth{\MakeUppercase{#1}}{}}
+\fancyhead[RE]{}
+\lfoot{}
+\cfoot{\fancyplain{}{\thepage}}
+\rfoot{}
+
+% \sisetup{separate-uncertainty, multi-part-units = brackets}
+% \DeclareSIUnit\parsec{pc}
+% \DeclareSIUnit\photons{ph}
+% \def\kms{km~s$^{-1}$}
+
+\newcolumntype{L}[1]{>{\raggedright\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+
+%\setlength{\headheight}{15pt}
+
+%\parskip = \baselineskip
+
+\captionsetup[table]{name=Table,labelfont={sc,footnotesize},textfont=footnotesize,labelsep=none}
+\captionsetup[figure]{name=Fig.,labelfont={sc,small},textfont=footnotesize,labelsep=endash}
+\numberwithin{equation}{chapter}
+\numberwithin{figure}{chapter}
+
+\newcommand{\vdag}{(v)^\dagger}
+\newcommand\aastex{AAS\TeX}
+\newcommand\latex{La\TeX}
+
+\setlength{\parindent}{0 cm}
+\pagenumbering{gobble}
+
+\acsetup{list-style=longtable}
+
+\begin{document}
+\begin{titlepage}
+
+\newcommand{\HRule}{\rule{\linewidth}{0.8mm}}
+\center
+ \vspace*{0.5cm}  % Play around with this as you want
+% ------
+% Heading20
+% ------
+\raisebox{0.05cm}[0pt][0pt]{\includegraphics[width=2.0cm]{Thesis/logos/UvA_logo.png}}
+\raisebox{0.7cm}[0pt][0pt]{\textsc{\Huge University of Amsterdam}}
+\raisebox{-1.85cm}[0pt][0pt]{\includegraphics[width=7.0cm]{Thesis/logos/VUlogo.png}}\\[2.0 cm]
+
+\Large{\textbf{MSc Physics and Astronomy}}\\% Study discipline
+\Large{Track: Astronomy \& Astrophysics}\\[0.7cm] % Master track name
+\textsc{\Large \textbf{Master Thesis}}\\[0.2cm]
+
+% -----
+% Title
+% -----
+
+\HRule \\[0.3cm]
+
+{ \huge \bfseries The evolution of TIC 470710327 hierarchical triple system with a Roche lobe filling outer star }\\[0.8cm] % title of thesis
+%{\Large \bfseries Subtitle of Thesis\\Can use two lines} % subtitle of thesis
+
+\HRule \\[0.7cm]
+ 
+% -----
+% Details
+% -----
+
+{\Large \emph by}\\[0.6cm]
+{\Large \bfseries Adam Parkosidis\\ % student name
+13950142}\\[0.4cm] %student ID
+%\DTMlangsetup{showdayofmonth=false}
+{\large  \emph{\today}}\\ % month + year in which the thesis was concluded
+%\DTMlangsetup{showdayofmonth=true}
+{\large  \emph{60 ECTS}}\\ % 'this many' ects that are rewarded for the thesis
+{\large  \emph{Start date - End date}}\\[1.8cm] % period in which the research was carried out
+
+% -----
+% Supervisor, etc.
+% -----
+
+\begin{minipage}{0.4\textwidth}
+\begin{flushleft} \large
+{\large \emph{Supervisors:}}\\
+
+\large{Dr Silvia Toonen}\\ % Supervisor's Name
+\large{Dr Silvia Toonen}
+\end{flushleft}
+\end{minipage}
+~
+\begin{minipage}{0.4\textwidth}
+\begin{flushright} \large
+\emph{Examiners} \\
+\large{Dr Silvia Toonen} \\
+\large{Oliver Porth} % Examiner's Name
+\end{flushright}
+\end{minipage}\\
+
+
+% -----
+% Logo and Department
+% -----
+
+\raisebox{-138pt}[0pt][0pt]{\includegraphics[width=5.5cm]{Thesis/logos/api_logo.pdf}}\\ % Call your institute logo "institute.jpg", or be creative.
+
+% \raisebox{-138pt}[0pt][0pt]{\large{Anton Pannekoek Institute for Astronomy}} %name of the department or institute or company
+
+
+% -----
+% That was easy, right?
+% -----
+
+\vfill 
+
+\end{titlepage}
+
+\newpage
+\input{Thesis/Abstract.tex}
+\mbox{}
+
+
+\newpage
+\pagenumbering{roman}
+\setcounter{page}{1}
+{
+  \hypersetup{linkcolor=black}
+\tableofcontents
+
+\newpage
+\thispagestyle{empty}
+\mbox{}
+\newpage
+
+
+
+\listoffigures
+
+\newpage
+\thispagestyle{empty}
+\mbox{}
+\newpage
+
+\listoftables
+
+\newpage
+\thispagestyle{empty}
+\mbox{}
+\newpage
+
+\mbox{}
+\thispagestyle{empty}
+\printacronyms[include-classes=abbrev,name=List of Abbreviations]
+
+\newpage
+\thispagestyle{empty}
+\mbox{}
+\newpage
+
+\pagenumbering{arabic}
+\setcounter{page}{1}
+
+}
+
+\parskip = 3mm
+
+\input{Thesis/Introduction.tex}
+
+
+
+\newpage
+
+\bibliographystyle{plainnat}
+\bibliography{refs}
+
+%## IMPORTANT#############################################
+\acuseall
+%## IMPORTANT#############################################
+
+\end{document}
