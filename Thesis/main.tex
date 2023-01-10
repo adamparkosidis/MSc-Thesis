@@ -59,6 +59,9 @@
 \usepackage{array}
 \usepackage{tablefootnote}
 \usepackage{epigraph}
+\usepackage[capitalise]{cleveref}
+\usepackage{comment}
+\usepackage{float}
 
 \graphicspath{{folder/}{../figures/}}
 
@@ -148,15 +151,15 @@
 {\large \emph{Supervisors:}}\\
 
 \large{Dr Silvia Toonen}\\ % Supervisor's Name
-\large{Dr Silvia Toonen}
+\large{Dr Philipp Moesta}
 \end{flushleft}
 \end{minipage}
 ~
 \begin{minipage}{0.4\textwidth}
 \begin{flushright} \large
 \emph{Examiners} \\
-\large{Dr Silvia Toonen} \\
-\large{Oliver Porth} % Examiner's Name
+\large{Dr. Silvia Toonen} \\
+\large{Dr. Oliver Porth} % Examiner's Name
 \end{flushright}
 \end{minipage}\\
 
@@ -190,6 +193,7 @@
   \hypersetup{linkcolor=black}
 \tableofcontents
 
+\begin{comment}
 \newpage
 \thispagestyle{empty}
 \mbox{}
@@ -215,6 +219,8 @@
 \thispagestyle{empty}
 \printacronyms[include-classes=abbrev,name=List of Abbreviations]
 
+\end{comment}
+
 \newpage
 \thispagestyle{empty}
 \mbox{}
@@ -225,7 +231,7 @@
 
 }
 
-\parskip = 3mm
+\parskip = 2mm
 
 \input{Thesis/Introduction.tex}
 
