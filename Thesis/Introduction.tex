@@ -1,0 +1,137 @@
+\chapter{Introduction}
+
+\epigraph{The universe must be full of voices, calling from star to star in a myriad tongues. One day we shall join that cosmic conversation}{Arthur C. Clarke}
+
+Observations proved that field stars are not always single; many develop in pairs, and many of these binaries are members of triples or higher-order systems. Additionally, the fraction of systems with companions grows with mass (see \cref{fig:stellar_companions}), as a result massive stars are seldomly formed in isolation. In contrast, most of massive stars are created in binary or higher order multiple systems with $\sim 50\%$ of spectral type B stars be in triples \citep{sana2014southern,moe2017mind}, a percentage which reduces to $\sim 10\%$ for low-mass stars \citep{raghavan2010survey,toonen2014popcorn,moe2017mind}. In these cases, apart from the intrinsic stellar properties, the evolution depends sensitively on the interaction between the system's stellar components. Consequently, triple systems are not as uncommon as we may mistakenly believe, particularly in the concept of massive stars, the life cycle of which is still poorly understood.
+
+Although the fundamentals of single and binary evolution have long been acknowledged \citep{postnov2014evolution,toonen2014popcorn}, the long-term evolution of stellar triples remains unknown. In the simple case, stable triple systems, which are hierarchical, namely, consist of an inner and an outer binary orbit, i.e., the tertiary (third object). The secular evolution of such systems is the modification of orbital elements over timescales substantially larger than the system's dynamical timescale. Hence, the presence of the outer star has no influence on the history of the inner binary and the evolution of the inner binary and the tertiary can be discussed independently. In other cases, a third star in orbit around a binary system can drastically influence the system's development
+via dynamical interactions, which influence the orbital elements of the inner and outer orbit through changes in energy and angular momentum. Consequently, hierarchical triple star systems can become unstable via triple stellar evolution processes which are unique to systems with multiplicities of higher orders than binaries.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{Thesis/figures/fig_moe_2017.png}
+    \caption{Multiplicity fractions as a function of primary mass (dotted lines), including the single-star $F_{n=0;q> 0.1}$ (red), binary-star $F_{n=1;q> 0.1}$  (green), triple-star $F_{n=2;q> 0.1}$  (blue), and quadruple-star fraction $F_{n=3;q> 0.1}$  (magenta). Given a primary mass $M_1$, the model assumes that the multiplicity fractions follow a Poisson distribution across the interval $n = [0, 3]$ in a manner that reproduces the measured multiplicity frequency $F_{mult;q >0.1} = \Sigma_{n=1}^3 \; n F_{n;q> 0.1}$. For solar-type stars, this model matches the measured values (solid) within their uncertainties. Regardless of the uncertainties in the multiplicity fractions, $\leq 10\%$ of O-type stars are single while $\geq 55\%$ are born in triples and/or quadruples. Figure taken by \cite{moe2017mind}.}
+    \label{fig:stellar_companions}
+\end{figure}
+The rich dynamical behavior of three-body systems can produce Lidov-Kozai cycles, in which the eccentricity of the inner orbit and the inclination between the inner and outer orbits vary periodically \citep{michaely2014secular,toonen2016evolution,mangipudi2022extreme}. As a result, tidal effects (tidal friction), gravitational-wave emission, and stellar interactions such as mass transfer, angular momentum exchange and collisions may be enhanced. In this way, evolution in triples can give rise to stellar mergers \citep{antonini2017binary,vigna2021massive}, namely some of most energetic events in the universe, ranging from gravitational wave sources to electromagnetic transients, e.g. luminous red novae, and also provide promising evolutionary pathways for exotic objects \citep{sana2012binary, toonen2016evolution}, e.g. blue stragglers \citep{winn2009spin}. In the past, most of our efforts in understanding the progenitors of the events were focused on modeling binary evolution disregarding the interaction of the binary with a third star. Therefore, a detailed examination of triple evolution is as necessary as it is challenging because it demands a self consistent treatment of three-body dynamics and stellar evolution.
+
+In this thesis, I present the evolution of TIC 470710327 \citep{eisner2022planet}, a massive hierarchical triple system with a Roche lobe filling outer star. I use the Astrophysical Multipurpose Software Environment (AMUSE, \cite{portegies2018astrophysical}) to simulate the system's evolution and try to predict its future. Initially, I create stellar evolution models of the triple components until the tertiary fills its Roche lobe. I then simulate in detail the mass transfer for several orbits of the outer star using a combination of gravitational dynamics and hydrodynamics. I examine the importance of various parameters, properties and type of mass transfer, the response of the inner and outer orbital parameters, and the consequent evolution.
+
+This thesis is structured as follows: in the remainder of this first Chapter, I will present an overview of single massive star evolution until the end of helium burning phase with a focus on those aspects that are relevant for triple evolution. Furthermore, I will introduce concepts of binary evolution and I will argue how to extend these to the triple evolution case. After, presenting all the important concepts, I will introduce our target system and the goal of this project. 
+
+
+\section{Evolution of Massive Stars in Isolation}\label{sec:single_star_evolution}
+
+Stars with $M \leq 2$ M$_{\odot}$, $2 < M \leq 8$ M$_{\odot}$ and $M > 8$ M$_{\odot}$ are classified as low-, intermediate-, and high-mass, respectively. Despite the inherent rarity predicted by the initial mass function (IMF, see e.g. \cite{chabrier2005initial, dib2018emergence}), massive stars play a key role in the evolution of the Universe. They are the main source of UV radiation and heavy elements. They serve as a significant source of mixing and turbulence in the interstellar medium (ISM) of galaxies through a combination of winds, outflows, expanding HII regions, and supernova explosions. Galactic dynamos are powered by turbulence in conjunction with differential rotation. Cosmic rays are accelerated by the interaction of galactic magnetic fields and supernova shock fronts. The ISM is primarily heated by cosmic rays, UV radiation, and the dissipation of turbulence, whereas it is finally cooled by heavy metals present in dust, molecules, and in atomic/ionic form. Therefore, massive stars have a significant impact on galaxies' physical, chemical, and morphological structure \citep{kennicutt2005role}. However, the physical mechanisms behind the birth, development, and demise of massive stars remain elusive in comparison with low-mass stars \citep{zinnecker2007toward}. 
+
+
+\subsection{Timescales of Stellar Evolution}
+
+The fundamental timescales of stellar evolution are the dynamical ($t_{dyn}$), thermal ($t_{th}$), and nuclear timescales ($t_{nucl}$). The dynamical timescale is the characteristic time required for a star to collapse under its own gravitational force in the absence of internal pressure:
+
+\begin{equation}
+    t_{dyn} = \sqrt{\frac{R^3}{GM}} \sim 0.02 \left( \frac{R}{R_{\odot}} \right)^{3/2} \left( \frac{M}{M_{\odot}}\right)^{1/2} \; \text{days},
+\end{equation}\label{eq:dynamical_timsecale}
+
+where $R$ and $M$ are the star's radius and mass. It is a period on which a star might expand or contract if its hydrostatic equilibrium were disrupted, e.g. in case of sudden mass loss.
+
+Thermal (or Kelvin-Helmholtz) timescale indicates how quickly changes in a star's thermal structure may occur. It is therefore also the period on which a star responds when a its thermal equilibrium is disturbed:
+
+\begin{equation}
+    t_{th} = \frac{G M^2}{2RL} \sim 1.5 \times 10^7 \left( \frac{M}{M_{\odot}} \right)^{2} \frac{R_{\odot}}{R} \frac{L_{\odot}}{L} \; \text{yr},
+\end{equation}\label{eq:thermal_timsecale}
+
+where L is the star's luminosity.
+
+Finally, the nuclear timescale corresponds to the time required for the star to exhaust its nuclear fuel supply at its current luminosity: 
+
+\begin{equation}
+    t_{nucl} = \frac{\phi M_{nucl} c^2}{L} \sim 10^{10} \frac{M}{M_{\odot}} \frac{L_{\odot}}{L} \; \text{yr},,
+\end{equation}\label{eq:nuclear_timsecale}
+
+where $\phi$ is the efficiency of nuclear energy production, $M_{nuc}$ is the amount of mass available as fuel, and $c$ is the light speed. For core hydrogen burning, $\phi = 0.007$ and $M_{nucl} \sim 0.1 M$.
+
+Typically $t_{nucl} >> t_{th} >> t_{dyn}$, while assuming a mass-luminosity relation of $L \propto M^{\alpha}$, with empirically $\alpha \sim 3-4$ \citep{eker2015main}, it follows that massive stars live shorter and evolve faster than low-mass stars.
+
+\subsection{Hertzsprung-Russell diagram}
+
+The evolution of a star in isolation, namely single star evolution, is predominantly determined by the stellar mass. In their attempt to achieve hydrostatic and thermal equilibrium, stars generate temperatures and pressures that allow for nuclear burning. The cycles of nuclear burning and fuel exhaustion regulate the evolution of a star and set the various phases during the stellar lifetime. These burning cycles can be viewed as long-lived but transient disruptions to a star's (or at least its core's) inexorable shrinkage under the effect of gravity. The virial theorem dictates this contraction is caused by the fact that stars are hot and lose energy through radiation. 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{Thesis/graphs/HR_massive_stars.pdf}
+    \caption{Hertzsprung-Russell diagram. Evolutionary tracks for three stars in the HR-diagram with masses 9, 12 and 15 M$_{\odot}$ at solar metallicity until the end of Hellium burning. Specific moments in the evolution of the stars are noted by black circles and squares as explained in the text. The tracks are calculated with MESA (cite to be). The dashed lines show lines of constant radii by means of the Stefan–Boltzmann law.}
+    \label{fig:HR_massive_stars}
+\end{figure}
+The Hertzsprung-Russell (HR) diagram in \cref{fig:HR_massive_stars} shows three evolutionary tracks for massive stars. The black circles correspond to the Zero Age Main Sequence (ZAMS) and the Terminal Age Main Sequence (TAMS). At ZAMS, the star having started the hydrogen burning in its core, achieves thermal equilibrium (TE), $L_{nuc}/L =1$, while TAMS is defined as the core hydrogen exhaustion point. Additionally, the black squares represent the start and end of helium burning in the core, respectively. In both cases the end of nuclear burning in the core has defined as the point when hydrogen and helium core mass fractions are $< 0.01$, respectively. Finally, between TAMS and the ignition of helium, there is a short-lived phase called Hertzsprung gap branch, where hydrogen burning occurs in a shell around the core. 
+
+During the MS, hydrogen is fused into $^4$He. Independently on the ongoing reaction channel (pp or CNO), the luminosity of the star increases during this phase, (L$\,\propto\,\mu^{4}\,M^3$), due to the change in the core's composition ($\mu$ increases). Nevertheless, the way in which the star evolves through the MS-phase depends on its mass. Stars with masses M\,$\geq$\,1.3\,M$_\odot$, consequently massive stars too, are driven by the CNO-cycle ($\epsilon_{CNO}\,\propto\,\rho_{c}T^{18}_{c}$). As the luminosity increases over time, the energy produced in the core needs to increase too, in order to maintain TE. However, due to the high dependence on the central temperature of the CNO-cycle, a small change of T$_c$ will have a tremendous effect on the energy production rate $\epsilon_{CNO}$, which would take out the star from HE and TE. Thus, T$_c$ needs to remain almost constant in time. The ideal gas law implies that $\frac{P_c}{\rho_c} \propto \frac{T_c}{\mu}$, hence while $\mu$ increases, in order to decrease the pressure inside the core, the envelope expands on nuclear time-scale. Stars driven by the CNO-cycle evolve through larger radii and lower T$_{eff}$ than stars driven by the pp-cycle. 
+
+Furthermore, stars driven by the CNO-cycle have convective cores, since the energy produced is too large to be transported by radiation ($\nabla_{rad} > \nabla_{ad}$). One effect of the convection on the evolution is that the MS-lifetime is extended (H is brought from the envelope inside the core, more detailed discussion in \cref{sub:mixing}). Another effect is that as the core approaches the end of H-burning, the reactions suddenly cease in the whole core. Consequently, the energy generation rate would normally decrease due to the sudden depletion of hydrogen in the core, which also diminishes the thermostatic action of the CNO reactions, threatening the thermal equilibrium of the star. In response the temperature of the core needs to increase in order to keep the same energy generation rate, $\epsilon_{CNO}$. As a result, the pressure exerted on the core by the envelope must increase, $\frac{P_c}{\rho_c} \propto \frac{T_c}{\mu}$, leading to the contraction of the star which also leads to higher effective temperature. This is evident in the second part of the MS (see \cref{fig:HR_massive_stars}), where we observe the ``hook'' feature. 
+
+At TAMS, where the hydrogen in the core has been depleted, hydrogen burning occurs in a shell around the core, while the central temperature is insufficient to initiate burning in the helium core. From that point on, the star enters the Hertzsprung gap branch. The core contracts in $t_{th}$ in an attempt to reach thermal equilibrium. The virial theorem indicates that half of the gravitational energy ($E_{grav}$) is converted to internal energy ($E_{int}$) raising the central temperature, while the other half is escaping as luminosity ($L_c$) from the core. Furthermore, the hydrogen burning shell around the core also produces energy via the CNO-cycle. The thermostatic behavior of the CNO-cycle indicates that the burning shell must maintain thermal equilibrium by remaining at a relatively constant temperature. Because contraction of the burning shell would result in heating, the radius of the burning shell must also stay fairly constant. As the core contracts, sp does the shell and so the pressure in the burning shell increases. As a result, the overlaying envelope's pressure must drop, causing the layers above the shell to expand, $\frac{P_{sh}}{\rho_{sh}} \propto \frac{T_{sh}}{\mu_{sh}}$. This called the mirror principle. The aforementioned behavior is evident in Fig. \ref{fig:HR_massive_stars}, as the stars move towards bigger radius and lower effective temperature. An important thing to mention is that during this phase the temperature in the core is raising up and should not be confused with the effective temperature. As the star moves towards lower effective temperatures, the opacity ($\kappa$) in the envelope raises, thus the energy transport through radiation becomes less efficient ($\nabla_{rad} \propto \kappa$), while gradually the envelope becomes convective.
+
+\begin{comment}
+A significant fraction of the energy from these two sources acts as the work applied towards the envelope leading to the expansion of the latter under hydrostatic equilibrium, while the expansion itself results to the envelope temperature being reduced. Simultaneously, the abundance of hydrogen in the shell is reducing making the shell gradually thinner, while the produced helium is adding gradually mass to the helium core speeding up its contraction.
+\end{comment}
+
+Stars of less than $12$M$_{\odot}$ reach effective temperatures as low as ($10^{3.7}$K) 5000K before helium ignition. At this moment, they begin to ascend the red giant branch (RGB), which is accompanied by a significant rise in luminosity and radius. Due to the low effective temperature the opacity of the envelope rises and the latter becomes gradually convective. The prohibited zone of the HR-diagram is located to the right of the RGB, where hydrostatic equilibrium cannot be established. Any star in this zone will travel quickly towards the RGB. The red giant star has a compact core and an extensive envelope that extends hundreds of solar radii. When the temperature in the core exceeds $T_c \sim 10^8 K$, helium core burning begins, and the red giant phase ends. For stars with $M \geq 12$M$_{\odot}$, helium ignites before the effective temperature has dropped to a few thousand Kelvin. The stellar tracks for stars of less than $12$M$_{\odot}$ form a loop on the HR-diagram during helium burning, also known as the horizontal branch. The loop is accompanied by a drop and increase in the stellar radius. As the blazing front advances from the core to a shell enclosing the core, the star's outer layers expand again, and the evolution continues.
+
+\begin{comment}
+The important difference here is that there is a shell in which hydrogen burning takes places via the CNO-cycle. Consequently, the expansion of the layers around the core will result to the increase of the pressure that is exerted by the latter towards that shell. The thermostatic behavior of the CNO-cycle once again tries to maintain the thermal equilibrium, $T_{sh} \sim const.$ in the shell, and because $\frac{P_{sh}}{\rho_{sh}} \propto \frac{T_{sh}}{\mu_{sh}}$ the pressure by the envelope towards the hydrogen burning shell must increase. This leads to the envelope's contraction and consequently to the reduction of the luminosity $L$ as can be seen in Fig. \ref{fig:HR2}, which is still determined by the conditions in the photosphere because of the convective envelope. The contraction takes place until point {\it F}, but it is evident that the rate of the contraction becomes lower as the star moves towards {\it F}. In reality the temperature in the envelope slowly rises as the star reaches the end of the red-giant branch (transition from the red line to the blue line), thus the opacity also rises and the envelope becomes gradually less convective and more radiative. This is happening because not all the layers from the hydrogen burning shell and above are convective, but there is a small part at the bottom of the envelope that is still radiative. Hence, the helium burning acts now as a second source of energy inside the star. As the latter moves towards the transition point is already in thermal equilibrium and the virial theorem indicates that as the envelope contracts must rise its internal energy, thus rise its temperature. Consequently, the radiative layers above the core (not the hydrogen burning shell) are gradually heated erasing the convection from inside towards the surface of the star. From the transition point on the star enters the blue loop with a radiative envelope, which keeps contracting but the contraction is slowly decelerating, and a gradually increasing effective temperature. Hence, the luminosity starts to rise, because has a stronger dependence on the effective temperature than on the radius ($L \propto R^2 T_{eff}^4$). This is evident in Fig. \ref{fig:HR2}.
+
+As a result, stars go through expansion and contraction phases during their lives. The change in the star's physical radius occurs at different timescales depending on the physical mechanism buried beneath these processes. For example, in nuclear timescale ($t_{nuc}$, see \eqref{eq:nuclear_timsecale}), stars expand throughout the main sequence (MS), but in thermal timescale ($t_{th}$, see \eqref{eq:thermal_timsecale}), stars expand during the H-shell burning phase.
+\end{comment}
+
+
+
+\subsection{Stellar Winds}
+
+
+
+\subsection{Internal Mixing}\label{sub:mixing}
+
+Even though the overall stellar evolution is only slightly affected by the initial chemical composition, a variety of internal mixing process can impact the life cycle, particularly of massive ($M>8$ M$_{\odot}$), stars \citep{langer2012presupernova}. Apart from convection, convective overshooting, semiconvection, and rotationally induced mixing are the most important internal mixing process \citep{schootemeijer2019constraining} and are still poorly understood. 
+
+{\bf Convection}
+
+{\bf Convective Overshooting}
+
+Convective overshooting refers to the process of mixing beyond the boundaries of convective regions, which can occur when convective cells penetrate into radiative regions due to their non-zero velocity \citep{alongi1993evolutionary,brott2011rotating,schootemeijer2019constraining}. In stars with convective cores, e/g/ intermediate and massive stars, the size of the core is effectively enlarged through mechanisms such as convective core overshooting. This overshooting brings additional hydrogen into the core of the star and therefore directly impacts the final He core mass and main-sequence (MS) lifetime as well as the evolution of the stars after the MS.
+
+{\bf Semiconvection}
+
+{\bf Rotationally Induced Mixing}
+
+\section{Binary Star Systems}
+
+The evolution of a star in isolation could be summarized as: {\it Stars contract because they are hot and lose energy through radiation (Virial Theorem), while nuclear burning cycles serve as long-lived but transitory interruptions to a star's (or at least its core's) inevitable contraction due to gravity}. Despite that seemingly straightforward picture, massive stars tend form in multiple systems (see \cref{fig:stellar_companions}). Binaries particularly, which consist of two stars that orbit around a shared center of mass and are gravitationally connected to each other, are of immense importance. By nature,  they reveal more about themselves, particularly their masses and diameters, than other astronomical objects. This is especially true for eclipsing binaries \citep{prvsa2016physics}, which provide us with direct knowledge regarding spatial relations inside the source. Furthermore, close binaries are unique cosmic laboratories providing useful insights regarding different physical process. For example, gravitational wave emission is widely studied in binary mergers where both stars are compact objects \citep{cutler1994gravitational,abbott2017gw170608,abbott2019gwtc}, accretion as a power source in X-ray binaries \citep{lewin1997x,reig2011x}, while stellar interactions such as mass transfer, angular momentum exchange and tidal friction in close binaries {\it citation to be}. 
+
+Despite the additional complexity that these stellar interactions provide to the evolution of these systems, they offer the necessary base for discussing stellar interactions in triple systems.  There are two fundamental reasons why many binaries transfer matter at some point in their evolution:
+
+\begin{enumerate}
+    \item During its evolution, one of the stars in a binary system may expand in radius (R$_{\star}$) or contract in binary separation (${\alpha}$) to the point where the companion's gravitational force can remove the outer layers of its envelope (Roche lobe overflow).
+    \item At some point in its evolution, usually during the late post-MS phases, one of the stars may release most of its mass in the form of a stellar wind; part of this material will be gravitationally trapped by the companion (stellar wind accretion). 
+\end{enumerate}
+
+This section is mainly focused on MS-MS interacting binaries via Roche Lobe Overflow, (1). As discussed in \cref{sec:single_star_evolution}, this can occur because stars contract and expand during their evolution. Furthermore, the binary separation may decrease due to the loss of orbital angular momentum from the system as a result of stellar wind mass loss or gravitational radiation. 
+
+%Binaries' orbital periods and distances vary greatly. Some systems are so close that the stars' surfaces are virtually touching and can interchange material, namely contact binaries {\it(citation to be)}. Others may be separated by thousands of astronomical units and have orbital periods of hundreds of years. 
+
+\subsection{Roche Lobe Overflow}
+
+\subsubsection{Roche Lobes}
+
+The evolution of binaries can be described by the stellar masses, $M_1$ and $M_2$, their orbital separation,$\alpha$, and the eccentricity, $e$, of their orbit \citep{postnov2014evolution,sana2012binary,toonen2014popcorn}.
+
+\subsubsection{Conservative Mass Transfer}
+
+\subsubsection{Non-Conservative Mass Transfer}
+
+
+\section{Hierarchical Triple Star Systems}
+
+
+\section{Goal and Outline of Thesis}
+
+%\subsection{AMUSE}
+
+\subsection{Thesis Outline}
