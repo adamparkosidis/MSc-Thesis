@@ -5,6 +5,9 @@ import math
 import subprocess
 import numpy
 import pickle
+import pandas as pd
+import matplotlib.pyplot as plt
+
 
 from amuse.units import units, constants, nbody_system
 from amuse.units.core import enumeration_unit
@@ -13,16 +16,21 @@ from amuse.datamodel import Particles, Particle, ParticlesSuperset
 from amuse.io import write_set_to_file, read_set_from_file
 from amuse.support.exceptions import AmuseException
 
+from amuse.datamodel.particle_attributes import total_angular_momentum, kinetic_energy
+from amuse.ext.orbital_elements import orbital_elements_from_binary, orbital_period_to_semimajor_axis, get_orbital_elements_from_binaries
+from amuse.ext.star_to_sph import convert_stellar_model_to_SPH, StellarModelInSPH
+from amuse.ext.sink import new_sink_particles
 from amuse.ext.star_to_sph import convert_stellar_model_to_SPH, StellarModelInSPH
 from amuse.couple.bridge import Bridge, CalculateFieldForParticles
+
 from amuse.community.evtwin.interface import EVtwin
-from amuse.community.mesa.interface import MESA
+from amuse.community.mesa.interface import MESA # original
 from amuse.community.gadget2.interface import Gadget2
 from amuse.community.twobody.twobody import TwoBody
 from amuse.community.huayno.interface import Huayno
 
 import matplotlib
-matplotlib.use("Agg")
+#matplotlib.use("Agg")
 from matplotlib import pyplot
 from amuse.plot import scatter, xlabel, ylabel, plot,loglog,semilogx,semilogy, sph_particles_plot
 from amuse.plot import pynbody_column_density_plot, HAS_PYNBODY
@@ -70,37 +78,46 @@ def set_up_inner_binary():
 
     and returns the binary
     '''
-    semimajor_axis = 0.133256133158 | units.AU
+    #semimajor_axis = 0.133256133158 | units.AU  # 0.048273275517640366 
+    orbital_period = 1.10 | units.day
     eccentricity = 0
-    masses = [3.2, 3.1] | units.MSun
-    orbital_period = (4 * numpy.pi**2 * semimajor_axis**3 / 
-        (constants.G * masses.sum())).sqrt().as_quantity_in(units.day) # orbital_period in days
+    masses = [6.5, 5.9] | units.MSun #  3.2,3.1
+    semimajor_axis = orbital_period_to_semimajor_axis(orbital_period, masses[0], masses[1])
+    
+    #orbital_period = (4 * numpy.pi**2 * semimajor_axis**3 / 
+    #    (constants.G * masses.sum())).sqrt().as_quantity_in(units.day)
     
     print("   Initializing inner binary")
-    print("   Orbital period inner binary:", orbital_period) 
+    #print("   Orbital period inner binary:", orbital_period)
     stars =  Particles(2)
     stars.mass = masses
     stars.position = [0.0, 0.0, 0.0] | units.AU
     stars.velocity = [0.0, 0.0, 0.0] | units.km / units.s
     stars[0].x = semimajor_axis
     stars[0].vy = get_relative_velocity(stars.total_mass(), semimajor_axis, eccentricity)
-    stars.move_to_center()                                                                 # more info in /src/amuse/datamodel/particle_attributes.py
+    stars.move_to_center()                     # more info in /src/amuse/datamodel/particle_attributes.py
+    print('Inner binary orbital seperation in {:.2f} au'.format( \
+        (stars[0].position - stars[1].position).length().value_in(units.au)))
     return stars
 
 def set_up_outer_star(inner_binary_mass):
     '''
+    Input: inner binary combined mass 
+    
     Sets the orbital parameters of the tertiary, takes the inner binary mass to set 
     the relative velocity of the tertiary with respect to the inner binary (the tertiary
     gravitationaly 'sees' the inner binary as a star with mass = inner_binary_mass) 
     and returns the tertiary
     '''
-    semimajor_axis = 1.22726535008 | units.AU
-    eccentricity = 0.15
-    inclination = math.radians(9.0)
+    #semimajor_axis = 1.22726535008 | units.AU  #  ,0.8274288819130811
+    orbital_period = 52.04 | units.day
+    eccentricity = 0.15     # 0.3
+    inclination = math.radians(16.8)  #   9.0
     
     print("   Initializing outer star")
     giant = Particle()
-    giant.mass = 5.5 | units.MSun
+    giant.mass = 16.0 | units.MSun # 5.5
+    semimajor_axis = orbital_period_to_semimajor_axis(orbital_period, giant.mass, inner_binary_mass)
     giant.position = semimajor_axis * ([math.cos(inclination), 0, math.sin(inclination)] | units.none)
     giant.velocity = get_relative_velocity(giant.mass + inner_binary_mass, 
         semimajor_axis, eccentricity) * ([0, 1, 0] | units.none)
@@ -119,6 +136,14 @@ def set_up_initial_conditions():
     stars.move_to_center()
     return stars, view_on_giant
 
+def triple_set_up_info(triple, view_on_giant):
+    a_bin = ((triple-view_on_giant).center_of_mass() - triple.center_of_mass()).length().value_in(units.au)
+    print("\nBinary system semi-major axis is {:.2f} AU".format(a_bin)) 
+    a_giant = triple[2].position.length().value_in(units.AU)      
+    print("Giant's semi-major is axis {:0.2f} AU".format(a_giant))
+    dist_giant = (view_on_giant.position - (triple-view_on_giant).center_of_mass()).length().value_in(units.au)
+    print("Giant's distance from binar's COM is {:.2f} RSun".format(dist_giant))
+
 def estimate_roche_radius(triple, view_on_giant):
     '''
     Estimates and returns the Roche radius of the tertiary. In the calculation of the semi-major axis of the 
@@ -126,7 +151,7 @@ def estimate_roche_radius(triple, view_on_giant):
     of the tertiary in the 3D space. THe semi-major axis is calculated as the distance from the center of mass
     of the inner binary. Hence, the inner binay is 'seen' as a point by the tertiary with the total mass of the binary.
     Furthermore, it is assumed that the tertiary's orbit is circular in the calculation
-    of the Roche radius.  
+    of the Roche radius. 
     
     --> At this point a correction can be made to include the eccenticity of the tertiary, in the calculation
     of the Roche lobe 
@@ -139,15 +164,29 @@ def estimate_roche_radius(triple, view_on_giant):
     q23 = q13**2
     return (a*(0.49*q23/(0.6*q23+math.log(1+q13)))).as_quantity_in(units.RSun)
 
-def evolve_stars(triple, view_on_giant, stellar_evolution_code, radius_factor):
+def estimate_roche_radius_bin(star1, star2):
+    '''
+    Estimates and returns the Roche radius of the binary components. The binary orbit is circular in 
+    the calculation. 
+    '''
+    # 'mass ratio' of giant to inner binary
+    q = (star1.mass / star2.mass)
+    # Assume ~ circular orbit:
+    a = (star1.position - star2.position).length()
+    q13 = q**(1./3.)
+    q23 = q13**2
+    return (a*(0.49*q23/(0.6*q23+math.log(1+q13)))).as_quantity_in(units.RSun)
+
+def evolve_stars(triple, view_on_giant, stellar_evolution, radius_factor):
     '''
     Stellar evolution of the stars: Evolves the three stars until the more massive star's (tertiary in this case) 
     radius = 'radius_factor' (in this case=1) * 'Roche radius'. It also returns the evolved stars at the end of the 
     evolution and the .log file of the choosen stellar evolution code.
     '''
+    se_giant = stellar_evolution.particles.add_particle(view_on_giant)  # gives the tertiary into the stel. evol. code
     stop_radius = radius_factor * estimate_roche_radius(triple, view_on_giant)                                             
-    stellar_evolution = stellar_evolution_code(redirection='file', redirect_file='stellar_evolution_code_out.log')
-    se_giant = stellar_evolution.particles.add_particle(view_on_giant)                                                 # gives the tertiary into the stel. evol. code
+    #stellar_evolution = stellar_evolution_code(redirection='file', redirect_file='stellar_evolution_code_out.log')
+                                                     
     while (se_giant.radius < stop_radius):
         stellar_evolution.evolve_model(keep_synchronous = False)
     
@@ -160,9 +199,17 @@ def evolve_stars(triple, view_on_giant, stellar_evolution_code, radius_factor):
 # Phase two: Convert the 1D stellar evolution model to a gas particle distribution 
 ##########################################
 
-def convert_giant_to_sph(view_on_se_giant, number_of_sph_particles):
+def convert_giant_to_sph(view_on_se_giant, number_of_sph_particles): #pickle_file
     '''
-    Converting the 1D stellar evolution model to a gas particle distribution       # more info /src/amuse/ext/star_to_sph.py
+    Converting the 1D stellar evolution model to a gas particle distribution (see /src/amuse/ext/star_to_sph.py):
+    First uses the class 'EnclosedMassInterpolator' (see /src/amuse/ext/spherical_model.py) to calculate the enclosed mass profile of the star using the radius and density profiles
+    given by the Stellar evolution code. Then uses the class 'StellarModel2SPH' (see /src/amuse/ext/star_to_sph.py). At first finds the index in the enclosed mass profile (it's a numpy array)
+    where the 'target_core_mass' would be added and would agree with the enclosed mass profile. Then finds the respective radius for that index from the radius profile (effectivelly corresponding 
+    to the minimum core radius). Furthermore, defines a maximum core radius very close to the surface of the star. At this point, there an iterations from the minimum towards the maximum radius and
+    vice versa using internal energies. I do not understand the process yet, but I think the goal is to converge to a radius (minimum radius < radius < maximum radius) which will reprsent now the
+    SPH core particle. We want the SPH particle to be bigger than the physical core, without violating the density profile, in order to achieve higher resolution at the outer layers of the star.
+    For yet not well understood process this paper is cited (Integrals over r**2 times the cubic spline kernel W of Monaghan & Lattanzio (1985)).
+
 
     Converts the tertiary star to a collection of SPH particles based on the output of the stellar evolution code.
     Thus, the collection of particles is characterized by the temperature, density etc profiles that characterize the evolved
@@ -172,12 +219,12 @@ def convert_giant_to_sph(view_on_se_giant, number_of_sph_particles):
         view_on_se_giant,                                                              # Star particle to be converted to an SPH model
         number_of_sph_particles,                                                       
         with_core_particle = True,                                                     # Model the core as a heavy, non-sph particle
-        target_core_mass  = 1.4 | units.MSun,                                          # If (with_core_particle): target mass for the non-sph particle (in paper M = 2, ?)
+        target_core_mass  = 7.0 | units.MSun, # can try view_on_se_giant.core_mass,  was 1.4 | units.MSun    # If (with_core_particle): target mass for the non-sph particle (in paper M = 2, ?)
         do_store_composition = False                                                   # If set, store the local chemical composition on each particle 
     )
     return giant_in_sph
 
-def relax_in_isolation(giant_in_sph, sph_code, output_base_name):
+def relax_in_isolation(giant_in_sph, sph_code, output_base_name,mult_factor):
     '''
     Calculates the total mass of the star as the mass of the SPH particles representing the outer layers plus
     the mass of a non-SPH particle representing the core. Calculates the total radius of the star as the position
@@ -193,7 +240,8 @@ def relax_in_isolation(giant_in_sph, sph_code, output_base_name):
     total_mass = giant_in_sph.gas_particles.total_mass() + giant_in_sph.core_particle.mass  
     total_radius = max(giant_in_sph.gas_particles.position.lengths_squared()).sqrt()
     dynamical_timescale = (total_radius**3 / (2 * constants.G * total_mass)).sqrt().as_quantity_in(units.day) 
-    t_end = (10.0 * dynamical_timescale).as_quantity_in(units.day)                                                  
+
+    t_end = (mult_factor * dynamical_timescale).as_quantity_in(units.day)                                                  
     n_steps = 100
     hydro_code_options = dict(number_of_workers=2, redirection='file', redirect_file='hydrodynamics_code_relax_out.log')
 
@@ -210,7 +258,7 @@ def relax_in_isolation(giant_in_sph, sph_code, output_base_name):
     kinetic_energies = hydrodynamics.kinetic_energy.as_vector_with_length(1).as_quantity_in(units.erg)
     thermal_energies = hydrodynamics.thermal_energy.as_vector_with_length(1).as_quantity_in(units.erg)
     
-    print("   Relaxing for", t_end, "(10 * dynamical timescale)")
+    print("Relaxing for {:.2f} ({:.1f} * dynamical timescale)".format(t_end.value_in(units.day),mult_factor))
     times = (t_end * list(range(1, n_steps+1)) / n_steps).as_quantity_in(units.day)
     for i_step, time in enumerate(times):
         hydrodynamics.evolve_model(time)
@@ -256,6 +304,14 @@ def load_giant_model(file_base_name):
 ##########################################
 # Phase three: Coupling hydrodynamics with gravity in the evolution model 
 ##########################################
+
+def update_sinks_radii(sink_cand):
+    '''
+    Updates the accretion radius of the sinks based on the Roche Lobe radius
+    '''
+    sink_cand[0].sink_radius = estimate_roche_radius_bin(sink_cand[0],sink_cand[1])
+    sink_cand[1].sink_radius = estimate_roche_radius_bin(sink_cand[1],sink_cand[0])
+    return sink_cand
 
 def prepare_binary_system(dynamics_code, binary_particles):
     '''
@@ -313,8 +369,8 @@ def calculate_orbital_elements(m1, m2, pos1, pos2, vel1, vel2, m3, pos3, vel3):
         (constants.G * mtot * semimajor_axis))
     return semimajor_axis, eccentricity
 
-def evolve_coupled_system(binary_system, giant_system, t_end, n_steps, 
-        do_energy_evolution_plot, previous_data=None):
+def evolve_coupled_system(binary_system, giant_system, giant_model, inner_binary, hydro_channels, gravity_channels, \
+                          t_end, n_steps, do_energy_evolution_plot, previous_data=None):
     '''
     
     
@@ -348,6 +404,24 @@ def evolve_coupled_system(binary_system, giant_system, t_end, n_steps,
         giant_center_of_mass_velocity = [] | units.km / units.s
         ms1_velocity = [] | units.km / units.s
         ms2_velocity = [] | units.km / units.s
+
+    # Create sink particles based on the inner binary
+    sink_cand = inner_binary.copy()
+    sink_particles = new_sink_particles(sink_cand)
+    # Calculate the accretion radii of the sinks
+    sink_particles = update_sinks_radii(sink_particles)
+    gravity_channels["sinks_to_code"] = sink_particles.new_channel_to(binary_system.particles)
+    gravity_channels["code_to_sinks"] = binary_system.particles.new_channel_to(sink_particles)
+
+    # Allow the sink particles to accrete gas particles  
+    sink_particles.accrete(giant_model.gas_particles) 
+    # update the code gas particles based on the local particles
+    giant_model.gas_particles.synchronize_to(giant_system.gas_particles)
+    # update the inner binary IN the code based on the sink particles
+    gravity_channels["sinks_to_code"].copy()
+    # update the local inner binary based on the inner binary IN the code
+    gravity_channels["code_to_local"].copy()
+
     i_offset = len(giant_center_of_mass)
     
     giant_total_mass = giant_system.particles.total_mass()
@@ -358,6 +432,37 @@ def evolve_coupled_system(binary_system, giant_system, t_end, n_steps,
     for i_step, time in enumerate(times):
         coupled_system.evolve_model(time)
         print("   Evolved to:", time, end=' ')
+
+        #update the gas particles FROM the code
+        hydro_channels["code_to_local_gas"].copy()
+        #update the core particle FROM the code
+        hydro_channels["code_to_local_core"].copy()
+        #update the sink particles [vx ,vy,vz,x ,y,z] FROM the code
+        gravity_channels["code_to_sinks"].copy()
+
+        # acrrete gas particles if possible
+        tot_sinks = sink_particles.mass.sum()
+        sink_particles.accrete(giant_model.gas_particles)
+        dM_sinks = sink_particles.mass.sum() - tot_sinks
+
+        if dM_sinks>0|units.MSun:
+            print("\nStars accreted dM=", dM_sinks.in_(units.MSun))
+            # synchronize the code gas particles with the local gas particles in the code and remove the accreted ones
+            giant_model.gas_particles.synchronize_to(giant_system.gas_particles)
+            # update the accretion radius of the sinks based on the new mass and positions
+            sink_particles = update_sinks_radii(sink_particles)
+            #update the inner particles [mass,accretion_radius] in the code
+            gravity_channels["sinks_to_code"].copy()
+            
+            print(len(giant_system.gas_particles),len(giant_model.gas_particles),len(coupled_system.gas_particles))
+            print('/n',len(coupled_system.particles))
+            
+        #update the inner binary particles [mass,radius,vx ,vy,vz,x ,y,z] FROM the code
+        gravity_channels["code_to_local"].copy()
+        
+        giant_total_mass = giant_system.particles.total_mass()
+        ms1_mass = binary_system.particles[0].mass
+        ms2_mass = binary_system.particles[1].mass
         
         if do_energy_evolution_plot:
             potential_energies.append(coupled_system.particles.potential_energy())
@@ -411,7 +516,7 @@ def evolve_coupled_system(binary_system, giant_system, t_end, n_steps,
     
     coupled_system.stop()
     
-    make_movie()
+    #make_movie()
     
     if do_energy_evolution_plot:
         energy_evolution_plot(all_times[:len(kinetic_energies)-1], kinetic_energies, 
@@ -499,8 +604,8 @@ def continue_evolution(sph_code, dynamics_code, t_end, n_steps,
     giant_system = prepare_giant_system(sph_code, giant_model, view_on_giant, t_end, n_steps)
     
     print("\nEvolving with bridge between", sph_code.__name__, "and", dynamics_code.__name__)
-    evolve_coupled_system(binary_system, giant_system, t_end, n_steps, do_energy_evolution_plot, 
-        previous_data = os.path.join("snapshots", files[3]))
+    evolve_coupled_system(binary_system, giant_system, giant_model,inner_binary, hydro_channels,gravity_channels, \
+                    t_end, n_steps, do_energy_evolution_plot, previous_data = os.path.join("snapshots", files[3]))
     print("Done")
 
 def energy_evolution_plot(time, kinetic, potential, thermal, figname = "energy_evolution.png"):
@@ -549,19 +654,19 @@ def orbit_parameters_plot(semi_major_in,semi_major_out, time, par_symbol="a", pa
 
 
 if __name__ == "__main__":
-    stellar_evolution_code = MESA
+    stellar_evolution_code = MESA(version='2208')
     sph_code = Gadget2
     #dynamics_code = TwoBodyolve_stars
     dynamics_code = Huayno
 
-    number_of_sph_particles = 50000
+    number_of_sph_particles = 1000
     # Stop stellar evolution when giant's radius is (radius_factor * Roche lobe radius)
     radius_factor = 1.0
     relaxed_giant_output_base_name = "relaxed_giant_" + str(number_of_sph_particles) + "_" + str(radius_factor)
-    t_end = 300.0 | units.day
+    t_end = 300.0 | units.day 
     n_steps = 3000
     
-    do_energy_evolution_plot = False
+    do_energy_evolution_plot = True
     
     if os.path.exists("snapshots"):
         print("Found snapshots folder, continuing evolution of previous run")
@@ -573,13 +678,20 @@ if __name__ == "__main__":
     
     print("Initializing triple")
     triple, view_on_giant = set_up_initial_conditions()
+    triple_set_up_info(triple, view_on_giant)
     print("\nInitialization done:\n", triple)
     
-    print("\nEvolving with", stellar_evolution_code.__name__)
+    #print("\nEvolving with", stellar_evolution_code.__name__) 
     se_stars, se_code_instance = evolve_stars(triple, view_on_giant, stellar_evolution_code, radius_factor)
-    triple.radius = se_stars.radius
-    print("\nStellar evolution done:\n", se_stars)
+    # Return the new radii for the stars
+    triple[2].radius = se_stars[0].radius
+    triple[0].radius = se_stars[1].radius
+    triple[1].radius = se_stars[2].radius
+    print("\nAfter stellar evolution done star:\n", triple)
     
+    # relaxation duration = mult_factor*dynamical_timescale of the giant
+    mult_factor = 10.0
+
     if os.path.exists(os.path.join("..", "giant_models", relaxed_giant_output_base_name + "_gas.amuse")):
         print("\nLoading SPH model for giant from:", end=' ') 
         print(os.path.join("..", "giant_models", relaxed_giant_output_base_name + "_gas.amuse"))
@@ -591,14 +703,27 @@ if __name__ == "__main__":
         giant_model = convert_giant_to_sph(view_on_se_giant, number_of_sph_particles)
         se_code_instance.stop()
         print("Relaxing giant with", sph_code.__name__)
-        relax_in_isolation(giant_model, sph_code, relaxed_giant_output_base_name)
+        relax_in_isolation(giant_model, sph_code, relaxed_giant_output_base_name,)
     
+    inner_binary = triple - view_on_giant
     print("\nSetting up {0} to simulate inner binary system".format(dynamics_code.__name__))
-    binary_system = prepare_binary_system(dynamics_code, triple - view_on_giant)
+    binary_system = prepare_binary_system(dynamics_code, inner_binary)
+
+    # Create a channel between the inner_binary particles (python) and the binary_system.particles (Huayno)
+
+    gravity_channels = {}
+    gravity_channels["local_to_code"] = inner_binary.new_channel_to(binary_system.particles)
+    gravity_channels["code_to_local"] = binary_system.particles.new_channel_to(inner_binary)
     
     print("\nSetting up {0} to simulate giant in SPH".format(sph_code.__name__))
     giant_system = prepare_giant_system(sph_code, giant_model, view_on_giant, t_end, n_steps)
+
+    hydro_channels = {}
+    hydro_channels["local_to_code"] = giant_model.gas_particles.new_channel_to(giant_system.gas_particles)
+    hydro_channels["code_to_local_gas"] = giant_system.gas_particles.new_channel_to(giant_model.gas_particles)
+    hydro_channels["code_to_local_core"] = giant_system.dm_particles.new_channel_to(giant_model.core_particle.as_set())
     
     print("\nEvolving with bridge between", sph_code.__name__, "and", dynamics_code.__name__)
-    evolve_coupled_system(binary_system, giant_system, t_end, n_steps, do_energy_evolution_plot)
+    evolve_coupled_system(binary_system, giant_system, giant_model,inner_binary, hydro_channels,gravity_channels, \
+                    t_end, n_steps, do_energy_evolution_plot, previous_data=None)
     print("Done")
