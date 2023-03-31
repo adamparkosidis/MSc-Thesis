@@ -1,24 +1,39 @@
 import os
 import os.path
+import shutil
 import math
+import subprocess
 import numpy
+import pickle
+import pandas as pd
 import matplotlib.pyplot as plt
 
-from amuse.units import units, constants
+
+from amuse.units import units, constants, nbody_system
+from amuse.units.core import enumeration_unit
 from amuse.units.generic_unit_converter import ConvertBetweenGenericAndSiUnits
-from amuse.datamodel import Particles, Particle
+from amuse.datamodel import Particles, Particle, ParticlesSuperset
+from amuse.io import write_set_to_file, read_set_from_file
+from amuse.support.exceptions import AmuseException
 
 from amuse.datamodel.particle_attributes import total_angular_momentum, kinetic_energy
-from amuse.ext.orbital_elements import  orbital_period_to_semimajor_axis
-from amuse.ext.star_to_sph import convert_stellar_model_to_SPH
+from amuse.ext.orbital_elements import orbital_elements_from_binary, orbital_period_to_semimajor_axis, get_orbital_elements_from_binaries
+from amuse.ext.star_to_sph import convert_stellar_model_to_SPH, StellarModelInSPH
+from amuse.ext.sink import new_sink_particles
+from amuse.ext.star_to_sph import convert_stellar_model_to_SPH, StellarModelInSPH
+from amuse.couple.bridge import Bridge, CalculateFieldForParticles
 
+from amuse.community.evtwin.interface import EVtwin
 from amuse.community.mesa.interface import MESA # original
 from amuse.community.gadget2.interface import Gadget2
+from amuse.community.twobody.twobody import TwoBody
+from amuse.community.huayno.interface import Huayno
 
+import matplotlib
 #matplotlib.use("Agg")
 from matplotlib import pyplot
-from amuse.plot import xlabel, ylabel, plot
-
+from amuse.plot import scatter, xlabel, ylabel, plot,loglog,semilogx,semilogy, sph_particles_plot
+from amuse.plot import pynbody_column_density_plot, HAS_PYNBODY
 
 
 def dynamical_time_scale(m, r, G=constants.G):
@@ -229,14 +244,14 @@ def relax_in_isolation(giant_in_sph, sph_code, enc_mass_prof, mult_factor, epsil
 
     unit_converter = ConvertBetweenGenericAndSiUnits(total_radius, total_mass, t_end)           # more info in /src/amuse/units/generic_unit_converter.py
     hydrodynamics = sph_code(unit_converter, **hydro_code_options)
-    hydrodynamics.parameters.epsilon_squared = (epsilon*giant_in_sph.core_radius)**2  # Softening removes the singularity in the inverse-square force
+    hydrodynamics.parameters.epsilon_squared = (epsilon*total_radius)**2  # Softening removes the singularity in the inverse-square force
     hydrodynamics.parameters.max_size_timestep = t_end
     hydrodynamics.parameters.time_max = 1.1 * t_end
     hydrodynamics.parameters.time_limit_cpu = 7.0 | units.day
     hydrodynamics.gas_particles.add_particles(giant_in_sph.gas_particles)
     hydrodynamics.dm_particles.add_particle(giant_in_sph.core_particle)
     
-    print('epsilon = {:.4f} RSun'.format((hydrodynamics.parameters.epsilon_squared**(1/2)).value_in(units.RSun)))
+    print('epsilon*giant_core_radius = {:.4f} RSun'.format((hydrodynamics.parameters.epsilon_squared**(1/2)).value_in(units.RSun)))
     
     potential_energies = hydrodynamics.potential_energy.as_vector_with_length(1).as_quantity_in(units.erg)
     kinetic_energies = hydrodynamics.kinetic_energy.as_vector_with_length(1).as_quantity_in(units.erg)
@@ -380,7 +395,7 @@ def plot_giant(gas, core, relax_time,where_to_save,e):
     else:
         plt.savefig(where_to_save+'/giant_relaxed{:.0f}tdyn_{:.2f}MSun_{:.2f}eps.png'.format(relax_time, \
                     core.mass.value_in(units.MSun),e))
-    #plt.show()
+    plt.close()
 
 def enc_mass(enc_mass_prof, rad_prof,perce):
     ind = numpy.where(enc_mass_prof>=perce)[0][0]
@@ -403,7 +418,7 @@ def plt_dens_profiles(se_rad, se_dens, hyd_rad, hyd_dens ,star_enc_mass, relax_t
     else:
         plt.savefig(where_to_save+'/giant_dens_prof_relaxed{:.0f}tdyn_{:.2f}MSun_{:.4f}eps.png'.format(relax_time, \
                          m_core,e))
-    #plt.show()
+    plt.close()
 
     
 
@@ -412,13 +427,25 @@ def plt_dens_profiles(se_rad, se_dens, hyd_rad, hyd_dens ,star_enc_mass, relax_t
 #### Main ####
 ##############
 
+'''
+The parameter that needs to be optimized for a good relaxation of the stars is the smoothing lenght of the target core. The optimum smoothing length
+is directly related to the target core mass and the stepness of the density profile that we try to resolve (see the produced graphs for better understanding).
+The stepness of the density porfile is again related with the initial mass of the star, but most importantly with the internal structure of the star the moment
+we jump from the stellar evolution code to the sph code. More specifically, convective envelopes are much more homogenius than radiative envelopes and thus easier
+to resolve with a smaller number of particles.
 
-number_of_sph_particles = 10000
+It seems that for convective envelopes or in other words when we try to resolve <=6 orders of magnitude in densisty (between the density of the core and the
+minimum density at the edge of the envelope) a rule of thumb for good relaxation results is smoothing length = [0.1-0.25] * radius of the star.
+
+'''
+
+
+number_of_sph_particles = 5000
 
 triple, view_on_giant = set_up_initial_conditions()
 
 # Stop stellar evolution when giant's radius is (radius_factor * Roche lobe radius)
-radius_factor= 1.0
+radius_factor= 8.0
 stop_radius = radius_factor * estimate_roche_radius(triple, view_on_giant)
 
 print("Tertiary's Roche lobe radius is {:.2f} RSun or {:.2f} AU".format(stop_radius.value_in(units.RSun), \
@@ -429,15 +456,20 @@ triple_set_up_info(triple, view_on_giant)
 # Create directories
 
 path = os.getcwd()
-#create directory tos tore the output
-os.mkdir(path+'/core_masses')
 
+if os.path.isdir("core_masses") == False:
+    #create directory to store the output
+    os.mkdir(path+'/core_masses')
 
 mult_factor = 10.0
+
 # target core : m_factor * M_{star}
-target_core_m_factor = numpy.arange(0.25,0.6,0.025)                
-epsilon_m_factor = numpy.arange(0.01,1.01,0.01)                
-#giant_model_radii = []
+#target_core_m_factor = numpy.arange(0.5,0.8,0.1)
+target_core_m_factor = numpy.array(list([0.5,0.6]))
+
+epsilon_m_factor = numpy.arange(0.12, 0.2, 0.01)    
+#epsilon_m_factor = numpy.array(list([0.35,0.37,0.4,0.45,0.5]))
+
 
 for dummy_var, core_mult_f in enumerate(target_core_m_factor):
     
@@ -452,12 +484,13 @@ for dummy_var, core_mult_f in enumerate(target_core_m_factor):
     target_core = core_mult_f * view_on_giant.mass.value_in(units.MSun) 
     giant_model = convert_giant_to_sph(view_on_se_giant, number_of_sph_particles,target_core)
     
-    dir_name = 'M_{:.1f}Mcore'.format(target_core)
-    os.mkdir(path+'/core_masses/'+dir_name)
+    dir_name = 'M_{:.1f}Mcore_{:.1e}SPH_part'.format(target_core,number_of_sph_particles)
+
+    if os.path.isdir(path+'/core_masses/'+dir_name) == False:
+        #create directory to store the output
+        os.mkdir(path+'/core_masses/'+dir_name)
+
     path_to_dir_for_data = path+'/core_masses/'+dir_name
-    
-    # save the (target) core's radius 
-    # giant_model_radii.append(giant_model.core_particle.radius.value_in(units.RSun))
 
     ## Giant's profile at ROLF
     giant_num_zones, giant_dens_profile, giant_temp_profile, giant_rad_profile, \
@@ -477,7 +510,6 @@ for dummy_var, core_mult_f in enumerate(target_core_m_factor):
     plt_dens_profiles(giant_rad_profile, giant_dens_profile, radii0, densities0, enc_mass_calc, 0.0, target_core, 
                       path_to_dir_for_data,None)
       
-    
     
     for eps in epsilon_m_factor:
         sph_code = Gadget2
