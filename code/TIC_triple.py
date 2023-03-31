@@ -137,12 +137,29 @@ def set_up_initial_conditions():
     return stars, view_on_giant
 
 def triple_set_up_info(triple, view_on_giant):
-    a_bin = ((triple-view_on_giant).center_of_mass() - triple.center_of_mass()).length().value_in(units.au)
-    print("\nBinary system semi-major axis is {:.2f} AU".format(a_bin)) 
-    a_giant = triple[2].position.length().value_in(units.AU)      
-    print("Giant's semi-major is axis {:0.2f} AU".format(a_giant))
-    dist_giant = (view_on_giant.position - (triple-view_on_giant).center_of_mass()).length().value_in(units.au)
-    print("Giant's distance from binar's COM is {:.2f} RSun".format(dist_giant))
+    
+    print("\n Inner orbit:")
+    inner_seperation = (triple[0].position-triple[1].position).lengths().in_(units.au)
+    print("Orbital Separation of inner binary stars {:.2f} AU or {:.2f} RSun".format( \
+        inner_seperation.value_in(units.au), inner_seperation.value_in(units.RSun)))
+    
+    sm_1 = ((triple-view_on_giant).center_of_mass() - triple[0].position).lengths().in_(units.au)
+    print("Semi-major axis1 {:.2f} AU or {:.2f} RSun".format(sm_1.value_in(units.au), \
+                    sm_1.value_in(units.RSun)))
+    sm_2 = ((triple-view_on_giant).center_of_mass() - triple[1].position).lengths().in_(units.au)
+    print("Semi-major axis1 {:.2f} AU or {:.2f} RSun".format(sm_2.value_in(units.au), \
+                    sm_2.value_in(units.RSun)))
+    
+    print("\n Outer orbit:")
+    a_bin = ((triple-view_on_giant).center_of_mass() - triple.center_of_mass()).length().in_(units.au)
+    print("\nBinary system semi-major axis is {:.2f} AU or {:.2f} RSun".format(a_bin.value_in(units.au), \
+                                                                               a_bin.value_in(units.RSun))) 
+    a_giant = triple[2].position.length().in_(units.AU)      
+    print("Giant's semi-major is axis {:0.2f} AU or {:.2f} RSun".format(a_giant.value_in(units.au), \
+                                                                        a_giant.value_in(units.RSun)))
+    dist_giant = (view_on_giant.position - (triple-view_on_giant).center_of_mass()).length().in_(units.au)
+    print("Giant's distance from binary's COM is {:.2f} AU or {:.2f} RSun".format(dist_giant.value_in(units.au), \
+                                                                                  dist_giant.value_in(units.RSun)))
 
 def estimate_roche_radius(triple, view_on_giant):
     '''
@@ -257,8 +274,10 @@ def relax_in_isolation(giant_in_sph, sph_code, output_base_name,mult_factor):
     potential_energies = hydrodynamics.potential_energy.as_vector_with_length(1).as_quantity_in(units.erg)
     kinetic_energies = hydrodynamics.kinetic_energy.as_vector_with_length(1).as_quantity_in(units.erg)
     thermal_energies = hydrodynamics.thermal_energy.as_vector_with_length(1).as_quantity_in(units.erg)
+    energy_comparisons = (2*hydrodynamics.kinetic_energy.as_vector_with_length(1) + \
+        hydrodynamics.potential_energy.as_vector_with_length(1)).as_quantity_in(units.erg)
     
-    print("Relaxing for {:.2f} ({:.1f} * dynamical timescale)".format(t_end.value_in(units.day),mult_factor))
+    print("Relaxing for {:.2f} days or ({:.1f} * dynamical timescale)".format(t_end.value_in(units.day),mult_factor))
     times = (t_end * list(range(1, n_steps+1)) / n_steps).as_quantity_in(units.day)
     for i_step, time in enumerate(times):
         hydrodynamics.evolve_model(time)
@@ -266,6 +285,7 @@ def relax_in_isolation(giant_in_sph, sph_code, output_base_name,mult_factor):
         potential_energies.append(hydrodynamics.potential_energy)
         kinetic_energies.append(hydrodynamics.kinetic_energy)
         thermal_energies.append(hydrodynamics.thermal_energy)
+        energy_comparisons.append(2*hydrodynamics.kinetic_energy + hydrodynamics.potential_energy)
     
     hydrodynamics.gas_particles.copy_values_of_attributes_to(
         ['mass', 'x','y','z', 'vx','vy','vz', 'u', 'h_smooth'], 
@@ -287,6 +307,8 @@ def relax_in_isolation(giant_in_sph, sph_code, output_base_name,mult_factor):
     
     energy_evolution_plot(times, kinetic_energies, potential_energies, thermal_energies, 
         figname = output_base_name + "_energy_evolution.png")
+    virial_eq_plot(times/dynamical_timescale, energy_comparisons, \
+        figname = output_base_name + "_virial_equilibrium.png")
 
 def load_giant_model(file_base_name):
     snapshotfile = os.path.join("..", "giant_models", file_base_name + "_gas.amuse")
@@ -599,13 +621,27 @@ def continue_evolution(sph_code, dynamics_code, t_end, n_steps,
     
     print("\nSetting up {0} to simulate inner binary system".format(dynamics_code.__name__))
     binary_system = prepare_binary_system(dynamics_code, binary)
+
+    gravity_channels = {}
+    gravity_channels["local_to_code"] = binary.new_channel_to(binary_system.particles)
+    gravity_channels["code_to_local"] = binary_system.particles.new_channel_to(binary)
     
     print("\nSetting up {0} to simulate giant in SPH".format(sph_code.__name__))
     giant_system = prepare_giant_system(sph_code, giant_model, view_on_giant, t_end, n_steps)
     
+    hydro_channels = {}
+    hydro_channels["local_to_code"] = giant_model.gas_particles.new_channel_to(giant_system.gas_particles)
+    hydro_channels["code_to_local_gas"] = giant_system.gas_particles.new_channel_to(giant_model.gas_particles)
+    hydro_channels["code_to_local_core"] = giant_system.dm_particles.new_channel_to(giant_model.core_particle.as_set())
+
+    
+    print(binary_system.particles)
+    print(giant_system.dm_particles)
+
     print("\nEvolving with bridge between", sph_code.__name__, "and", dynamics_code.__name__)
-    evolve_coupled_system(binary_system, giant_system, giant_model,inner_binary, hydro_channels,gravity_channels, \
-                    t_end, n_steps, do_energy_evolution_plot, previous_data = os.path.join("snapshots", files[3]))
+    evolve_coupled_system(binary_system, giant_system, giant_model,binary, hydro_channels,gravity_channels, \
+                          t_end, n_steps, do_energy_evolution_plot, \
+                          previous_data = os.path.join("snapshots", files[3]))
     print("Done")
 
 def energy_evolution_plot(time, kinetic, potential, thermal, figname = "energy_evolution.png"):
@@ -616,6 +652,15 @@ def energy_evolution_plot(time, kinetic, potential, thermal, figname = "energy_e
     plot(time, thermal, label='Q')
     plot(time, kinetic + potential + thermal, label='E')
     xlabel('Time')
+    ylabel('Energy')
+    pyplot.legend(prop={'size':"x-small"}, loc=4)
+    pyplot.savefig(figname)
+    pyplot.close()
+
+def virial_eq_plot(time, energy_comp, figname = "virial_equilibrium.png"):
+    pyplot.figure(figsize = (7, 7))
+    plot(time, energy_comp, label='2K + U')
+    xlabel(r'Time [$t_{dyn}$]')
     ylabel('Energy')
     pyplot.legend(prop={'size':"x-small"}, loc=4)
     pyplot.savefig(figname)
@@ -669,6 +714,9 @@ if __name__ == "__main__":
     do_energy_evolution_plot = True
     
     if os.path.exists("snapshots"):
+        '''
+        If there is a 'snapshots' directory continue the evolution from that point
+        '''
         print("Found snapshots folder, continuing evolution of previous run")
         continue_evolution(sph_code, dynamics_code, t_end, n_steps, 
             relaxed_giant_output_base_name, do_energy_evolution_plot)
@@ -691,21 +739,29 @@ if __name__ == "__main__":
     
     # relaxation duration = mult_factor*dynamical_timescale of the giant
     mult_factor = 10.0
+    inner_binary = triple - view_on_giant
 
     if os.path.exists(os.path.join("..", "giant_models", relaxed_giant_output_base_name + "_gas.amuse")):
+        '''
+        Check if there is a MESA model (in a folder called 'giant_models') representing the giant already
+        and load it instead of creating a new one
+        '''
         print("\nLoading SPH model for giant from:", end=' ') 
         print(os.path.join("..", "giant_models", relaxed_giant_output_base_name + "_gas.amuse"))
         giant_model = load_giant_model(relaxed_giant_output_base_name)
         se_code_instance.stop()
     else:
+        '''
+        If there is no MESA model representing the giant already, create a new one and relax it
+        '''
         print("\nConverting giant to", number_of_sph_particles, "SPH particles")
         view_on_se_giant = view_on_giant.as_set().get_intersecting_subset_in(se_stars)[0]
         giant_model = convert_giant_to_sph(view_on_se_giant, number_of_sph_particles)
         se_code_instance.stop()
         print("Relaxing giant with", sph_code.__name__)
-        relax_in_isolation(giant_model, sph_code, relaxed_giant_output_base_name,)
+        relax_in_isolation(giant_model, sph_code, relaxed_giant_output_base_name,mult_factor)
+
     
-    inner_binary = triple - view_on_giant
     print("\nSetting up {0} to simulate inner binary system".format(dynamics_code.__name__))
     binary_system = prepare_binary_system(dynamics_code, inner_binary)
 

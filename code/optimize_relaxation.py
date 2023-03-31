@@ -413,12 +413,12 @@ def plt_dens_profiles(se_rad, se_dens, hyd_rad, hyd_dens ,star_enc_mass, relax_t
 ##############
 
 
-number_of_sph_particles = 1000
+number_of_sph_particles = 10000
 
 triple, view_on_giant = set_up_initial_conditions()
 
 # Stop stellar evolution when giant's radius is (radius_factor * Roche lobe radius)
-radius_factor= 0.2
+radius_factor= 1.0
 stop_radius = radius_factor * estimate_roche_radius(triple, view_on_giant)
 
 print("Tertiary's Roche lobe radius is {:.2f} RSun or {:.2f} AU".format(stop_radius.value_in(units.RSun), \

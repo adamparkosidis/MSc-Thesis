@@ -1,0 +1,31 @@
+I. Introduction
+
+Briefly introduce the concept of multiple stellar systems, focusing on triple systems and their prevalence in massive stars.
+Discuss the importance of studying triple systems, highlighting their unique dynamical behavior and potential for exotic events.
+State the research objective of the thesis, which is to investigate the evolution of the massive hierarchical triple system TIC 470710327.
+Briefly outline the methodology used in the study, which involves simulating the system's evolution using the AMUSE software environment.
+Provide an overview of the structure of the thesis.
+
+II. Stellar Evolution
+
+Provide an overview of single massive star evolution, focusing on the stages relevant to triple evolution, such as the main sequence, red supergiant phase, and helium burning phase.
+Discuss the evolution of binary systems, highlighting the importance of mass transfer, angular momentum exchange, and collisions.
+Introduce concepts of triple evolution, such as the Lidov-Kozai cycles and their potential to enhance tidal effects and gravitational wave emission.
+III. Methodology
+
+Provide a detailed description of the AMUSE software environment used in the simulations.
+Outline the creation of the stellar evolution models for the triple components, and the simulation of the mass transfer process for the outer star.
+Discuss the parameters and properties that are examined in the simulations, and the methodology used to analyze the results.
+IV. Results
+
+Present the results of the simulations, focusing on the response of the inner and outer orbital parameters to the mass transfer process.
+Discuss the importance of various parameters and properties, such as the type of mass transfer and the response of the inner binary to the mass transfer process.
+Analyze the implications of the results for the future evolution of the system, including the potential for exotic events.
+V. Discussion and Conclusion
+
+Summarize the main findings of the study, highlighting the importance of triple evolution in understanding the evolution of massive stars.
+Discuss the limitations of the study and areas for future research.
+Conclude by emphasizing the significance of the study in advancing our understanding of triple evolution and its potential for exotic events.
+VI. References
+
+Provide a list of references cited throughout the thesis.
