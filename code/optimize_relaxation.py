@@ -432,7 +432,8 @@ The parameter that needs to be optimized for a good relaxation of the stars is t
 is directly related to the target core mass and the stepness of the density profile that we try to resolve (see the produced graphs for better understanding).
 The stepness of the density porfile is again related with the initial mass of the star, but most importantly with the internal structure of the star the moment
 we jump from the stellar evolution code to the sph code. More specifically, convective envelopes are much more homogenius than radiative envelopes and thus easier
-to resolve with a smaller number of particles.
+to resolve with a smaller number of particles. Furthermore, the number of particles effects slightly the optimum smoothing length, thus it is preferable to start 
+testing with a small number of particles just enough to resolve the majority of the mass. 
 
 It seems that for convective envelopes or in other words when we try to resolve <=6 orders of magnitude in densisty (between the density of the core and the
 minimum density at the edge of the envelope) a rule of thumb for good relaxation results is smoothing length = [0.1-0.25] * radius of the star.
