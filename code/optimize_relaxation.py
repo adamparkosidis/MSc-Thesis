@@ -51,8 +51,8 @@ def get_relative_velocity(total_mass, semimajor_axis, ecc):
 
 def set_up_inner_binary():
     '''
-    Sets the orbital parameters of the inner binary, moves the binary
-    to the center of mass of the three-body system:
+    Sets up the inner binary based on the relative orbit's parameters, and defines
+    the center of mass of the inner binary:
 
     particles.position -= particles.center_of_mass()
     particles.velocity -= particles.center_of_mass_velocity()
@@ -83,10 +83,10 @@ def set_up_outer_star(inner_binary_mass):
     '''
     Input: inner binary combined mass 
     
-    Sets the orbital parameters of the tertiary, takes the inner binary mass to set 
-    the relative velocity of the tertiary with respect to the inner binary (the tertiary
+    Sets up the tertiary based on the relative orbit's parameters. Takes the inner binary mass to set 
+    the relative velocity of the tertiary with respect to the inner binary center of mass (the tertiary
     gravitationaly 'sees' the inner binary as a star with mass = inner_binary_mass) 
-    and returns the tertiary
+    and returns the tertiary.
     '''
     #outer_orbital_sep = 0.8274288819130811 | units.AU  # 1.22726535008
     orbital_period = 52.04 | units.day
@@ -251,7 +251,7 @@ def relax_in_isolation(giant_in_sph, sph_code, enc_mass_prof, mult_factor, epsil
     hydrodynamics.gas_particles.add_particles(giant_in_sph.gas_particles)
     hydrodynamics.dm_particles.add_particle(giant_in_sph.core_particle)
     
-    print('epsilon*giant_core_radius = {:.4f} RSun'.format((hydrodynamics.parameters.epsilon_squared**(1/2)).value_in(units.RSun)))
+    print('Smoothing Length = {:.4f} RSun'.format((hydrodynamics.parameters.epsilon_squared**(1/2)).value_in(units.RSun)))
     
     potential_energies = hydrodynamics.potential_energy.as_vector_with_length(1).as_quantity_in(units.erg)
     kinetic_energies = hydrodynamics.kinetic_energy.as_vector_with_length(1).as_quantity_in(units.erg)
@@ -291,7 +291,7 @@ def relax_in_isolation(giant_in_sph, sph_code, enc_mass_prof, mult_factor, epsil
     energy_evolution_plot(times, kinetic_energies, potential_energies, thermal_energies,  
                     figname = where_to_save + "/energy_evolution_eps{:.2f}.png".format(epsilon))
     virial_eq_plot(times/dynamical_timescale, energy_comparisons, \
-                    figname = where_to_save + "/virial_equilibrium_eps{:.2f}.png".format(epsilon))
+                    figname = where_to_save + "/virial_equilibrium_eps{:.4f}.png".format(epsilon))
     
     
 def amuse_mesa_profiles(tertiary):
@@ -393,7 +393,7 @@ def plot_giant(gas, core, relax_time,where_to_save,e):
     if relax_time == 0.0:
         plt.savefig(where_to_save+'/Giant_before_relaxation_{:.2f}MSun.png'.format(core.mass.value_in(units.MSun)))
     else:
-        plt.savefig(where_to_save+'/giant_relaxed{:.0f}tdyn_{:.2f}MSun_{:.2f}eps.png'.format(relax_time, \
+        plt.savefig(where_to_save+'/giant_relaxed{:.0f}tdyn_{:.2f}MSun_{:.4f}eps.png'.format(relax_time, \
                     core.mass.value_in(units.MSun),e))
     plt.close()
 
@@ -410,7 +410,7 @@ def plt_dens_profiles(se_rad, se_dens, hyd_rad, hyd_dens ,star_enc_mass, relax_t
     ax1.scatter(hyd_rad[0].value_in(units.RSun),hyd_dens[0].value_in(units.g / units.cm**3), color='red', label='Mc = {:.2f} M_sun'.format(m_core))
     ax1.set_xlabel(r'$R \; (R_{\odot})$')
     ax1.set_ylabel(r'$\rho \; (g/cm^3)$')
-    plt.title("Relaxation Time {:.0f} dynamical tomescales".format(relax_time))
+    plt.title("Relaxation Time {:.0f} dynamical timescales".format(relax_time))
     ax1.legend()
     plt.yscale('log')
     if relax_time == 0.0:
