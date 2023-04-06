@@ -39,7 +39,6 @@ from amuse.plot import pynbody_column_density_plot, HAS_PYNBODY
 def dynamical_time_scale(m, r, G=constants.G):
     return numpy.sqrt(r**3/(2*constants.G*m))
 
-
 def relaxation_time_scale(N, M, R, G=constants.G):
     return 0.138*N/numpy.log(0.4*N) * dynamical_time_scale(M, R, G=constants.G)
 
@@ -522,9 +521,3 @@ for dummy_var, core_mult_f in enumerate(target_core_m_factor):
     se_code_instance.stop()
     
     
-
-
-
-
-
-
