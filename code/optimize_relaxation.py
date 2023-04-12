@@ -521,9 +521,3 @@ for dummy_var, core_mult_f in enumerate(target_core_m_factor):
     se_code_instance.stop()
     
     
-
-
-
-
-
-
