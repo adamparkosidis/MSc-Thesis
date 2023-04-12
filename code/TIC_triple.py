@@ -504,10 +504,17 @@ def prepare_giant_system(sph_code, giant_model, view_on_giant, time_unit, n_step
         time_unit)
     system = sph_code(unit_converter, **hydro_code_options)
     system.parameters.epsilon_squared = (epsilon*total_radius)**2 
-    system.parameters.max_size_timestep = time_unit / n_steps
-    system.parameters.time_max = 1.1 * time_unit
-    system.parameters.time_limit_cpu = 7.0 | units.day
 
+    # This gives the maximum timestep a particle may take. This should be set to a sensible value in order to protect against too large timesteps for particles with
+    # very small acceleration. For cosmological simulations, the parameter given here is the maximum allowed step in the logarithm of the expansion factor. 
+    # Note that the definition of MaxSizeTimestep has changed compared to Gadget-1.1 for cosmological simulations.
+    system.parameters.max_size_timestep = time_unit / n_steps            
+
+    # This sets the final time for the simulation. The code normally tries to run until this time is reached. 
+    # For cosmological integrations, the value given here is the final scale factor.
+    system.parameters.time_max = 1.1 * time_unit       
+    # CPU-time limit for the present submission of the code. If 85 percent of this time have been reached at the end of a timestep, the code terminates itself and produces restart files.                  
+    system.parameters.time_limit_cpu = 7.0 | units.day 
     giant_model.gas_particles.position += view_on_giant.position
     giant_model.gas_particles.velocity += view_on_giant.velocity
     
@@ -543,7 +550,7 @@ def evolve_coupled_system(binary_system, giant_system, giant_model, inner_binary
     '''    
     directsum = CalculateFieldForParticles(particles=giant_system.particles, gravity_constant=constants.G)  # more info ./src/amuse/couple/bridge.py
     directsum.smoothing_length_squared = giant_system.parameters.gas_epsilon**2
-    coupled_system = Bridge(timestep=(t_end / (2 * n_steps)), verbose=False, use_threading=True)
+    coupled_system = Bridge(timestep=(t_end / n_steps), verbose=False, use_threading=True) #(2 * n_steps)
     coupled_system.add_system(binary_system, (directsum,), False)
     coupled_system.add_system(giant_system, (binary_system,), False)
     
@@ -593,7 +600,8 @@ def evolve_coupled_system(binary_system, giant_system, giant_model, inner_binary
     giant_total_mass = giant_system.particles.total_mass()
     ms1_mass = binary_system.particles[0].mass
     ms2_mass = binary_system.particles[1].mass
-    
+    removed_mass = 0 | units.MSun
+
     print("   Evolving for", t_end)
     for i_step, time in enumerate(times):
         coupled_system.evolve_model(time)
@@ -622,6 +630,18 @@ def evolve_coupled_system(binary_system, giant_system, giant_model, inner_binary
             
             print(len(giant_system.gas_particles),len(giant_model.gas_particles),len(coupled_system.gas_particles))
             print('/n',len(coupled_system.particles))
+
+        # remove escaped gas particles if possible, particles that are at distance > 10au from the CoM
+        particles_to_remove = Particles(0)
+        particles_to_remove.add_particles(giant_model.gas_particles[giant_model.gas_particles.position.lengths().value_in(units.au)>10])
+        
+        if len(particles_to_remove) > 0:
+            print("\nMass removed dM=", particles_to_remove.mass.in_(units.MSun))
+            removed_mass += particles_to_remove.mass.sum()
+            # remove the lost particles
+            giant_model.gas_particles.remove_particles(particles_to_remove)
+            # synchronize the code gas particles with the local gas particles in the code
+            giant_model.gas_particles.synchronize_to(giant_system.gas_particles)
             
         #update the inner binary particles [mass,radius,vx ,vy,vz,x ,y,z] FROM the code
         gravity_channels["code_to_local"].copy()
@@ -651,22 +671,22 @@ def evolve_coupled_system(binary_system, giant_system, giant_model, inner_binary
         print("Outer Orbit:", time.in_(units.day),  a_giant[-1].in_(units.AU), e_giant[-1], ms1_mass.in_(units.MSun), ms2_mass.in_(units.MSun), giant_total_mass.in_(units.MSun))
         
         if i_step % 10 == 9:
-            snapshotfile = os.path.join("snapshots", "hydro_triple_{0:=04}_gas.amuse".format(i_step + i_offset))
+            snapshotfile = os.path.join("snapshots", "hydro_triple_{0:=07}_gas.amuse".format(i_step + i_offset))
             write_set_to_file(giant_system.gas_particles, snapshotfile, format='amuse')
-            snapshotfile = os.path.join("snapshots", "hydro_triple_{0:=04}_core.amuse".format(i_step + i_offset))
+            snapshotfile = os.path.join("snapshots", "hydro_triple_{0:=07}_core.amuse".format(i_step + i_offset))
             write_set_to_file(giant_system.dm_particles, snapshotfile, format='amuse')
-            snapshotfile = os.path.join("snapshots", "hydro_triple_{0:=04}_binary.amuse".format(i_step + i_offset))
+            snapshotfile = os.path.join("snapshots", "hydro_triple_{0:=07}_binary.amuse".format(i_step + i_offset))
             write_set_to_file(binary_system.particles, snapshotfile, format='amuse')
             
-            datafile = os.path.join("snapshots", "hydro_triple_{0:=04}_info.amuse".format(i_step + i_offset))
+            datafile = os.path.join("snapshots", "hydro_triple_{0:=07}_info.amuse".format(i_step + i_offset))
             with open(datafile, 'wb') as outfile:
                 pickle.dump((all_times[:len(giant_center_of_mass)], potential_energies, 
                     kinetic_energies, thermal_energies, giant_center_of_mass, 
                     ms1_position, ms2_position, giant_center_of_mass_velocity,
                     ms1_velocity, ms2_velocity), outfile)
        
-        figname1 = os.path.join("plots", "hydro_triple_small{0:=04}.png".format(i_step + i_offset))
-        figname2 = os.path.join("plots", "hydro_triple_large{0:=04}.png".format(i_step + i_offset))
+        figname1 = os.path.join("plots", "hydro_triple_small{0:=07}.png".format(i_step + i_offset))
+        figname2 = os.path.join("plots", "hydro_triple_large{0:=07}.png".format(i_step + i_offset))
         print("  -   Hydroplots are saved to: ", figname1, "and", figname2)
         for plot_range, plot_name in [(8|units.AU, figname1), (40|units.AU, figname2)]:
             if HAS_PYNBODY:
@@ -712,13 +732,21 @@ def evolve_coupled_system(binary_system, giant_system, giant_model, inner_binary
     separation = rel_position.lengths()
     speed_squared = rel_velocity.lengths_squared()
     
+    rel_position_dire = numpy.linalg.norm(rel_position)
+    rel_velocity_dire = numpy.linalg.norm(rel_velocity)
+    # velocity components
+    v_r = numpy.dot(rel_position / rel_position_dire, rel_velocity)
+    #v_p = numpy.sqrt(rel_velocity_dire ** 2 - v_r ** 2)
+
+    # orbital angular momentum
+    h_vec = numpy.cross(rel_position, rel_velocity)
+    h_dire = numpy.linalg.norm(h_vec)
     # Now calculate the important quantities:
     semimajor_axis_giant = (constants.G * total_mass * separation / 
         (2 * constants.G * total_mass - separation * speed_squared)).as_quantity_in(units.AU)
     eccentricity_giant = numpy.sqrt(1.0 - (rel_position.cross(rel_velocity)**2).sum(axis=1) / 
         (constants.G * total_mass * semimajor_axis_giant))
-    mutual_inclination = numpy.degrees(numpy.arctan(rel_position.z.as_quantity_in(units.AU) /
-                                                   rel_position.x.as_quantity_in(units.AU)))
+    mutual_inclination = numpy.degrees(numpy.arccos(h_vec[2] / h_dire))
     
     orbit_incl_plot(mutual_inclination,all_times[:len(eccentricity_binary)])
     
