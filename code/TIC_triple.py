@@ -52,7 +52,7 @@ def kozai_cycle_timescale(P_out,P_in,m1,m2,m3,e_out,a=1):
     t_koz = a*(P_out**2/P_in)*((m1+m2+m3)/m3)*(1-e_out**2)**(3/2)
     return t_koz.in_(units.yr)
 
-def nuclear_time_scale(l, L):
+def nuclear_time_scale(m, L):
     return 7e-4 * m * constants.c**2/L
 
 def relaxation_time_scale(N, M, R, G=constants.G):
