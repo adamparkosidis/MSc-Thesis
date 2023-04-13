@@ -404,9 +404,10 @@ def relax_in_isolation(giant_in_sph, sph_code, output_base_name,mult_factor, eps
     n_steps = 100
     hydro_code_options = dict(number_of_workers=3, redirection='file', redirect_file='hydrodynamics_code_relax_out.log')
 
-    unit_converter = ConvertBetweenGenericAndSiUnits(total_radius, total_mass, t_end)           # more info in /src/amuse/units/generic_unit_converter.py
+    #unit_converter = ConvertBetweenGenericAndSiUnits(total_radius, total_mass, t_end)           # more info in /src/amuse/units/generic_unit_converter.py
+    unit_converter = ConvertBetweenGenericAndSiUnits(1 | units.MSun, 1 | units.RSun, 1 | units.day)
     hydrodynamics = sph_code(unit_converter, **hydro_code_options)
-    hydrodynamics.parameters.epsilon_squared = (epsilon*total_radius)**2                    # Softening removes the singularity in the inverse-square force
+    hydrodynamics.parameters.epsilon_squared = (epsilon*total_radius)**2   # Smoothing parameter for gravity calculations, removes the singularity in the inverse-square force 
     hydrodynamics.parameters.max_size_timestep = t_end
     hydrodynamics.parameters.time_max = 1.1 * t_end
     hydrodynamics.parameters.time_limit_cpu = 7.0 | units.day
@@ -498,12 +499,13 @@ def prepare_giant_system(sph_code, giant_model, view_on_giant, time_unit, n_step
 
     hydro_code_options = dict(number_of_workers=3, 
         redirection='file', redirect_file='hydrodynamics_code_out.log')
-    unit_converter = ConvertBetweenGenericAndSiUnits(
-        1.0 | units.RSun, 
-        giant_model.gas_particles.total_mass() + giant_model.core_particle.mass, 
-        time_unit)
+    #unit_converter = ConvertBetweenGenericAndSiUnits(
+    #    1.0 | units.RSun, 
+    #    giant_model.gas_particles.total_mass() + giant_model.core_particle.mass, 
+    #    time_unit)
+    unit_converter = ConvertBetweenGenericAndSiUnits(1 | units.MSun, 1 | units.RSun, 1 | units.day)
     system = sph_code(unit_converter, **hydro_code_options)
-    system.parameters.epsilon_squared = (epsilon*total_radius)**2 
+    system.parameters.epsilon_squared = (epsilon*total_radius)**2 # Smoothing parameter for gravity calculations, removes the singularity in the inverse-square force 
 
     # This gives the maximum timestep a particle may take. This should be set to a sensible value in order to protect against too large timesteps for particles with
     # very small acceleration. For cosmological simulations, the parameter given here is the maximum allowed step in the logarithm of the expansion factor. 
@@ -514,7 +516,8 @@ def prepare_giant_system(sph_code, giant_model, view_on_giant, time_unit, n_step
     # For cosmological integrations, the value given here is the final scale factor.
     system.parameters.time_max = 1.1 * time_unit       
     # CPU-time limit for the present submission of the code. If 85 percent of this time have been reached at the end of a timestep, the code terminates itself and produces restart files.                  
-    system.parameters.time_limit_cpu = 7.0 | units.day 
+    system.parameters.time_limit_cpu = 100.0 | units.day
+
     giant_model.gas_particles.position += view_on_giant.position
     giant_model.gas_particles.velocity += view_on_giant.velocity
     
@@ -560,7 +563,7 @@ def evolve_coupled_system(binary_system, giant_system, giant_model, inner_binary
         with open(previous_data, 'rb') as file:
             (all_times, potential_energies, kinetic_energies, thermal_energies, 
                 giant_center_of_mass, ms1_position, ms2_position, 
-                giant_center_of_mass_velocity, ms1_velocity, ms2_velocity) = pickle.load(file)
+                giant_center_of_mass_velocity, ms1_velocity, ms2_velocity, giant_mass, body1_mass, body2_mass, removed_mass) = pickle.load(file)
         all_times.extend(times + all_times[-1])
     else:
         all_times = times
@@ -577,6 +580,10 @@ def evolve_coupled_system(binary_system, giant_system, giant_model, inner_binary
         giant_center_of_mass_velocity = [] | units.km / units.s
         ms1_velocity = [] | units.km / units.s
         ms2_velocity = [] | units.km / units.s
+        giant_mass =[] | units.MSun
+        body1_mass =[] | units.MSun
+        body2_mass =[] | units.MSun
+        removed_mass = [] | units.MSun
 
     # Create sink particles based on the inner binary
     sink_cand = inner_binary.copy()
@@ -600,7 +607,7 @@ def evolve_coupled_system(binary_system, giant_system, giant_model, inner_binary
     giant_total_mass = giant_system.particles.total_mass()
     ms1_mass = binary_system.particles[0].mass
     ms2_mass = binary_system.particles[1].mass
-    removed_mass = 0 | units.MSun
+    removed_dm = 0 | units.MSun
 
     print("   Evolving for", t_end)
     for i_step, time in enumerate(times):
@@ -633,16 +640,16 @@ def evolve_coupled_system(binary_system, giant_system, giant_model, inner_binary
 
         # remove escaped gas particles if possible, particles that are at distance > 10au from the CoM
         particles_to_remove = Particles(0)
-        particles_to_remove.add_particles(giant_model.gas_particles[giant_model.gas_particles.position.lengths().value_in(units.au)>10])
+        particles_to_remove.add_particles(giant_model.gas_particles[giant_model.gas_particles.position.lengths().value_in(units.au)>8])
         
         if len(particles_to_remove) > 0:
             print("\nMass removed dM=", particles_to_remove.mass.in_(units.MSun))
-            removed_mass += particles_to_remove.mass.sum()
+            removed_dm += particles_to_remove.mass.sum()
             # remove the lost particles
             giant_model.gas_particles.remove_particles(particles_to_remove)
             # synchronize the code gas particles with the local gas particles in the code
             giant_model.gas_particles.synchronize_to(giant_system.gas_particles)
-            
+
         #update the inner binary particles [mass,radius,vx ,vy,vz,x ,y,z] FROM the code
         gravity_channels["code_to_local"].copy()
         
@@ -661,6 +668,10 @@ def evolve_coupled_system(binary_system, giant_system, giant_model, inner_binary
         giant_center_of_mass_velocity.append(giant_system.particles.center_of_mass_velocity())
         ms1_velocity.append(binary_system.particles[0].velocity)
         ms2_velocity.append(binary_system.particles[1].velocity)
+        giant_mass.append(giant_total_mass)
+        body1_mass.append(ms1_mass)
+        body2_mass.append(ms2_mass)
+        removed_mass.append(removed_dm)
 
         a_giant, e_giant = calculate_orbital_elements(ms1_mass, ms2_mass,
                                                       ms1_position, ms2_position,
@@ -683,7 +694,7 @@ def evolve_coupled_system(binary_system, giant_system, giant_model, inner_binary
                 pickle.dump((all_times[:len(giant_center_of_mass)], potential_energies, 
                     kinetic_energies, thermal_energies, giant_center_of_mass, 
                     ms1_position, ms2_position, giant_center_of_mass_velocity,
-                    ms1_velocity, ms2_velocity), outfile)
+                    ms1_velocity, ms2_velocity, giant_mass, body1_mass, body2_mass, removed_mass), outfile)
        
         figname1 = os.path.join("plots", "hydro_triple_small{0:=07}.png".format(i_step + i_offset))
         figname2 = os.path.join("plots", "hydro_triple_large{0:=07}.png".format(i_step + i_offset))
@@ -731,22 +742,17 @@ def evolve_coupled_system(binary_system, giant_system, giant_model, inner_binary
     total_mass += giant_total_mass
     separation = rel_position.lengths()
     speed_squared = rel_velocity.lengths_squared()
-    
-    rel_position_dire = numpy.linalg.norm(rel_position)
-    rel_velocity_dire = numpy.linalg.norm(rel_velocity)
-    # velocity components
-    v_r = numpy.dot(rel_position / rel_position_dire, rel_velocity)
-    #v_p = numpy.sqrt(rel_velocity_dire ** 2 - v_r ** 2)
 
     # orbital angular momentum
-    h_vec = numpy.cross(rel_position, rel_velocity)
-    h_dire = numpy.linalg.norm(h_vec)
+    h_vec = rel_position.cross(rel_velocity).value_in(units.m**2 * units.s**-1)
+    h_dire = numpy.linalg.norm(h_vec, axis=1)
+
     # Now calculate the important quantities:
     semimajor_axis_giant = (constants.G * total_mass * separation / 
         (2 * constants.G * total_mass - separation * speed_squared)).as_quantity_in(units.AU)
     eccentricity_giant = numpy.sqrt(1.0 - (rel_position.cross(rel_velocity)**2).sum(axis=1) / 
         (constants.G * total_mass * semimajor_axis_giant))
-    mutual_inclination = numpy.degrees(numpy.arccos(h_vec[2] / h_dire))
+    mutual_inclination = numpy.degrees(numpy.arccos(h_vec[:,2] / h_dire))
     
     orbit_incl_plot(mutual_inclination,all_times[:len(eccentricity_binary)])
     
@@ -761,6 +767,17 @@ def evolve_coupled_system(binary_system, giant_system, giant_model, inner_binary
         speed_squared.as_quantity_in(units.km**2 / units.s**2), 
         all_times[:len(eccentricity_binary)], 
         par_symbol="v^2", par_name="speed_squared")
+
+    mass_plot_combined(giant_mass.as_quantity_in(units.MSun),body1_mass.as_quantity_in(units.MSun),body2_mass.as_quantity_in(units.MSun), \
+              semimajor_axis_giant, all_times[:len(eccentricity_binary)],par_symbol="M")
+    
+    mass_plot(giant_mass.as_quantity_in(units.MSun),all_times[:len(eccentricity_binary)],figname="giant_mass") 
+    
+    mass_plot(body1_mass.as_quantity_in(units.MSun),all_times[:len(eccentricity_binary)],figname="primary_mass") 
+        
+    mass_plot(body2_mass.as_quantity_in(units.MSun),all_times[:len(eccentricity_binary)],figname="secondary_mass")
+    
+    mass_plot(removed_mass.as_quantity_in(units.MSun),all_times[:len(eccentricity_binary)],figname="lost_mass")
 
 def make_movie():
     print("   Creating movie from snapshots")
@@ -785,7 +802,7 @@ def continue_evolution(sph_code, dynamics_code, t_end, n_steps,
     
     snapshotfile = os.path.join("..", "giant_models", relaxed_giant_output_base_name + "_core.amuse")
     core_particle = read_set_from_file(snapshotfile, format='amuse')
-    
+
     giant_model = StellarModelInSPH(
         gas_particles = sph_particles, 
         core_particle = gd_particles[0], 
@@ -811,8 +828,8 @@ def continue_evolution(sph_code, dynamics_code, t_end, n_steps,
     hydro_channels["code_to_local_core"] = giant_system.dm_particles.new_channel_to(giant_model.core_particle.as_set())
 
     
-    print(binary_system.particles)
-    print(giant_system.dm_particles)
+    print('\nLoading binary components',binary_system.particles)
+    print('\nLoading Giant core particle',giant_system.dm_particles)
     
     print("\nEvolving with bridge between", sph_code.__name__, "and", dynamics_code.__name__)
     evolve_coupled_system(binary_system, giant_system, giant_model,binary, hydro_channels,gravity_channels, \
@@ -881,6 +898,33 @@ def orbit_parameters_plot(semi_major_in,semi_major_out, time, par_symbol="a", pa
     pyplot.savefig(par_name+"_evolution.png")
     pyplot.close()
 
+def mass_plot_combined(g_mass, b1_mass, b2_mass, semi_major_out, time, par_symbol, par_name="mass"):
+
+    figure = pyplot.figure(figsize = (10, 6), dpi = 100)
+    subplot1 = figure.add_subplot(2, 1, 1)
+    plot(time,g_mass,label='giant')
+    plot(time,b1_mass,label='bin_primary')
+    plot(time,b2_mass,label='bin_secondary')
+    subplot1.set(xlabel=None)
+    ylabel('$'+par_symbol+'$')
+    subplot1.legend()
+
+    subplot = figure.add_subplot(2, 1, 2)
+    plot(time,semi_major_out )
+    xlabel('t')
+    ylabel('$a'+'_\mathrm{giant}$')
+    pyplot.minorticks_on()
+    pyplot.savefig(par_name+"_evolution.png")
+    pyplot.close()
+
+
+def mass_plot(mass,time,figname):
+    figure = pyplot.figure(figsize = (10, 6), dpi = 100)
+    plot(time,mass)
+    xlabel('t')
+    ylabel('M')
+    pyplot.savefig(figname+"_evolution.png")
+    pyplot.close()
 
 if __name__ == "__main__":
     stellar_evolution_code = MESA(version='2208')
@@ -892,8 +936,8 @@ if __name__ == "__main__":
     # Stop stellar evolution when giant's radius is (radius_factor * Roche lobe radius)
     radius_factor = 1.1
     epsilon = 0.12
-    relaxed_giant_output_base_name = "relaxed_giant_" + str(number_of_sph_particles) + "_" + str(radius_factor)+ \
-        "_" + str(epsilon)
+    relaxed_giant_output_base_name = "relaxed_giant_" + str(number_of_sph_particles) + "_R" + str(radius_factor) + \
+        "_e" + str(epsilon)
 
     t_end = 50.0 | units.day 
     n_steps = 500
@@ -975,13 +1019,6 @@ if __name__ == "__main__":
     hydro_channels["code_to_local_core"] = giant_system.dm_particles.new_channel_to(giant_model.core_particle.as_set())
     triple_before_combined_run_info(giant_system,binary_system,giant_model_luminosity)
 
-
-
-
-
-    # t_end = (7500 * dynamical_time_scale(triple[2].mass,triple[2].radius).value_in(units.day)) | units.day
-    #n_steps = 7e-6 * t_end # corresponds to a timestep = 0.1 days or 0.05 dynamical timescales
-    
     print("\nEvolving with bridge between", sph_code.__name__, "and", dynamics_code.__name__)
     evolve_coupled_system(binary_system, giant_system, giant_model,inner_binary, hydro_channels,gravity_channels, \
                     t_end, n_steps, do_energy_evolution_plot, previous_data=None)
