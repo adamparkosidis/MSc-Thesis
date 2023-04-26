@@ -495,7 +495,7 @@ print("\nInitialization done:\n", triple)
 radius_factor= 1.1
 stop_radius = radius_factor * estimate_roche_radius(triple, view_on_giant)
 
-print("Tertiary's radius radius is {:.2f} RSun or {:.2f} AU, which corresponds to {:.2f}* Roche lobe".format(stop_radius.value_in(units.RSun), \
+print("Tertiary's radius is {:.2f} RSun or {:.2f} AU, which corresponds to {:.2f}* Roche lobe".format(stop_radius.value_in(units.RSun), \
                                                                      stop_radius.value_in(units.au),radius_factor))
 
 # Create directories
