@@ -468,7 +468,17 @@ def plt_dens_profiles(se_rad, se_dens, hyd_rad, hyd_dens ,star_enc_mass, relax_t
 #### Main ####
 ##############
 
-number_of_sph_particles = 100
+'''
+The parameter that needs to be optimized for a good relaxation of the stars is the smoothing lenght of the target core. The optimum smoothing length
+is directly related to the target core mass and the stepness of the density profile that we try to resolve (see the produced graphs for better understanding).
+The stepness of the density porfile is again related with the initial mass of the star, but most importantly with the internal structure of the star the moment
+we jump from the stellar evolution code to the sph code. More specifically, convective envelopes are much more homogenius than radiative envelopes and thus easier
+to resolve with a smaller number of particles. Furthermore, the number of particles effects slightly the optimum smoothing length, thus it is preferable to start 
+testing with a small number of particles just enough to resolve the majority of the mass. 
+It seems that a rule of thumb for good relaxation results is smoothing length = [0.1-0.25] * radius of the star.
+'''
+
+number_of_sph_particles = 200000
 
 period_orbit_1 = 1.1 | units.day
 period_orbit_2 = 52.04 | units.day
@@ -482,7 +492,7 @@ triple, view_on_giant = set_up_initial_conditions(period_orbit_1, period_orbit_2
 print("\nInitialization done:\n", triple)
 
 # Stop stellar evolution when giant's radius is (radius_factor * Roche lobe radius)
-radius_factor= 1.0
+radius_factor= 1.1
 stop_radius = radius_factor * estimate_roche_radius(triple, view_on_giant)
 
 print("Tertiary's radius radius is {:.2f} RSun or {:.2f} AU, which corresponds to {:.2f}* Roche lobe".format(stop_radius.value_in(units.RSun), \
