@@ -1,6 +1,41 @@
-\section{Goal and Outline of Thesis}
+\section{Scientific Codes}
 
-%\subsection{AMUSE}
+\subsection{AMUSE}
 
-\subsection{Thesis Outline}
-This thesis is structured as follows: i
+
+
+\subsection{MESA}
+
+MESA (Modules for Experiments in Stellar Astrophysics, \cite{paxton2010modules,paxton2013modules,paxton2015modules,paxton2019modules}) is a highly sophisticated and versatile 1D stellar evolution code that has become one of the most widely used tools in modern astrophysics. Developed by a large group of scientists, the code is written in Fortran and combines numerous numerical and physics modules that allow for simulations of a wide range of stellar evolution scenarios.
+
+MESA is specifically designed to solve the fully coupled structure and composition equations simultaneously, which is a critical feature that makes it an extremely powerful tool for creating highly accurate and detailed models of stars. The code includes a vast array of modules for various astrophysical processes, including the equation of state, nuclear reaction networks, hydrodynamics, convective and radiative energy transport, mass loss, rotation, and magnetic fields. As a result, MESA can simulate the evolution of stars from their birth to their death, including complex phases such as helium and carbon burning, thermal pulses, and supernova explosions. The ability to accurately model these processes makes MESA an invaluable tool for astrophysical research and has led to numerous groundbreaking discoveries in the field.
+
+
+
+\subsection{Gadget-2}
+
+Gadget-2 (GAlaxies with Dark matter and Gas intEracT) is a smoothed particle hydrodynamics (SPH) code that simulates the gravitational and hydrodynamic evolution of collisionless and gaseous systems in astrophysical contexts. \citep{springel2005cosmological}. The code is capable of modeling a wide range of physical processes, such as gas dynamics, gravity, magnetic fields, and radiative transfer. Gadget-2 is written in C++ and is publicly available under the GNU General Public License.
+
+The basic principle of the SPH method is to represent the fluid as a set of particles with associated physical attributes such as density, pressure, and velocity. To calculate these properties at a given point in space, the code uses a cubic spline kernel \citep{monaghan1985refined}, that is smooth and has a compact support, meaning it averages the properties of neighboring particles within a certain radius of the target point. Furthermore, the method is Lagrangian, meaning that the particles move with the fluid and do not have a fixed position in space.
+
+
+The hydrodynamics computation in Gadget-2 is performed by solving the equations of motion for each particle in the simulation domain. The acceleration of each particle is calculated by summing the forces acting on it, including gravity, pressure gradients, and artificial viscosity. The gravity calculation uses the hybrid TreePM method \citep{bode2000tree,bagla2002treepm}, where the simulation volume is recursively subdivided into cubic cells, with each cell containing a maximum number of particles. The algorithm then builds a tree structure where each cell is treated as a node, and nodes that are spatially close are grouped together to form larger nodes. The final tree structure is used to compute the gravitational force on each particle avoiding the need to calculate the force between all pairs of particles in the system. This method reduces the computational cost from $O(N^2)$ for direct summation to $O(N\log N)$, where $N$ is the number of particles.
+
+
+The code also includes modules for modeling magnetic fields and radiative transfer. The magnetic field module includes algorithms for calculating the magnetic field evolution and its effects on the gas dynamics. The radiative transfer module includes algorithms for calculating the transport of radiation through the simulation domain and its effects on the gas and dust properties. Gadget-2 can be run in parallel on high-performance computing clusters using the Message Passing Interface (MPI) standard.
+
+
+\subsection{Huayno}
+
+
+Huayno is a high-performance N-body integrator code designed to simulate the dynamics of collisionless systems, such as galaxies, star clusters, and dark matter halos. The code is written in C++ and uses a hybrid algorithm that combines the particle-mesh (PM) and tree-based algorithms. Huayno is publicly available under the GNU General Public License.
+
+The basic principle of the PM algorithm is to represent the gravitational potential as a discrete mesh of fixed resolution. The particle positions are interpolated onto the mesh using a cloud-in-cell (CIC) scheme, and the gravitational forces are calculated by solving Poisson's equation on the mesh. The tree-based algorithm, on the other hand, uses a hierarchical structure to group particles into clusters and calculates the forces between clusters at different levels of the hierarchy. The hybrid algorithm combines the advantages of both algorithms and reduces the computational cost of simulating large systems.
+
+Huayno also includes various subroutines and modules to facilitate the user in setting up simulations for different astrophysical scenarios. For example, the user can specify the initial conditions of the system, such as particle positions, velocities, masses, and physical properties. The user can also specify the boundary conditions of the simulation domain, such as periodic, reflecting, or outflow boundaries.
+
+The code is designed to handle a wide range of particle distributions, from homogeneous and isotropic systems to anisotropic and structured systems. Huayno can also handle non-equilibrium systems, such as systems with binary or multiple stars. The user can specify the softening length of the gravitational interaction, which determines the spatial extent of the smoothing. The code also includes modules for integrating the orbits of particles, calculating the energy and angular momentum of the system, and analyzing the simulation output.
+
+Huayno is designed to run efficiently on modern high-performance computing (HPC) clusters, and it supports parallel computing using the Message Passing Interface (MPI) standard. The code is optimized for a wide range of hardware architectures, including multi-core processors, GPUs, and FPGAs. The user can specify the number of processors or cores to use for the simulation, as well as the communication and load-balancing strategies.
+
+In summary, Huayno is a powerful N-body integrator code that combines the PM and tree-based algorithms to simulate the dynamics of collisionless systems. The code is highly customizable and can handle a wide range of astrophysical scenarios, from galaxy formation to dark matter halos. The user can specify the initial conditions and boundary conditions of the simulation, as well as the softening length and other parameters. Huayno is optimized for parallel computing and can run efficiently on a wide range of HPC clusters.
