@@ -1,0 +1,68 @@
+\section{Stellar Evolution}\label{sec:stellar_evolution}
+
+The stellar evolution calculations in this work are performed using the normal AMUSE parameters for MESA, with solar metallicity as the input.
+MESA allows me to track the independent evolution of the triple system components and obtain estimations of their properties at the beginning of RLOF. In addition to fundamental parameters such as mass, radius, etc., MESA enables the access to the internal structure and detailed properties of the individual components. This information is essential for the conversion of one-dimensional stellar models into three-dimensional hydrodynamical realizations, providing a more comprehensive understanding of the physical processes involved in RLOF and the resulting mass transfer in these systems. In this work, I allow the tertiary to evolve until $R_{\star} = 1.1 \times R_{ROLF}$ which will be explained in this chapter along with the implications of that choice.
+
+\subsection{Pre-ROLF Evolution}
+
+By the time the outer star approaches the radius of its Roche lobe, all three stars have lost some mass, while the tertiary's radius is much bigger than when it was formed. In order to accurately evaluate the Roche lobe sizes,  I need to estimate the masses of the stars at the ROLF moment. Unfortunately, $\xi$ Tau age is not known, but mass-loss via winds during the main sequence is expected to be unimportant for low- and intermediate- mass stars.
+
+Despite that, I track the evolution of the tertiary's mass and radius profile. I utilize Reimer's \cite{reimers1975circumstellar} and Blocker's \cite{bloecker1995stellarI,bloecker1995stellarII} mass-loss prescriptions (see \cref{sec:single_star_evolution}) using commonly scaling factors of $\eta = 0.5$ and $\eta = 0.1$, respectivelly.
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width=0.9\textwidth]{Thesis/graphs/giant_1-1mass_loss.pdf}
+    \label{fig:mass_loss}
+    \end{subfigure}%
+    \begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width=0.9\textwidth]{Thesis/graphs/giant_1-1radius.pdf}
+    \label{fig:radius_profile}
+    \end{subfigure}
+    \caption{ Mass and radius evolution of a 5.5 M$_{\odot}$ star at solar metallicity until ROLF. ZAMS and TAMS are noted by black circles, while bgininng and the end of helium burning by black squares. The stellar evolution models are made using MESA\citep{paxton2010modules,paxton2013modules,paxton2015modules,paxton2019modules}.}
+\end{figure}
+
+The tertiary loses less than $1\%$ of its 
+initial mass, while the expected mass loss from the binary components is even smaller. for this is that less massive, and thus less luminus, stars will have weaker winds (see \cref{sec:single_star_evolution}). As a result, I do not correct for mass-loss and use the parameters listed in  \cref{tab:system_orbit_param}.
+
+At this point, I also assume that the mass lost through winds has no effect on the stars. This assumption would be false in the case of more massive stars. As mass escapes from the star's surface, it carries angular momentum and can change the inner and outer orbital parameters. Furthermore, some of the escaped mass can be accreted, complicating the evolution of the two orbits even further. Given the small amount of mass loss, the aforementioned assumption is safe in this case.
+
+In \cref{fig:HR_ROLF}, I present the evolution of the tertiaty on the HR diagram until the moment of ROLF. It is apparent that the tertiary will overflow its Roche lobe during the early AGB phase, after helium exhaustion, leading to a type C mass transfer.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{Thesis/graphs/HR_1-1ROLF.pdf}
+    \caption{Evolution of 5.5 M$_{\odot}$ at solar metallicity until the moment of ROLF. The track is calculated with MESA \citep{paxton2010modules,paxton2013modules,paxton2015modules,paxton2019modules}. The dashed lines show lines of constant radii by means of the Stefan–Boltzmann law.}
+    \label{fig:HR_ROLF}
+\end{figure}
+
+In \cref{tab:system_orbit_param_ROLF} I summarize the important parameters of the system at the moment of RLOF.
+
+\begin{table}[H]
+    \begin{adjustbox}{width=1\textwidth}
+    \small
+    \centering
+    \begin{tabular}{| c c c c c c c c c c|}
+       M$_1$ (M$_{\odot}$) & 
+       M$_2$ (M$_{\odot}$) &
+       M$_3$ (M$_{\odot}$) & $\alpha_{in}$ (au) &
+       $\alpha_{out}$ (au) &
+       $\epsilon_{in}$ &
+       $\epsilon_{out}$ &
+       $R_{ROLF}$ (au) &
+       $t_{ROLF}$ (Myr) &
+       $M_{ROLF}$  (M$_{\odot}$) \\
+       \hline
+       3.2 & 3.1 & 5.5 & 0.133 & 1.24 & 0.0 & 0.15 & 0.423 & 82.36 & 5.5
+    \end{tabular}
+    \end{adjustbox}
+    \caption{ Orbital parameters of $\xi$ Tau system at the beginning of ROLF}
+    \label{tab:system_orbit_param_ROLF}
+\end{table}
+
+
+Figure 3 depicts the radial density profile of the outer component of the star at the moment of RLOF (green drawn line)
+
+

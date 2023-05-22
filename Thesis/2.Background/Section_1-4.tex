@@ -1,4 +1,4 @@
-\section{Scientific Codes}
+\section{Scientific Codes}\label{sec:scientific_codes}
 
 In this section, I introduce the scientific codes that I coupled together in order to simulate the evolution of my target system.  Because these codes can be used in a variety of astrophysical scenarios, I will concentrate on their fundamental usage and working principles. I encourage users who want to dig deeper into the codes to follow the relevant citations.
 
@@ -8,14 +8,14 @@ MESA (Modules for Experiments in Stellar Astrophysics, \cite{paxton2010modules,p
 
 MESA includes a wide range of physics modules for various astrophysical processes, such as the equation of state, nuclear reaction networks, hydrodynamics, convective and radiative energy transport, mass loss, rotation, and magnetic fields. The code can simulate the evolution of stars from their birth to their death, including complex phases such as helium and carbon burning, thermal pulses, and supernova explosions. As a result, MESA is an invaluable tool for astrophysical research, from studying the formation and evolution of stars to exploring the origins of the elements in the universe.
 
-The central feature of MESA is the solution of the coupled structure and composition equations, which describe the internal structure of stars and the evolution of their chemical composition over time. These equations are based on fundamental principles of stellar physics, such as conservation of mass, momentum, and energy, as well as nuclear reactions that generate and consume energy in the star. The structure and composition equations can be written as a set of coupled differential equations that describe the evolution of the mass, radius, luminosity, temperature, and chemical composition of the star over time.
+The central feature of MESA is the solution of the coupled structure and composition equations, which describe the internal structure of stars and the evolution of their chemical composition over time. These equations are based on fundamental principles of stellar physics, such as conservation of mass, momentum, and energy, as well as nuclear reactions that generate and consume energy in the star. The structure and composition equations can be written as a set of coupled differential equations that describe the evolution of the mass, radius, luminosity, temperature, and chemical composition of the star over time \citep{paxton2010modules,paxton2013modules,paxton2015modules,paxton2019modules}).
 
 MESA also includes a comprehensive nuclear reaction network that describes the fusion of light elements into heavier elements in the stellar core. The network includes thousands of nuclear reactions that involve hundreds of isotopes, making it one of the most detailed and accurate nuclear reaction networks available for stellar evolution calculations.
 
 
 \subsection{Gadget-2}
 
-Gadget-2 (GAlaxies with Dark matter and Gas intEracT) is a smoothed particle hydrodynamics (SPH) code that simulates the gravitational and hydrodynamic evolution of collisionless and gaseous systems in astrophysical contexts. \citep{springel2005cosmological}. The code is capable of modeling a wide range of physical processes, such as gas dynamics, gravity, magnetic fields, and radiative transfer. Gadget-2 is written in C++ and is publicly available under the GNU General Public License.
+Gadget-2 (GAlaxies with Dark matter and Gas intEracT) is a smoothed particle hydrodynamics (SPH) code that simulates the gravitational and hydrodynamic evolution of collisionless and gaseous systems in astrophysical contexts \citep{springel2005cosmological}. The code is capable of modeling a wide range of physical processes, such as gas dynamics, gravity, magnetic fields, and radiative transfer. Gadget-2 is written in C++ and is publicly available under the GNU General Public License.
 
 The basic principle of the SPH method is to represent the fluid as a set of particles with associated physical attributes such as density, pressure, and velocity. To calculate these properties at a given point in space, the code uses a cubic spline kernel \citep{monaghan1985refined}, that is smooth and has a compact support, meaning it averages the properties of neighboring particles within a certain radius of the target point. Furthermore, the method is Lagrangian, meaning that the particles move with the fluid and do not have a fixed position in space.
 
@@ -40,9 +40,6 @@ The code is designed to handle a wide range of particle distributions, from homo
 
 Huayno is designed to run efficiently on modern high-performance computing (HPC) clusters, and it supports parallel computing using the Message Passing Interface (MPI) standard. The code is optimized for a wide range of hardware architectures, including multi-core processors, GPUs, and FPGAs. The user can specify the number of processors or cores to use for the simulation, as well as the communication and load-balancing strategies.
 
-In summary, Huayno is a powerful N-body integrator code that combines the PM and tree-based algorithms to simulate the dynamics of collisionless systems. The code is highly customizable and can handle a wide range of astrophysical scenarios, from galaxy formation to dark matter halos. The user can specify the initial conditions and boundary conditions of the simulation, as well as the softening length and other parameters. Huayno is optimized for parallel computing and can run efficiently on a wide range of HPC clusters.
-
-
 \subsection{AMUSE}
 
 Astrophysical Multipurpose Software Environment (AMUSE) is an open-source software package designed for astrophysical simulations and data analysis \citep{pelupessy2013astrophysical,portegies2018astrophysical}. The software is written in Python, which provides a user-friendly interface, and allows users to combine multiple astrophysical codes into a single simulation. AMUSE consists of a collection of modules that can be used to simulate a wide range of astrophysical phenomena, including stellar evolution, gravitational dynamics, hydrodynamics, radiative transfer, and cosmology.
@@ -53,5 +50,4 @@ AMUSE provides a powerful and flexible tool for data analysis, allowing users to
 
 AMUSE is designed to be highly scalable and can be run on a range of computing platforms, from laptops to high-performance computing clusters \citep{pelupessy2013astrophysical}. The software is optimized for parallel computing, and users can run simulations on multiple cores or distributed computing clusters using the Message Passing Interface (MPI) standard.
 
-In summary, AMUSE is a powerful and versatile software package for astrophysical simulations and data analysis. The software allows researchers to simulate a wide range of astrophysical phenomena and to combine different simulation codes into a single framework. AMUSE provides a user-friendly interface and is highly scalable, making it an essential tool for astrophysical research in the era of big data.
 
