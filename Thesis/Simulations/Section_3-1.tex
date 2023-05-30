@@ -1,9 +1,7 @@
 \section{Stellar Evolution}\label{sec:stellar_evolution}
 
 The stellar evolution calculations in this work are performed using the normal AMUSE parameters for MESA, with solar metallicity as the input.
-MESA allows me to track the independent evolution of the triple system components and obtain estimations of their properties at the beginning of RLOF. In addition to fundamental parameters such as mass, radius, etc., MESA enables the access to the internal structure and detailed properties of the individual components. This information is essential for the conversion of one-dimensional stellar models into three-dimensional hydrodynamical realizations, providing a more comprehensive understanding of the physical processes involved in RLOF and the resulting mass transfer in these systems. In this work, I allow the tertiary to evolve until $R_{\star} = 1.1 \times R_{ROLF}$ which will be explained in this chapter along with the implications of that choice.
-
-\subsection{Pre-ROLF Evolution}
+MESA allows me to track the independent evolution of the triple system components and obtain estimations of their properties at the beginning of RLOF. In this work, I allow the tertiary to evolve until $R_{\star} = 1.1 \times R_{ROLF}$ which will be explained in this chapter along with the implications of that choice.
 
 By the time the outer star approaches the radius of its Roche lobe, all three stars have lost some mass, while the tertiary's radius is much bigger than when it was formed. In order to accurately evaluate the Roche lobe sizes,  I need to estimate the masses of the stars at the ROLF moment. Unfortunately, $\xi$ Tau age is not known, but mass-loss via winds during the main sequence is expected to be unimportant for low- and intermediate- mass stars.
 
@@ -25,7 +23,7 @@ Despite that, I track the evolution of the tertiary's mass and radius profile. I
 \end{figure}
 
 The tertiary loses less than $1\%$ of its 
-initial mass, while the expected mass loss from the binary components is even smaller. for this is that less massive, and thus less luminus, stars will have weaker winds (see \cref{sec:single_star_evolution}). As a result, I do not correct for mass-loss and use the parameters listed in  \cref{tab:system_orbit_param}.
+initial mass, while the expected mass-loss from the binary components is even smaller, because less massive, and thus less luminus, stars will have weaker winds (see \cref{sec:single_star_evolution}). As a result, I do not correct for mass-loss and use the parameters listed in  \cref{tab:system_orbit_param}.
 
 At this point, I also assume that the mass lost through winds has no effect on the stars. This assumption would be false in the case of more massive stars. As mass escapes from the star's surface, it carries angular momentum and can change the inner and outer orbital parameters. Furthermore, some of the escaped mass can be accreted, complicating the evolution of the two orbits even further. Given the small amount of mass loss, the aforementioned assumption is safe in this case.
 
@@ -38,7 +36,7 @@ In \cref{fig:HR_ROLF}, I present the evolution of the tertiaty on the HR diagram
     \label{fig:HR_ROLF}
 \end{figure}
 
-In \cref{tab:system_orbit_param_ROLF} I summarize the important parameters of the system at the moment of RLOF.
+In \cref{tab:system_orbit_param_ROLF} I summarize the important parameters of the system at the moment of RLOF. 
 
 \begin{table}[H]
     \begin{adjustbox}{width=1\textwidth}
@@ -62,7 +60,21 @@ In \cref{tab:system_orbit_param_ROLF} I summarize the important parameters of th
     \label{tab:system_orbit_param_ROLF}
 \end{table}
 
+Given these parameters, I also calculate the important timescales for the tertiary, which are listed in \cref{tab:tertiary_timescale_ROLF}.
 
-Figure 3 depicts the radial density profile of the outer component of the star at the moment of RLOF (green drawn line)
+\begin{table}[H]
+    \centering
+    \begin{tabular}{| c | c |}
+       Timescale & Duration \\
+       \hline
+       $t_{dyn}$ & 4.85 day\\
+       $t_{koz}$ & 16.81 yr\\
+       $t_{th}$ & 4585.78 yr 
+    \end{tabular}
+    \caption{ Tertiary timescales at the beginning of ROLF.}
+    \label{tab:tertiary_timescale_ROLF}
+\end{table}
+
+
 
 

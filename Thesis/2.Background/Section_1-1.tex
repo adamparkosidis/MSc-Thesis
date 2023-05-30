@@ -13,25 +13,25 @@ Intermediate-mass stars have a complex evolutionary path that includes multiple 
 
 The fundamental timescales of stellar evolution are the dynamical ($t_{dyn}$), thermal ($t_{th}$), and nuclear timescales ($t_{nucl}$). The dynamical timescale is the characteristic time required for a star to collapse under its own gravitational force in the absence of internal pressure:
 
-\begin{equation}
+\begin{equation}\label{eq:dynamical_timsecale}
     t_{dyn} = \sqrt{\frac{R^3}{GM}} \sim 0.02 \left( \frac{R}{R_{\odot}} \right)^{3/2} \left( \frac{M}{M_{\odot}}\right)^{1/2} \; \text{days},
-\end{equation}\label{dynamical_timsecale}
+\end{equation}
 
 where $R$ and $M$ are the star's radius and mass. It is a period on which a star might expand or contract if its hydrostatic equilibrium were disrupted, e.g. in case of sudden mass-loss.
 
 Thermal (or Kelvin-Helmholtz) timescale indicates how quickly changes in a star's thermal structure may occur. It is therefore also the period on which a star responds when a its thermal equilibrium is disturbed:
 
-\begin{equation}
+\begin{equation}\label{eq:thermal_timsecale}
     t_{th} = \frac{G M^2}{2RL} \sim 1.5 \times 10^7 \left( \frac{M}{M_{\odot}} \right)^{2} \frac{R_{\odot}}{R} \frac{L_{\odot}}{L} \; \text{yr},
-\end{equation}\label{thermal_timsecale}
+\end{equation}
 
 where L is the star's luminosity.
 
 Finally, the nuclear timescale corresponds to the time required for the star to exhaust its nuclear fuel supply at its current luminosity: 
 
-\begin{equation}
+\begin{equation}\label{eq:nuclear_timsecale}
     t_{nucl} = \frac{\phi M_{nucl} c^2}{L} \sim 10^{10} \frac{M}{M_{\odot}} \frac{L_{\odot}}{L} \; \text{yr},,
-\end{equation}\label{nuclear_timsecale}
+\end{equation}
 
 where $\phi$ is the efficiency of nuclear energy production, $M_{nuc}$ is the amount of mass available as fuel, and $c$ is the light speed. For core hydrogen burning, $\phi = 0.007$ and $M_{nucl} \sim 0.1 M$.
 
@@ -47,7 +47,7 @@ The Hertzsprung-Russel diagram is a logarithmic representation of the surface lu
     \caption{Hertzsprung-Russell diagram. Evolutionary tracks for three stars with masses 3, 5.5 and 8 M$_{\odot}$ at solar metallicity until the end of Helium burning. Specific moments in the evolution of the stars are noted by black circles and squares as explained in the text. The tracks are calculated with MESA \citep{paxton2010modules,paxton2013modules,paxton2015modules,paxton2019modules}. The dashed lines show lines of constant radii by means of the Stefan–Boltzmann law.}
     \label{fig:HR_inter_stars}
 \end{figure}
-The Hertzsprung-Russell (HR) diagram in \cref{fig:HR_inter_stars} shows three evolutionary tracks for intermediate-mass stars. The black circles correspond to the Zero Age Main Sequence (ZAMS) and the Terminal Age Main Sequence (TAMS). At ZAMS, the star having started the hydrogen burning in its core, achieves thermal equilibrium (TE), $L_{nuc}/L =1$, while TAMS is defined as the core hydrogen exhaustion point. Additionally, the black squares represent the start and end of helium burning in the core, respectively. In both cases the end of nuclear burning in the core is defined as the point when hydrogen and helium core mass fractions are $< 0.01$. The change in the star's physical radius occurs on different timescales depending on the physical mechanism buried beneath these processes. On nuclear timescale ($t_{nuc}$, see \eqref{nuclear_timsecale}), stars evolve throughout the main sequence (MS) and the helium-burning phase, while on thermal timescale ($t_{th}$, see \eqref{thermal_timsecale}), stars expand during the H-shell burning phase.
+The Hertzsprung-Russell (HR) diagram in \cref{fig:HR_inter_stars} shows three evolutionary tracks for intermediate-mass stars. The black circles correspond to the Zero Age Main Sequence (ZAMS) and the Terminal Age Main Sequence (TAMS). At ZAMS, the star having started the hydrogen burning in its core, achieves thermal equilibrium (TE), $L_{nuc}/L =1$, while TAMS is defined as the core hydrogen exhaustion point. Additionally, the black squares represent the start and end of helium burning in the core, respectively. In both cases the end of nuclear burning in the core is defined as the point when hydrogen and helium core mass fractions are $< 0.01$. The change in the star's physical radius occurs on different timescales depending on the physical mechanism buried beneath these processes. On nuclear timescale ($t_{nuc}$, see \ref{eq:nuclear_timsecale}), stars evolve throughout the main sequence (MS) and the helium-burning phase, while on thermal timescale ($t_{th}$, see \ref{eq:thermal_timsecale}), stars expand during the H-shell burning phase.
 
 \begin{figure}[H]
     \centering
@@ -90,17 +90,17 @@ Hot, luminous stars (mostly OB-type MS stars and blue supergiants, BSG) experien
 
 During the final stages of evolution on the AGB, low- and intermediate-mass stars experience significant mass-loss, which removes the remaining envelope, leaving only C-O white dwarfs as their final remnants \citep{marigo2007evolution, pols2011stellar}. Cool, luminous red supergiants (RSG) produce a stellar wind, which is likely caused by a combination of stellar pulsations and radiation pressure on dust particles that accumulate in the cool outer atmosphere, similarly with AGB stars. Because there are no theoretical predictions, empirical formulas that fit the average observed mass-loss rates of stars of roughly solar metallicity are used in theoretical studies. For example, Reimers' mass-loss empirical formula \citep{reimers1975circumstellar} is commonly used to model the mass-loss on the RGB:
 
-\begin{equation}
+\begin{equation}\label{eq:reimers}
     \dot{M}_{R} = -4 \times 10^{-13} \eta 
     \frac{L}{L_{\odot}}  \frac{R}{R_{\odot}} \frac{M_{\odot}}{M},
     \text{ M${\odot}$/yr}
-\end{equation}\label{eq:reimers}
+\end{equation}
 where $eta$ is parameter of the order of unity. On the AGB where dust formation becomes important, Blocker's mass-loss empirical formula \citep{bloecker1995stellarI,bloecker1995stellarII} is commonly used:
 
-\begin{equation}
+\begin{equation}\label{eq:reimers}
     \dot{M}_{Bl} = -4.83 \times 10^{-9} M^{-2.1} L^{2.7} \dot{M}_{R},
     \text{ M${\odot}$/yr}
-\end{equation}\label{eq:reimers}
+\end{equation}
 
 Other mass-loss prescriptions that are common in theoretical studies are \cite{de1988mass,nieuwenhuijzen1990parametrization}. The high mass-loss rate during the AGB phase defines both the maximum luminosity that a star may achieve on the AGB, and its ultimate mass, i.e. the mass of the white-dwarf remnant.
 
@@ -113,21 +113,63 @@ On the other hand, for masses greater than 15 M$_{\odot}$, mass-loss by stellar 
 
 Even though the overall stellar evolution is only slightly affected by the initial chemical composition, a variety of internal mixing process can impact the life cycle, particularly of massive ($M>8$ M$_{\odot}$), stars \citep{langer2012presupernova}. Apart from convection, convective overshooting, semiconvection, and rotationally induced mixing are the most important internal mixing process \citep{schootemeijer2019constraining} and are still poorly understood. 
 
-{\bf Convection}
+\subsubsection{Convection}
 
 Nuclear reactions at a star's core generate energy,
-which is transported to the stellar surface, on roughly thermal timescale, \eqref{thermal_timsecale}, preserving the TE of the star. As a result, an energy density gradient exists, resulting in a net energy flux towards the stellar surface. Since an energy density gradient is associated with a temperature gradient, the more the luminosity to be transported, the greater the temperature gradient required. However, there is an upper limit to the temperature gradient inside a star; if this limit is surpassed, gas instability, called Convection, occurs \cite{pols2011stellar}. 
+which is transported to the stellar surface, on roughly thermal timescale, see Eq. \eqref{eq:thermal_timsecale}, preserving the TE of the star. As a result, an energy density gradient exists, resulting in a net energy flux towards the stellar surface. Since an energy density gradient is associated with a temperature gradient, the more the luminosity to be transported, the greater the temperature gradient required. However, there is an upper limit to the temperature gradient inside a star; This limit is called adiabatic temperature gradient
+\begin{equation}\label{eq:ad_tempe_grad}
+    \nabla_{ad} = \left ( \frac{d logT}{d logP} \right)_{ad} 
+\end{equation}
+and describes the logarithmic variation of temperature under adiabatic compression or expansion. An adiabatic process occurs on such a short (dynamical) timescale that there is no heat exchange with the environment.
 
-Convection refers to the collective (bulk) movements of gas particles. This is a key activity in stellar interiors because it not only effectively transports energy but also results in fast mixing. Another important aspect of convection is that the energy transportation and mixing occur on timescale $t{conv}$, where $t_{conv} << t_{KH}$. This means that, while convection can efficiently transfer a large amount of energy, it does so at a nearly constant effective temperature $T_eff$, indicating that the process is nearly adiabatic (see red giant branch Fig. \ref{fig:HR_evolution}). Unfortunately though, it remains one of the least known aspects of stellar physics.
+In the case that the temperature gradient limit is surpassed, gas instability, called Convection, occurs \citep{pols2011stellar}. Convection refers to the collective (bulk) cyclic movements of gas particles. This is a key activity in stellar interiors because it not only effectively transports energy but also results in fast mixing. Another important aspect of convection is that the energy transportation and mixing occur on local dynamical timescale $t_{conv}$, where $t_{conv} << t_{KH}$. This means that, while convection can efficiently transfer a large amount of energy, it does so at a nearly constant effective temperature $T_{eff}$, indicating that the process is nearly adiabatic (see red giant branch Fig. \ref{fig:HR_evolution}). Unfortunately though, it remains one of the least known aspects of stellar physics.
 
-For a chemically homogenius layer stability criterion against convection
+From \cref{eq:ad_tempe_grad} one can see that the temperature stratification of a convective star can be described by a power law $T \propto P^{\nabla_{ad}}$, where $\nabla_{ad} = 0.4$ for an ideal gas \citep{pols2011stellar} (variations of $\nabla_{ad}$ in partial ionized zones have being ignored). Additionally, for an ideal gas, $P \propto \rho T$ and by combining the above one can easily see that
+\begin{equation}\label{eq:adiabatic_eos}
+    P \propto \rho^{5/3}
+\end{equation}
+Relationship \cref{eq:adiabatic_eos} is of great importance. It corresponds to a polytrope of $n = \frac{3}{2}, \gamma = 1+ \frac{1}{n}$ and the absence of $T$ implies that the mechanical structure of convective stars or convective stellar envelopes is independent of the stellar temperature profile. 
 
+\begin{comment}
+Another important consequence of \cref{eq:adiabatic_eos} is
+\begin{equation}\label{}
+    R \propto M^{-1/3}
+\end{equation}
+which derives by combining \cref{eq:adiabatic_eos} with the equations of 
+\end{comment}
+
+
+{\bf Stability Against Convection}
 
 Assuming that photons alone carry the produced energy, I define the dimensionless radiative temperature gradient:
-\begin{equation}
+\begin{equation}\label{eq:radia_tempe_grad}
     \nabla_{rad} = \left ( \frac{d logT}{d logP} \right)_{rad} = \frac{3}{16 \pi \alpha c G} \frac{\kappa l P}{m T^4}
-\end{equation}\label{eq:radia_tempe_grad}
-where $\alpha$ the radiation constant, $c$ the speed of light and $G$ the gravitational constant. The variable $l$ is the local luminosity, $\kappa$ the Rosseland mean opacity and $m$ the mass coordinate. Eq. \eqref{eq:radia_tempe_grad} describes the logarithmic variation of temperature with pressure, which represents the depth), for a star in HE if energy is transported only by radiation.
+\end{equation}
+where $\alpha$ the radiation constant, $c$ the speed of light and $G$ the gravitational constant. The variable $l$ is the local luminosity, $\kappa$ the Rosseland mean opacity and $m$ the mass coordinate. Eq. \eqref{eq:radia_tempe_grad} describes the logarithmic variation of temperature with pressure, which represents the depth, for a star in HE if energy is transported only by radiation.
+
+Using \eqref{eq:ad_tempe_grad}, \eqref{eq:radia_tempe_grad}  and assuming ideal gas, I derive the  Ledoux criterion,  which states that a stellar layer is stable against convection if:
+\begin{equation}\label{eq:Ledoux_criterion}
+    \nabla_{rad} < \nabla_{rad} +  \nabla_{\mu}
+\end{equation}
+where $\nabla_{\mu}$ is the gradient of the mean molecular weight through the star. Hence, for chemically homogenius layers, the stability criterion against convection reduces to the Schwarzwild criterion:
+\begin{equation}\label{eq:Schwarzwild_criterion}
+    \nabla_{rad} < \nabla_{ad}
+\end{equation}
+
+Because nuclear processes create more and more heavy elements in deeper layers, the mean molecular weight generally increases inwards. As a result, typically $\nabla_{\mu} \geq 0$, indicating that a composition gradient has a stabilizing effect according to the Ledoux criteria. 
+
+{\bf Convection Occurrence}
+
+Using \eqref{eq:radia_tempe_grad} and the Schwarzwild crietrion, \eqref{eq:Schwarzwild_criterion}, we expect convection to occur:
+\begin{itemize}
+    \item In opaque regions of the star, meaning $\kappa$ is large. Since the opacity increases with decreasing temperature \citep{pols2011stellar} we expect the envelopes of cool star to be convective. For example, low-mass stars or intermediate-mass stars during the RGB and AGB phase, see \cref{fig:HR_ROLF} and \cref{fig:HR_evolution}.
+    \item In regions of the star with large energy flux, meaning $\frac{l}{m}$ is large. For example, the cores of intermediate- and high-mass stars, where nuclear reactions are driven by the CNO-cycle ($\epsilon_{CNO} \propto \rho_c T_{c}^{18})$
+\end{itemize}
+
+
+
+
+
 
 
 {\bf Convective Overshooting}
