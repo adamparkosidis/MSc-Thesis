@@ -1,6 +1,6 @@
 \section{Scientific Codes}\label{sec:scientific_codes}
 
-In this section, I introduce the scientific codes that I coupled together in order to simulate the evolution of my target system.  Because these codes can be used in a variety of astrophysical scenarios, I will concentrate on their fundamental usage and working principles. I encourage users who want to dig deeper into the codes to follow the relevant citations.
+In this section, I introduce the scientific codes that I coupled together in order to simulate the evolution of my target system.  Because these codes can be used in a variety of astrophysical scenarios, I will concentrate on their fundamental usage and working principles. I encourage users who want to dig deeper into the codes to follow the relevant citations. 
 
 \subsection{MESA}
 
@@ -15,7 +15,7 @@ MESA also includes a comprehensive nuclear reaction network that describes the f
 
 \subsection{GADGET-2}
 
-A detailed documentation of GADGET-2 is out of the scope of this section. Nevertheless it is the main code used in my simulations, thus the general description of the code will be followed by the basic principles behind the calculation of hydro- and collisionless dynamics.
+A detailed documentation of GADGET-2 is out of the scope of this section. Nevertheless, GADGET-2, is the main code used in my simulations, thus the general description of the code will be followed by the basic principles behind the calculation of hydro- and collisionless dynamics.
 
 GADGET-2 (GAlaxies with Dark matter and Gas intEracT) is a smoothed particle hydrodynamics (SPH) code that simulates the gravitational and hydrodynamic evolution of collisionless and gaseous systems in astrophysical contexts \citep{springel2005cosmological}. The code is capable of modeling a wide range of physical processes, such as gas dynamics, gravity, magnetic fields, and radiative transfer. GADGET-2 is written in C++ and is publicly available under the GNU General Public License.
 
@@ -74,16 +74,17 @@ In general, the modified gravitational potential per unit mass can be given by:
 where $\phi$ is the softening kernel
 and depends on the softening length, $h$. The softening length here corresponds to the smoothing length used in the hydrodynamic calculations, and it is a function of the initial particle spacing, $\delta r$.
 
-GADGET-2 employs the cubic spline kernel of \cite{monaghan1985refined}, $W(|r|,h)$ and uses a convolved Dirac function  with the normalized gravitational softening kernel of variable size $\epsilon$, hence  $\delta(|r|) = W(|r|,2.8 \epsilon)$. 
+GADGET-2 employs the cubic spline kernel of \cite{monaghan1985refined}, $W(|r|,h)$ and uses a convolved Dirac function  with the normalized gravitational softening kernel of variable size $\epsilon$, hence  $\delta(|r|) = W(|r|,2.8 \epsilon)$. As a result, the Newtonian potential of a point mass at zero is now $-\frac{Gm}{\epsilon}$, same as a Plummer sphere of radius $\epsilon$. Thus, $\epsilon$ defines the spatial resolution in the computational domain. 
 
-As a result, the Newtonian potential of a point mass at zero is now $-\frac{Gm}{\epsilon}$, same as a Plummer sphere of radius $\epsilon$. Thus, $\epsilon$ defines the spatial resolution in the computational domain. Additionally, for $q \geq 2$, the smoothing is zero and the potential follows the exact form, $\Phi(r) \propto -\frac{1}{r}$. The functional form of the modified potential, gravitational force and the density profile using the cubic spline kernel is depicted in \cref{fig:smoothened_gravity}.
-
+The functional form of the modified potential, gravitational force and the density profile using the cubic spline kernel is depicted in \cref{fig:smoothened_gravity}.
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.9\textwidth]{Thesis/figures/smoothening.pdf}
     \caption{The functional form of the modified potential (-), gravitational force and the density profile using the cubic spline kernel. Figure taken by \cite{price2007energy}.}
     \label{fig:smoothened_gravity}
 \end{figure}
+It is apparent that, for $q \geq 2$, the smoothing is zero and the potential follows the exact form, $\Phi(r) \propto -\frac{1}{r}$. 
+
 
 \subsection{Huayno}
 

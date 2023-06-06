@@ -37,10 +37,9 @@ where $\phi$ is the efficiency of nuclear energy production, $M_{nuc}$ is the am
 
 Typically $t_{nucl} >> t_{th} >> t_{dyn}$, while assuming a mass-luminosity relation of $L \propto M^{\alpha}$, with empirically $\alpha \sim 3-4$ \citep{eker2015main}, it follows that intermediate- and high-mass stars live shorter and evolve faster than low-mass stars.
 
-\subsection{Hertzsprung-Russell diagram}
+\subsection{Hertzsprung-Russell diagram}\label{sub:HR_diagram}
 
 The Hertzsprung-Russel diagram is a logarithmic representation of the surface luminosity (or absolute magnitude) of a star as a function of its effective temperature (or spectral type). It is used to study the evolution of a star during different phases (from the pre-main sequence up to the late phases). It is divided into five different regions, namely the main-sequence, the red-giant branch, the horizontal-giant branch, the asymptotic-giant branch and the region of degenerate stars (WD). 
-
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.9\textwidth]{Thesis/graphs/HR_inter_stars.pdf}
@@ -48,16 +47,13 @@ The Hertzsprung-Russel diagram is a logarithmic representation of the surface lu
     \label{fig:HR_inter_stars}
 \end{figure}
 The Hertzsprung-Russell (HR) diagram in \cref{fig:HR_inter_stars} shows three evolutionary tracks for intermediate-mass stars. The black circles correspond to the Zero Age Main Sequence (ZAMS) and the Terminal Age Main Sequence (TAMS). At ZAMS, the star having started the hydrogen burning in its core, achieves thermal equilibrium (TE), $L_{nuc}/L =1$, while TAMS is defined as the core hydrogen exhaustion point. Additionally, the black squares represent the start and end of helium burning in the core, respectively. In both cases the end of nuclear burning in the core is defined as the point when hydrogen and helium core mass fractions are $< 0.01$. The change in the star's physical radius occurs on different timescales depending on the physical mechanism buried beneath these processes. On nuclear timescale ($t_{nuc}$, see \ref{eq:nuclear_timsecale}), stars evolve throughout the main sequence (MS) and the helium-burning phase, while on thermal timescale ($t_{th}$, see \ref{eq:thermal_timsecale}), stars expand during the H-shell burning phase.
-
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.9\textwidth]{Thesis/graphs/HR_evolution.pdf}
     \caption{Evolution of 5.5 M$_{\odot}$ at solar metallicity until a the end of the early ABG phase. The evolutionary phases have categorized in different colors as explained in the text. The track is calculated with MESA \citep{paxton2010modules,paxton2013modules,paxton2015modules,paxton2019modules}. The dashed lines show lines of constant radii by means of the Stefan–Boltzmann law.}
     \label{fig:HR_evolution}
 \end{figure}
-
 Fig. \ref{fig:HR_evolution} indicates the evolution of a 5.5M$_{\odot}$ star in isolation from the beginning of the main-sequence until the end of the early ABG phase. The evolutionary track is further categorized into sections and subsections: 
-
 \begin{enumerate}
     \item Main-Sequence (green)
     \item Giant branch: 
@@ -66,13 +62,12 @@ Fig. \ref{fig:HR_evolution} indicates the evolution of a 5.5M$_{\odot}$ star in 
     \item Blue loop (blue)
     \item Early asymptotic giant branch (black)
 \end{enumerate}
-
 During the MS, hydrogen is fused into $^4$He. Independent of the ongoing reaction channel (pp or CNO), the luminosity of the star increases during this phase, (L$\,\propto\,\mu^{4}\,M^3$), due to the change in the core's composition ($\mu$ increases). Nevertheless, the way in which a star evolves through the MS-phase depends on its mass. Stars with masses M\,$\geq$\,1.3\,M$_\odot$ are driven by the CNO-cycle ($\epsilon_{CNO}\,\propto\,\rho_{c}T^{18}_{c}$). The thermostatic action of the CNO-cycle causes the envelope to expand and, as a result, a decrease in effective temperature. Stars driven by the CNO-cycle evolve through larger radii and lower T$_{eff}$ than stars driven by the pp-cycle. Additionally, stars with masses M\,$\geq$\,1.3\,M$_\odot$ have convective cores, since the energy produced is too large to be transported by radiation ($\nabla_{rad} > \nabla_{ad}$). One effect of the convection on the evolution is that the MS-lifetime is extended (more detailed discussion in \cref{sub:mixing}). Another effect is that as the core approaches the end of H-burning, the reactions suddenly cease in the whole core, threatening the thermal equilibrium of the star. In response the temperature of the core needs to increase in order to keep the same energy generation rate leading to the contraction of the star. This is evident in the second part of the MS (see \cref{fig:HR_evolution}), where we observe the ``hook'' feature. 
 
 At TAMS, where the hydrogen in the core has been depleted, hydrogen burning occurs in a shell around the core, while the central temperature is insufficient to initiate He-burning. From that point on, the evolution is driven by the mirror principle and stars evolve towards red giants. The core contracts on $t_{th}$ in an attempt to reach thermal equilibrium, while the envelope expands. The aforementioned behavior is evident in Fig. \ref{fig:HR_inter_stars}, as stars move towards bigger radius and lower effective temperature. Intermediate-mass stars reach effective temperatures as low as ($10^{3.7}$K) 5000K before helium ignition. At this moment, they begin to ascend the red giant branch (RGB), which is accompanied by a significant rise in luminosity and radius. Due to the low effective temperature the opacity of the envelope rises and the latter becomes gradually convective ($\nabla_{rad} \propto \frac{\kappa}{T^4}$). The prohibited zone of the HR-diagram is located to the right of the RGB, where hydrostatic equilibrium cannot be established. Any star in this zone will travel quickly towards the RGB. The red giant star has a compact core and an extensive envelope that extends hundreds of solar radii. 
 
 When the temperature in the core exceeds $T_c \sim 10^8 K$, helium core burning begins. $^4$He fuses into a mixture of $^{12}$C and $^{16
-}$O via the $triple- \alpha$ and $C+\alpha$ reactions, respectively. Helium ignition is thermally stable for intermediate-mass stars. The contraction of the core seizes, the envelope starts to contract and the stellar radius decreases on $t_{nuc}$, see \eqref{nuclear_timsecale}. As the star begins to descend the red giant branch, the temperature in the envelope gradually rises. As a result, the envelope progressively shifts from convective to radiative. From the transition point on the star enters the blue loop with a helium burning core, a hydrogen burning shell, a radiative envelope, and a gradually increasing effective temperature.  Hence, the luminosity starts to rise, because it has a stronger dependence on the effective temperature than on the radius ($L \propto R^2 T_{eff}^4$). After the point where star reaches local maximum temperature, the evolution is similar with the second part of the main-sequence (``hook'' feature). Due to the convective core, the He-burning reactions suddenly cease in the whole core and not gradually. The temperature of the core ($T_c$) needs to increase in order to keep the same energy generation rate thus the pressure exerted on the core by the layers between the hydrogen burning shell and the core must also increase. This result to the decrease of the pressure that is exerted by these layers towards the hydrogen burning shell. Due to the thermostatic behavior of the CNO-cycle the pressure by the envelope towards the hydrogen burning shell must also decrease. This leads to the envelope's expansion and the reduction of the effective temperature until the end of He-burning (see Fig. \ref{fig:HR_inter_stars}).
+}$O via the $triple- \alpha$ and $C+\alpha$ reactions, respectively. Helium ignition is thermally stable for intermediate-mass stars. The contraction of the core seizes, the envelope starts to contract and the stellar radius decreases on $t_{nuc}$, see \eqref{eq:nuclear_timsecale}. As the star begins to descend the red giant branch, the temperature in the envelope gradually rises. As a result, the envelope progressively shifts from convective to radiative. From the transition point on the star enters the blue loop with a helium burning core, a hydrogen burning shell, a radiative envelope, and a gradually increasing effective temperature.  Hence, the luminosity starts to rise, because it has a stronger dependence on the effective temperature than on the radius ($L \propto R^2 T_{eff}^4$). After the point where star reaches local maximum temperature, the evolution is similar with the second part of the main-sequence (``hook'' feature). Due to the convective core, the He-burning reactions suddenly cease in the whole core and not gradually. The temperature of the core ($T_c$) needs to increase in order to keep the same energy generation rate thus the pressure exerted on the core by the layers between the hydrogen burning shell and the core must also increase. This result to the decrease of the pressure that is exerted by these layers towards the hydrogen burning shell. Due to the thermostatic behavior of the CNO-cycle the pressure by the envelope towards the hydrogen burning shell must also decrease. This leads to the envelope's expansion and the reduction of the effective temperature until the end of He-burning (see Fig. \ref{fig:HR_inter_stars}).
 
 The end of He-burning marks the beginning of the AGB phase (black part of the track in Fig. \ref{fig:HR_evolution}). This is a brief yet very important evolutionary phase of interemidiate-mass stars. It is characterized by rich nucleosynthesis and the enrichment of the outer layers with heavy elements. More specifically, for stars with M$ \geq 4M_{\odot}$, the convective envelope can penetrate down into the helium rich layers, dredging up He- and N-rich material. The late AGB phase is characterized by strong mass loss, that eventually removes the stellar envelopes, leaving behind a degenerate C-O core as the central star of a planetary nebula\citep{pols2011stellar}. For a more in depth description of the MS and post-MS evolution I direct the reader to \cite{pols2011stellar}.
 
@@ -82,27 +77,24 @@ For stars with $M \geq 12$M$_{\odot}$, helium ignites before the effective tempe
 \end{comment}
 
 
-\subsection{Stellar Winds}
+\subsection{Stellar Winds}\label{sub:winds}
 
 Stellar winds play an important role in stellar evolution because they cause mass and angular momentum loss from the star. Even though they are fundamental in understanding the formation and evolution of stars, the stellar wind mechanisms involved are not well understood in many cases. Hence $\dot{M}$ is frequently quite uncertain introducing significant uncertainties in the evolution of stars. Driven by observations and theoretical models, stellar winds are usually categorized in hot and cold winds because they are generated by different mechanisms. Numerous mass-loss rate prescriptions have been proposed, with $\dot{M}$ varying in different parts of the HR diagram.
 
 Hot, luminous stars (mostly OB-type MS stars and blue supergiants, BSG) experience a stellar wind driven by radiation. Radiation pressure causes an outward acceleration at frequencies corresponding to absorption lines in the spectrum, where the interaction between photons and matter is strong. Because it is primarily the lines of the heavier elements that contribute to line driving, radiation-driven mass-loss is dependent also on metallicity \citep{vink2001mass}. Mass loss due to hot winds is relatively unimportant for intermediate-mass stars.
 
 During the final stages of evolution on the AGB, low- and intermediate-mass stars experience significant mass-loss, which removes the remaining envelope, leaving only C-O white dwarfs as their final remnants \citep{marigo2007evolution, pols2011stellar}. Cool, luminous red supergiants (RSG) produce a stellar wind, which is likely caused by a combination of stellar pulsations and radiation pressure on dust particles that accumulate in the cool outer atmosphere, similarly with AGB stars. Because there are no theoretical predictions, empirical formulas that fit the average observed mass-loss rates of stars of roughly solar metallicity are used in theoretical studies. For example, Reimers' mass-loss empirical formula \citep{reimers1975circumstellar} is commonly used to model the mass-loss on the RGB:
-
-\begin{equation}\label{eq:reimers}
+\begin{equation}\label{eq:reimer}
     \dot{M}_{R} = -4 \times 10^{-13} \eta 
     \frac{L}{L_{\odot}}  \frac{R}{R_{\odot}} \frac{M_{\odot}}{M},
     \text{ M${\odot}$/yr}
 \end{equation}
-where $eta$ is parameter of the order of unity. On the AGB where dust formation becomes important, Blocker's mass-loss empirical formula \citep{bloecker1995stellarI,bloecker1995stellarII} is commonly used:
-
-\begin{equation}\label{eq:reimers}
+where $\eta$ is parameter of the order of unity. On the AGB where dust formation becomes important, Blocker's mass-loss empirical formula \citep{bloecker1995stellarI,bloecker1995stellarII} is commonly used:
+\begin{equation}\label{eq:blocker}
     \dot{M}_{Bl} = -4.83 \times 10^{-9} M^{-2.1} L^{2.7} \dot{M}_{R},
     \text{ M${\odot}$/yr}
 \end{equation}
-
-Other mass-loss prescriptions that are common in theoretical studies are \cite{de1988mass,nieuwenhuijzen1990parametrization}. The high mass-loss rate during the AGB phase defines both the maximum luminosity that a star may achieve on the AGB, and its ultimate mass, i.e. the mass of the white-dwarf remnant.
+Other mass-loss prescriptions that are common in theoretical studies are \cite{de1988mass,nieuwenhuijzen1990parametrization}. The high mass-loss rate during the AGB phase defines both the maximum luminosity that a low- or intermediate-mass star may achieve on the AGB, and its ultimate mass, i.e. the mass of the white-dwarf remnant.
 
 \begin{comment}
 
@@ -127,8 +119,8 @@ In the case that the temperature gradient limit is surpassed, gas instability, c
 From \cref{eq:ad_tempe_grad} one can see that the temperature stratification of a convective star can be described by a power law $T \propto P^{\nabla_{ad}}$, where $\nabla_{ad} = 0.4$ for an ideal gas \citep{pols2011stellar} (variations of $\nabla_{ad}$ in partial ionized zones have being ignored). Additionally, for an ideal gas, $P \propto \rho T$ and by combining the above one can easily see that
 \begin{equation}\label{eq:adiabatic_eos}
     P \propto \rho^{5/3}
-\end{equation}
-Relationship \cref{eq:adiabatic_eos} is of great importance. It corresponds to a polytrope of $n = \frac{3}{2}, \gamma = 1+ \frac{1}{n}$ and the absence of $T$ implies that the mechanical structure of convective stars or convective stellar envelopes is independent of the stellar temperature profile. 
+\end{equation}.
+\cref{eq:adiabatic_eos} is of great importance. It corresponds to a polytrope of $n = \frac{3}{2}$, where $\gamma = 1+ \frac{1}{n}$ and the absence of $T$ implies that the mechanical structure of convective stars or convective stellar envelopes is independent of the stellar temperature profile. 
 
 \begin{comment}
 Another important consequence of \cref{eq:adiabatic_eos} is
@@ -163,7 +155,7 @@ Because nuclear processes create more and more heavy elements in deeper layers, 
 Using \eqref{eq:radia_tempe_grad} and the Schwarzwild crietrion, \eqref{eq:Schwarzwild_criterion}, we expect convection to occur:
 \begin{itemize}
     \item In opaque regions of the star, meaning $\kappa$ is large. Since the opacity increases with decreasing temperature \citep{pols2011stellar} we expect the envelopes of cool star to be convective. For example, low-mass stars or intermediate-mass stars during the RGB and AGB phase, see \cref{fig:HR_ROLF} and \cref{fig:HR_evolution}.
-    \item In regions of the star with large energy flux, meaning $\frac{l}{m}$ is large. For example, the cores of intermediate- and high-mass stars, where nuclear reactions are driven by the CNO-cycle ($\epsilon_{CNO} \propto \rho_c T_{c}^{18})$
+    \item In regions of the star with large energy flux, meaning $\frac{l}{m}$ is large. For example, the cores of intermediate- and high-mass stars, where nuclear reactions are driven by the CNO-cycle ($\epsilon_{CNO} \propto \rho_c T_{c}^{18})$.
 \end{itemize}
 
 
