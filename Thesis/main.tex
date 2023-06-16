@@ -53,8 +53,8 @@
 % \usepackage{siunitx}
 \usepackage{subcaption}
 \usepackage{listings}
-\usepackage{acro}
-% \usepackage{abbriv}
+\usepackage{acro} 
+%\usepackage{abbriv}
 \usepackage{longtable}
 \usepackage{array}
 \usepackage{tablefootnote}
@@ -64,6 +64,8 @@
 \usepackage{adjustbox}
 \usepackage[capitalise]{cleveref}
 \usepackage{titlesec}
+\usepackage{multicol}
+
 
 \setcounter{secnumdepth}{4}
 
@@ -131,8 +133,9 @@
 
 \HRule \\[0.3cm]
 
-{ \huge \bfseries The evolution of $\xi$ Tau hierarchical triple system with a Roche lobe filling outer star }\\[0.8cm] % title of thesis
-%{\Large \bfseries Subtitle of Thesis\\Can use two lines} % subtitle of thesis
+{ \huge \bfseries Mass Transfer in Hierarchical Triple Systems:
+}\\[0.8cm] % title of thesis
+{\Large \bfseries The Case of Roche-Lobe filling Outer Star} % subtitle of thesis
 
 \HRule \\[0.7cm]
  
@@ -200,7 +203,7 @@
   \hypersetup{linkcolor=black}
 \tableofcontents
 
-\begin{comment}
+%\begin{comment}
 \newpage
 \thispagestyle{empty}
 \mbox{}
@@ -226,7 +229,12 @@
 \thispagestyle{empty}
 \printacronyms[include-classes=abbrev,name=List of Abbreviations]
 
-\end{comment}
+\DeclareAcronym{he}{
+  short=HE,
+  long=Hydrostatic Equilibrium,
+}
+
+%\end{comment}
 
 \newpage
 \thispagestyle{empty}
@@ -246,6 +254,8 @@
 
 \input{Thesis/Methods/Intro_chapter_2}
 
+
+
 %\input{Thesis/Chapter_3/Intro_chapter_3}
 
 %\input{Thesis/Chapter_3.tex}
@@ -260,5 +270,4 @@
 %## IMPORTANT#############################################
 \acuseall
 %## IMPORTANT#############################################
-
 \end{document}

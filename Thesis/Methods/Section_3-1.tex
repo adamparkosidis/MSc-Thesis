@@ -1,7 +1,7 @@
 \section{Stellar Evolution}\label{sec:stellar_evolution}
 
 The stellar evolution calculations in this work are performed using the normal AMUSE parameters for MESA, with solar metallicity as the input.
-MESA allows me to track the independent evolution of the triple system components and obtain estimations of their properties at the beginning of RLOF. In this work, I allow the tertiary to evolve until $R_{\star} = 1.1 \times R_{ROLF}$ which will be explained in this chapter along with the implications of that choice.
+MESA allows me to track the independent evolution of the triple system components and obtain estimations of their properties at the beginning of RLOF. In this work, I allow the tertiary to evolve until $R_{stop} = 1.1 \times R_{ROLF}$ which will be explained in this chapter along with the implications of that choice.
 
 By the time the outer star approaches the radius of its Roche lobe, all three stars have lost some mass, while the tertiary's radius is much bigger than when it was formed. In order to accurately evaluate the Roche lobe sizes,  I need to estimate the masses of the stars at the ROLF moment. Unfortunately, $\xi$ Tau's age is not known, but mass-loss via winds during the main sequence is expected to be unimportant for low- and intermediate- mass stars, see \cref{sub:winds}.
 
@@ -18,18 +18,18 @@ Despite that, I track the evolution of the tertiary's mass and radius profile. A
     \includegraphics[width=0.9\textwidth]{Thesis/graphs/giant_1-1radius.pdf}
     \label{fig:radius_profile}
     \end{subfigure}
-    \caption{ Mass and radius evolution of a 5.5 M$_{\odot}$ star at solar metallicity until ROLF. ZAMS and TAMS are noted by black circles, while bgininng and the end of helium burning by black squares. The stellar evolution models are made using MESA\citep{paxton2010modules,paxton2013modules,paxton2015modules,paxton2019modules}.}
+    \caption{ Mass and radius evolution of a 5.5 M$_{\odot}$ star at solar metallicity until ROLF. ZAMS and TAMS are noted by black circles, while the start and end of helium burning by black squares. I create the stellar evolution models using MESA \citep{paxton2010modules,paxton2013modules,paxton2015modules,paxton2019modules}.}
 \end{figure}
 The tertiary loses less than $1\%$ of its 
 initial mass, while the expected mass-loss from the binary components is even smaller, because less massive, and thus less luminus, stars will have weaker winds. As a result, I do not correct for mass-loss and use the parameters listed in  \cref{tab:system_orbit_param}.
 
 At this point, I also assume that the mass lost through winds has no effect on the stars. This assumption would be false in the case of more massive stars. As mass escapes from the star's surface, it carries angular momentum and can change the inner and outer orbital parameters. Furthermore, some of the escaped mass can be accreted, complicating the evolution of the two orbits even further. Given the small amount of mass loss, the aforementioned assumption is safe in this case.
 
-In \cref{fig:HR_ROLF}, I present the evolution of the tertiaty on the HR diagram until the moment of ROLF. It is apparent that the tertiary will overflow its Roche lobe during the early AGB phase, after helium exhaustion, leading to a type C mass transfer.
+In \cref{fig:HR_ROLF}, I present the evolution of the tertiary on the HR diagram until the moment of ROLF. It is apparent that the tertiary will overflow its Roche lobe during the early AGB phase, after helium exhaustion, leading to a type C mass transfer. 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.9\textwidth]{Thesis/graphs/HR_1-1ROLF.pdf}
-    \caption{Evolution of 5.5 M$_{\odot}$ at solar metallicity until the moment of ROLF. The track is calculated with MESA \citep{paxton2010modules,paxton2013modules,paxton2015modules,paxton2019modules}. The dashed lines show lines of constant radii by means of the Stefan–Boltzmann law.}
+    \caption{Evolution of 5.5 M$_{\odot}$ at solar metallicity until the moment of ROLF. I calculate the track using MESA \citep{paxton2010modules,paxton2013modules,paxton2015modules,paxton2019modules}. The dashed lines show lines of constant radii by means of the Stefan–Boltzmann law.}
     \label{fig:HR_ROLF}
 \end{figure}
 In \cref{tab:system_orbit_param_ROLF} I summarize the important parameters of the system at the moment of RLOF. 
@@ -68,6 +68,4 @@ Given these parameters, I also calculate the important timescales for the tertia
     \label{tab:tertiary_timescale_ROLF}
 \end{table}
 
-{\bf TODO: Mention results of with overshooting}
-
-
+Note that the default parameters of MESA withing AMUSE do not include overshooting. However, I perform one test taking into account overshooting with $f=0.016$ \citep{herwig2000evolution}. On one hand, the MS lifetime extends, ROLF occurs $~10Myr$ latter in the evolution, while the stellar core is more massive. On the other hand, the impact at the structure of the envelope's outer layers at the moment of ROLF is negligible. This is the region of highest interest for my mass transfer, thus I proceed with models without overshooting. Nevertheless, it is worth mentioning that for $f=0.016$, ROLF occurs before helium exhaustion leading to a type B mass transfer.

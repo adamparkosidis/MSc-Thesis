@@ -4,7 +4,7 @@ In this section, I introduce the scientific codes that I coupled together in ord
 
 \subsection{MESA}
 
-MESA (Modules for Experiments in Stellar Astrophysics, \cite{paxton2010modules,paxton2013modules,paxton2015modules,paxton2019modules}) is a powerful and versatile 1D stellar evolution code that has become one of the most widely used tools in modern astrophysics. The code is designed to solve the fully coupled structure and composition equations simultaneously, allowing for highly accurate and detailed models of stars. MESA is written in Fortran and is developed and maintained by a large international collaboration of scientists.
+MESA (Modules for Experiments in Stellar Astrophysics, \cite{paxton2010modules,paxton2013modules,paxton2015modules,paxton2019modules}) is a powerful and versatile 1D stellar evolution code that has become one of the most widely used tools in modern astrophysics. The code is written in Fortran and is designed to solve the fully coupled structure and composition equations simultaneously, allowing for highly accurate models of stars.
 
 MESA includes a wide range of physics modules for various astrophysical processes, such as the equation of state, nuclear reaction networks, hydrodynamics, convective and radiative energy transport, mass loss, rotation, and magnetic fields. The code can simulate the evolution of stars from their birth to their death, including complex phases such as helium and carbon burning, thermal pulses, and supernova explosions. As a result, MESA is an invaluable tool for astrophysical research, from studying the formation and evolution of stars to exploring the origins of the elements in the universe.
 
@@ -13,7 +13,7 @@ The central feature of MESA is the solution of the coupled structure and composi
 MESA also includes a comprehensive nuclear reaction network that describes the fusion of light elements into heavier elements in the stellar core. The network includes thousands of nuclear reactions that involve hundreds of isotopes, making it one of the most detailed and accurate nuclear reaction networks available for stellar evolution calculations.
 
 
-\subsection{GADGET-2}
+\subsection{GADGET-2}\label{sub:gadget2}
 
 A detailed documentation of GADGET-2 is out of the scope of this section. Nevertheless, GADGET-2, is the main code used in my simulations, thus the general description of the code will be followed by the basic principles behind the calculation of hydro- and collisionless dynamics.
 
@@ -31,7 +31,7 @@ The basic principle of the SPH method is that the fluid is represented as a set 
 \end{equation}
 where the integration is performed across the entire space and $W$ is an interpolating/smoothing kernel. Furthermore, the method is Lagrangian, meaning that the particles move with the fluid and do not have a fixed position in space.
 
-The smoothing kernel has two basic properties:
+The smoothing kernel has two basic properties, similar with Dirac's delta function:
 \begin{equation}\label{eq:kernel_property_1}
     \int W(r-r',h) dr' = 1
 \end{equation}
@@ -49,11 +49,11 @@ GADGET-2 code uses the cubic spline kernel of \cite{monaghan1985refined}:
       0, &  q \geq 2
     \end{cases}       
 \end{equation}
-where $q = \frac{r}{h}$. The kernel is smooth and has a compact support, meaning it averages the properties of neighboring particles within a certain radius of the target point called smoothing length, $h$. 
+where $q = \frac{r}{h}$. The kernel is smooth and has a compact support, meaning it averages the properties of neighboring particles within a certain radius, called smoothing length, $h$, of the target point.  
 
 When $q \geq 2$, there is no interaction, since $W(|r|,h)$ is zero. Thus, the amount of interactions for each particle is determined by the smoothing length $h$. When $h$ is too small, there aren't enough particles to interact with, resulting in poor precision. When $h$ is too large, local characteristics are scattered out too much, resulting in low precision and sluggish computation. Hence, the selection of the smoothing kernel, as well as an appropriate smoothing duration, is critical for both accuracy and speed. 
 
-For example, the density estimate,  which GADGET-2 does is in the form of:
+To make the most of SPH's Lagrangian nature, one must accommodate for an adaptive $h$. The smoothing length should be small in high-density regions and large in low-density regions. For example, the density estimate,  which GADGET-2 does is in the form of:
 \begin{equation}
     \rho_i = \sum_{j=1}^{N} m_j W(r_i -r_j,h_i)
 \end{equation}
@@ -61,20 +61,23 @@ where adaptive smoothing lengths $h_i$ of each particle are designed in such a w
 \begin{equation}
     \frac{4\pi}{3} h_{i}^3 \rho_i = N_{sph} \bar{m}
 \end{equation}
-where $N_{sph}$ is the typical number of smoothing neighbours, and $\bar{m}$ is an average particle mass.
+where $N_{sph}$ is the typical number of smoothing neighbours, and $\bar{m}$ is an average particle mass. In my simulations, I use the default value $N_{sph}=50$. 
+
+\begin{comment}
+When two gas particles approach each other the contribution of viscosity in their equation of motion cannot be ignored. Viscosity results to the transfer of momentum along velocity gradients by random motions of
+the gas. To account for that, GADGET2 (and SPH codes in general) adopts an artificial viscosity scheme.
+\end{comment}
+
 
 \subsubsection{Collisionless Dynamics}
 
-In self-gravitating SPH codes such as GADGET-2, the point particles represent a large amount of mass and may get arbitrarily and abnormally near in a simulation, and numerical rounding may blow up. In order to avoid particles from scattering too strongly off of one another on close approach, a smoothing kernel, is used to also soften gravitational forces. 
+In self-gravitating SPH codes such as GADGET-2, the point particles represent a large amount of mass and may get arbitrarily and abnormally near in a simulation, and numerical rounding may blow up. In order to avoid particles from scattering too strongly off of one another on close approach, a softening kernel, is used to also soften gravitational forces. 
 
-In general, the modified gravitational potential per unit mass can be given by:
+GADGET-2 employs once again the cubic spline kernel, Eq. \eqref{eq:spline_kernel}, where now $h$ refers to the softening lenght. In general the softening length can differ from the smoothing length used in the hydrodynamic calculations, but in my simulations they are equal. The basis for this is \cite{bate1997resolution} study, which demonstrated that in self-gravitating SPH simulations, employing a softening length that differs from the smoothing length might lead in unphysical results. Hence, the modified gravitational potential per unit mass is given as:
 \begin{equation}\label{eq:softened_gravity}
-   \Phi(r) = -G\sum_{i=1}^{N} m_i \phi(r-r_i,h)
+   \Phi(r) = -G\sum_{i=1}^{N} m_i W(r-r_i,h)
 \end{equation}
-where $\phi$ is the softening kernel
-and depends on the softening length, $h$. The softening length here corresponds to the smoothing length used in the hydrodynamic calculations, and it is a function of the initial particle spacing, $\delta r$.
 
-GADGET-2 employs the cubic spline kernel of \cite{monaghan1985refined}, $W(|r|,h)$ and uses a convolved Dirac function  with the normalized gravitational softening kernel of variable size $\epsilon$, hence  $\delta(|r|) = W(|r|,2.8 \epsilon)$. As a result, the Newtonian potential of a point mass at zero is now $-\frac{Gm}{\epsilon}$, same as a Plummer sphere of radius $\epsilon$. Thus, $\epsilon$ defines the spatial resolution in the computational domain. 
 
 The functional form of the modified potential, gravitational force and the density profile using the cubic spline kernel is depicted in \cref{fig:smoothened_gravity}.
 \begin{figure}[H]
@@ -83,31 +86,16 @@ The functional form of the modified potential, gravitational force and the densi
     \caption{The functional form of the modified potential (-), gravitational force and the density profile using the cubic spline kernel. Figure taken by \cite{price2007energy}.}
     \label{fig:smoothened_gravity}
 \end{figure}
-It is apparent that, for $q \geq 2$, the smoothing is zero and the potential follows the exact form, $\Phi(r) \propto -\frac{1}{r}$. 
+It is apparent that, for $q \geq 2$, the softening is zero and the potential follows the exact form, $\Phi(r) \propto -\frac{1}{r}$. 
 
 
-\subsection{Huayno}
+\subsection{Huayno}\label{sub:huayano}
 
-Huayno \citep{pelupessy2012n} is a high-performance N-body integrator code designed to simulate the dynamics of collisionless systems, such as galaxies, star clusters, and dark matter halos. The code is publicly available under the GNU General Public License and is written in C++. Similar with GADGET-2, the basic principle of Huayno is to use a hybrid algorithm \citep{bode2000tree} that combines the particle-mesh (PM) \citep{klypin1983three} and tree-based algorithms \citep{barnes1986hierarchical,dehnen2000very} to reduce the computational cost of simulating large systems.
+Huayno \citep{pelupessy2012n} is a high-performance N-body integrator code designed to simulate the dynamics of collisionless systems, such as galaxies, star clusters, and dark matter halos. The code is written in C++ and the basic principle of Huayno is the use of a hybrid algorithm \citep{bode2000tree} that combines the particle-mesh (PM) \citep{klypin1983three} and tree-based algorithms \citep{barnes1986hierarchical,dehnen2000very} to reduce the computational cost of simulating large systems.
 
 
 The PM algorithm represents the gravitational potential as a discrete mesh of fixed resolution, and the particle positions are interpolated onto the mesh using a cloud-in-cell (CIC) scheme. The gravitational forces are then calculated by solving Poisson's equation on the mesh. The tree-based algorithm, on the other hand, uses a hierarchical structure to group particles into clusters and calculates the forces between clusters at different levels of the hierarchy. By combining the advantages of both algorithms, Huayno can handle a wide range of particle distributions and non-equilibrium systems, such as systems with binary or multiple stars.
 
 
-Huayno also includes various subroutines and modules to facilitate the user in setting up simulations for different astrophysical scenarios. For example, the user can specify the initial conditions of the system, such as particle positions, velocities, masses, and physical properties. The user can also specify the boundary conditions of the simulation domain, such as periodic, reflecting, or outflow boundaries.
-
-The code is designed to handle a wide range of particle distributions, from homogeneous and isotropic systems to anisotropic and structured systems. Huayno can also handle non-equilibrium systems, such as systems with binary or multiple stars. The user can specify the softening length of the gravitational interaction, which determines the spatial extent of the smoothing. The code also includes modules for integrating the orbits of particles, calculating the energy and angular momentum of the system, and analyzing the simulation output.
-
-Huayno is designed to run efficiently on modern high-performance computing (HPC) clusters, and it supports parallel computing using the Message Passing Interface (MPI) standard. The code is optimized for a wide range of hardware architectures, including multi-core processors, GPUs, and FPGAs. The user can specify the number of processors or cores to use for the simulation, as well as the communication and load-balancing strategies.
-
-\subsection{AMUSE}
-
-Astrophysical Multipurpose Software Environment (AMUSE) is an open-source software package designed for astrophysical simulations and data analysis \citep{pelupessy2013astrophysical,portegies2018astrophysical}. The software is written in Python, which provides a user-friendly interface, and allows users to combine multiple astrophysical codes into a single simulation. AMUSE consists of a collection of modules that can be used to simulate a wide range of astrophysical phenomena, including stellar evolution, gravitational dynamics, hydrodynamics, radiative transfer, and cosmology.
-
-One of the unique features of AMUSE is its ability to couple different simulation codes and to integrate them into a single framework. This allows researchers to simulate complex astrophysical phenomena that cannot be studied using a single code or method alone \citep{pelupessy2013astrophysical,portegies2018astrophysical}. For example, AMUSE can simulate the evolution of a binary star system, including the dynamics of the stars, the evolution of their interiors, and the transfer of mass and angular momentum between them. AMUSE can also simulate the formation and evolution of a star cluster, including the dynamics of the stars, the gas dynamics, and the radiative feedback from the stars.
-
-AMUSE provides a powerful and flexible tool for data analysis, allowing users to analyze large data sets and to extract meaningful scientific results \citep{portegies2018astrophysical}. The software includes modules for data visualization, data reduction, and data analysis, allowing users to extract information from simulations and observational data.
-
-AMUSE is designed to be highly scalable and can be run on a range of computing platforms, from laptops to high-performance computing clusters \citep{pelupessy2013astrophysical}. The software is optimized for parallel computing, and users can run simulations on multiple cores or distributed computing clusters using the Message Passing Interface (MPI) standard.
 
 
