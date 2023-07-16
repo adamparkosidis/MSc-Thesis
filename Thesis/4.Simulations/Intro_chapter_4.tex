@@ -1,0 +1,56 @@
+\chapter{Simulations}\label{simulations}
+
+\epigraph{The consciousness of AC encompassed all of what had been a Universe and brooded over what was now Chaos. Step by step, it must be done. And AC said, "LET THERE BE LIGHT!"And there was light--”}{Isaac Asimov}
+
+
+Mass transfer in hierarchical triple
+systems and more specifically, the case of RLOF by the outer star is expected to be considerably different than mass transfer in an ordinary binary system. One reason is that the mass cannot simply be accreted by the inner
+object, but may be expelled via a slingshot effect due to the inner binary rotation. During mass transfer, the inner binary evolves as well, and both stars interact with the gas provided by the outer star and may accrete part of it. The non-accreted material may form a circumbinary disk or being expelled from the system, carrying away angular momentum, see \cref{sub:orbit_evol_mass_loss}. Simultaneously, orbital angular momentum exchange may influence the eccentricity of the inner orbit through the Lidov-Kozai cycles, see \cref{sub:lidov_kozai}. As a result, the semimajor axes ratio of the two orbits is expected to change, potentially making the system unstable, see \cref{sub:stability_triples}, increasing close encounters and even result to stellar mergers \citep{antonini2017binary,silsbee2017lidov,vigna2021massive}.
+
+I perform in total four simulations. In order to include accretion, I use sink particles which comove with the point masses representing the inner binary stars. Each sink has a characteristic sink radius, which defines the size of the accretion region around the position of each star. If a SPH particle finds its position inside this sink radius, the particle is accreted by the sink. Hence, the SPH particle's mass and momentum are added to the sink particle, which updates the mass and velocity of the star in the computational domain.
+
+The simulations are divided into two groups based on the sink particles' accretion radii, see \cref{tab:simulations_settings}. In the first case, the accretion radii are four times larger than the physical stellar radii. These accretion radii are slightly smaller than the Roche lobe radii of the inner binary components as they defined by the initial configuration, see inner Roche lobes in \cref{fig:triple_equop}. Here, I approximate the case of maximum accretion. In the second case, the accretion radii correspond to the physical radii of the binary components effectively representing the case of minimum accretion. As a result, the first three simulations investigate the effect of the initial mutual inclination between the two orbits, see \cref{sec:goal}, while comparisons between simulations 1 with 4, the effect of accretion, see \cref{sec:goal}. 
+
+%Finally, I perform one more simulation, number 5 in \cref{tab:simulations_settings}, which effectively corresponds to a retrograde rotation of the inner orbit with respect to the outer orbit.
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{| c | c | c |}
+     \hline
+     &Mutual Inclination, $i_{mut}$ & Accretion radius \\
+    \hline
+     1&$0^{\circ}$ & $R_{sink} = 4R_{\star}$\\
+     2&$20^{\circ}$ & $R_{sink} = 4R_{\star}$ \\
+     3&$69^{\circ}$ & $R_{sink} = 4R_{\star}$ \\
+     \hline
+     4&$0^{\circ}$ & $R_{sink} = R_{\star}$ \\
+     %5&$180^{\circ}$ & $R_{sink} = R_{\star}$ \\
+     \hline
+    \end{tabular}
+    \caption{ Varying parameters of the twelve simulations performed.}
+\label{tab:simulations_settings}
+\end{table}
+In all models, I start the coupled gravity-hydrodynamics simulations, when the radius of the star exceeds its Roche lobe, $R_{\star} = 1.1 \times R_L$, see \cref{eq:roche_lobe}, effectively increasing the average mass-loss rate, see \cref{eq:mass_loss_rate_anal}, of the tertiary. On one hand,  all consecutive rates of change of orbital parameters are overestimated. On the other hand, I better resolve the process of RLOF. Thus, the rates of change should be interpreted qualitatively, but their between relations can be reliably examined.
+
+\begin{comment}
+    
+
+At the beginning of the simulations, the star's envelope is spherical and gravitationally bound to the star. In all simulations, the outer layers of the tertiary's envelope are dragged towards the $L_1$ point at every pericenter passage.  Because, particles can escape from the gravitational well of the tertiary and later captured again, it is not trivial to define which particles are part of the star at every time step, see \cref{fig:simualtion_snapshots}. Based on the definition of the Roche lobe, see \cref{sub:roche_lobe}, I consider at each time step all the particles inside that $R_L$ to be part of the star and contribute to its total mass. Furthermore, the size of Roche lobe itself change periodically due to the motion of the giant relatively to the inner binary's center of mass, see \cref{eq:roche_lobe}. As a result, the aforementioned periodicity is intrinsically carried through the evolution of the tertiary's mass too, see \cref{fig:accretion_tertiary_mass}.
+
+
+In conclusion, periodic variations are naturally integrated in my models. The orbit is eccentric, the envelope is distorted as a result of tidal interactions with the inner orbit, and its mass fluctuates as matter surpasses and returns inside its Roche lobe. Disentangling these different factors is not trivial and their combined effect is carried through all calculations and thus it is evident in all plots displaying orbital parameters and properties of the outer orbit, e.g. see \cref{fig:accretion_outer_semimajor_axis} and \cref{fig:accretion_tertiary_mass}. The key point though, is that the aforementioned features are obviously strongly correlated with the tertiary's orbit and thus it is not a surprise that the timescale of this combined periodicity is equal to the period of the outer orbit. 
+
+In this work, I am interested in the global evolution of the orbital parameters. As a result, in the next sections, the presented graphs associated with the outer orbit, display not only the original output of my simulations, but also smoothed versions of it with a width equal to $3 \times P_{out}$. The is for illustration purposes, as it is easier for the reader to follow the comparison between the cases listed in \cref{tab:simulations_settings}. Furthermore, because no significant mass is transferred during the first four years of the simulations. The rates of change of orbital parameters are primarily determined by tidal effects between the two orbits. In all simulations, mass transfer from the tertiary to the inner binary begins at $t \approx 4$ yr, so the time period of interest in my work begins at that point.
+
+Finally, it is important to mention that after analyzing my data, it became clear that the resolution of my simulations was insufficient to accurately capture the influence of the gas drag on the inner orbit. As a result, the gas drag is underestimated, while the models capture the gravitational interactions between the inner binary, the core of the tertiary, and its gaseous envelope. Regardless, I can still extract useful information about the evolution of the outer orbit and conjecture about the evolution of the inner orbit. A detailed discussion over the low resolution and the gas drag is provided in \cref{discussion}.
+\end{comment}
+
+\input{Thesis/4.Simulations/Section_4-1}
+
+\input{Thesis/4.Simulations/Section_4-2}
+
+\input{Thesis/4.Simulations/Section_4-3}
+
+\input{Thesis/4.Simulations/Section_4-4}
+
+\input{Thesis/4.Simulations/Section_4-5}

@@ -37,7 +37,7 @@ The smoothing kernel has two basic properties, similar with Dirac's delta functi
 \end{equation}
 and
 \begin{equation}\label{eq:kernel_property_2}
-   \lim_{h\to0} W(r-r',h) = \delta(r-r')
+   \lim_{h\to0} W(r-r',h) = \delta(r-r').
 \end{equation}
 
 GADGET-2 code uses the cubic spline kernel of \cite{monaghan1985refined}:
@@ -46,8 +46,8 @@ GADGET-2 code uses the cubic spline kernel of \cite{monaghan1985refined}:
     \begin{cases}
       1 - \frac{3}{2}q^2 + \frac{3}{4}q^3, & 0 \leq q < 1\\
       \frac{1}{4}(2 - q)^3, & 1 \leq q <2 \\
-      0, &  q \geq 2
-    \end{cases}       
+      0, &  q \geq 2,
+    \end{cases}      
 \end{equation}
 where $q = \frac{r}{h}$. The kernel is smooth and has a compact support, meaning it averages the properties of neighboring particles within a certain radius, called smoothing length, $h$, of the target point.  
 
@@ -55,7 +55,7 @@ When $q \geq 2$, there is no interaction, since $W(|r|,h)$ is zero. Thus, the am
 
 To make the most of SPH's Lagrangian nature, one must accommodate for an adaptive $h$. The smoothing length should be small in high-density regions and large in low-density regions. For example, the density estimate,  which GADGET-2 does is in the form of:
 \begin{equation}
-    \rho_i = \sum_{j=1}^{N} m_j W(r_i -r_j,h_i)
+    \rho_i = \sum_{j=1}^{N} m_j W(r_i -r_j,h_i),
 \end{equation}
 where adaptive smoothing lengths $h_i$ of each particle are designed in such a way that their kernel volumes contain a constant mass for the estimated density, implying that the smoothing lengths and estimated densities follow the (implicit) equations
 \begin{equation}
@@ -65,13 +65,20 @@ where $N_{sph}$ is the typical number of smoothing neighbours, and $\bar{m}$ is 
 
 \begin{comment}
 When two gas particles approach each other the contribution of viscosity in their equation of motion cannot be ignored. Viscosity results to the transfer of momentum along velocity gradients by random motions of
-the gas. To account for that, GADGET2 (and SPH codes in general) adopts an artificial viscosity scheme.
+the gas. To account for that, GADGET-2 (and SPH codes in general) adopts an artificial viscosity scheme.
 \end{comment}
 
 
-\subsubsection{Collisionless Dynamics}
+\subsubsection{Collisionless dynamics}
 
 In self-gravitating SPH codes such as GADGET-2, the point particles represent a large amount of mass and may get arbitrarily and abnormally near in a simulation, and numerical rounding may blow up. In order to avoid particles from scattering too strongly off of one another on close approach, a softening kernel, is used to also soften gravitational forces. 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{Thesis/figures/smoothening.pdf}
+    \caption{The functional form of the modified potential (-), gravitational force and the density profile using the cubic spline kernel. Figure taken by \cite{price2007energy}.}
+    \label{fig:smoothened_gravity}
+\end{figure}
 
 GADGET-2 employs once again the cubic spline kernel, Eq. \eqref{eq:spline_kernel}, where now $h$ refers to the softening lenght. In general the softening length can differ from the smoothing length used in the hydrodynamic calculations, but in my simulations they are equal. The basis for this is \cite{bate1997resolution} study, which demonstrated that in self-gravitating SPH simulations, employing a softening length that differs from the smoothing length might lead in unphysical results. Hence, the modified gravitational potential per unit mass is given as:
 \begin{equation}\label{eq:softened_gravity}
@@ -79,15 +86,7 @@ GADGET-2 employs once again the cubic spline kernel, Eq. \eqref{eq:spline_kernel
 \end{equation}
 
 
-The functional form of the modified potential, gravitational force and the density profile using the cubic spline kernel is depicted in \cref{fig:smoothened_gravity}.
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.9\textwidth]{Thesis/figures/smoothening.pdf}
-    \caption{The functional form of the modified potential (-), gravitational force and the density profile using the cubic spline kernel. Figure taken by \cite{price2007energy}.}
-    \label{fig:smoothened_gravity}
-\end{figure}
-It is apparent that, for $q \geq 2$, the softening is zero and the potential follows the exact form, $\Phi(r) \propto -\frac{1}{r}$. 
-
+The functional form of the modified potential, gravitational force and the density profile using the cubic spline kernel is depicted in \cref{fig:smoothened_gravity}. It is apparent that, for $q \geq 2$, the softening is zero and the potential follows the exact form, $\Phi(r) \propto -\frac{1}{r}$. 
 
 \subsection{Huayno}\label{sub:huayano}
 

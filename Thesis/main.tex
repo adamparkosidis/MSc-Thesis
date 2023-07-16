@@ -65,7 +65,7 @@
 \usepackage[capitalise]{cleveref}
 \usepackage{titlesec}
 \usepackage{multicol}
-
+\usepackage{multirow}
 
 \setcounter{secnumdepth}{4}
 
@@ -96,7 +96,7 @@
 
 %\parskip = \baselineskip
 
-\captionsetup[table]{name=Table,labelfont={sc,footnotesize},textfont=footnotesize,labelsep=none}
+\captionsetup[table]{name=Table,labelfont={sc,footnotesize},textfont=footnotesize,labelsep={1in}}
 \captionsetup[figure]{name=Fig.,labelfont={sc,small},textfont=footnotesize,labelsep=endash}
 \numberwithin{equation}{chapter}
 \numberwithin{figure}{chapter}
@@ -150,7 +150,7 @@
 {\large  \emph{\today}}\\ % month + year in which the thesis was concluded
 %\DTMlangsetup{showdayofmonth=true}
 {\large  \emph{60 ECTS}}\\ % 'this many' ects that are rewarded for the thesis
-{\large  \emph{Start date - End date}}\\[1.8cm] % period in which the research was carried out
+{\large  \emph{01/11/2022 - 30/07/2023}}\\[1.8cm] % period in which the research was carried out
 
 % -----
 % Supervisor, etc.
@@ -209,8 +209,6 @@
 \mbox{}
 \newpage
 
-
-
 \listoffigures
 
 \newpage
@@ -229,10 +227,22 @@
 \thispagestyle{empty}
 \printacronyms[include-classes=abbrev,name=List of Abbreviations]
 
-\DeclareAcronym{he}{
-  short=HE,
-  long=Hydrostatic Equilibrium,
+\DeclareAcronym{ms}{
+  short = MS ,
+  long = main-sequence,
+  tag  = abbrev}
 }
+
+
+
+
+
+
+
+%\DeclareAcronym{he}{
+%  short=HE,
+%  long=Hydrostatic Equilibrium,
+%}
 
 %\end{comment}
 
@@ -250,10 +260,13 @@
 
 \input{Thesis/1.Introduction/Introduction}
 
-\input{Thesis/2.Background/Intro_chapter_1}
+\input{Thesis/2.Background/Intro_chapter_2}
 
-\input{Thesis/Methods/Intro_chapter_2}
+\input{Thesis/3.Methods/Intro_chapter_3}
 
+\input{Thesis/4.Simulations/Intro_chapter_4}
+
+\input{Thesis/5.Discussion_Conclusions/Intro_chapter_5}
 
 
 %\input{Thesis/Chapter_3/Intro_chapter_3}
