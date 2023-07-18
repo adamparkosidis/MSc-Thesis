@@ -1,8 +1,8 @@
 \section{Mass transfer via RLOF by the outer star}\label{sec:mass_transfer_RLOF}
 
-In this section, I describe how mass transfer by the outer star towards the inner binary affects the evolution of the system. More specifically, I use the first model listed in \cref{tab:simulations_settings}.
+In this section, I describe how mass transfer by the outer star towards the inner binary affects the evolution of the system. Despite the fact that I use the first model listed in \cref{tab:simulations_settings}, the general description of the process is similar for all models. In the next sections, I explicitly compare and analyse the models listed in \cref{tab:simulations_settings}.
 
-On one hand, no remarkable mass transfer takes places during the first four years of the simulation. On the other hand, the tertiary's envelope experience a series of significant deformations during that same period due to the combined effect of two factors. First, the outer orbit is eccentric, see \cref{tab:system_orbit_param}, and second, I use a collection of particles to represent the outer star. The latter means that as the giant's spherical symmetry is disturbed close to the pericenter and it is restored close to the apocenter. This is effectively the result of tidal interactions between the two orbits, which is a dissipative process and shrinks the outer orbit. In \cref{fig:simualtion_snapshots}, I present four snapshots of the system's evolution at $t = 3.75, \; 5, \; 6.25$ and $7.5$ yr. The envelope's deformation is evident by comparing the system at $t = 3.75$ yr, where the tertiary approaches the orbit's apoecenter to $t = 6.25$ yr, where it approaches the orbit's pericenter.
+On one hand, no remarkable mass transfer takes places during the first four years of the simulation. On the other hand, the tertiary's envelope experience a series of significant deformations during that same period due to the combined effect of two factors. First, the outer orbit is eccentric, see \cref{tab:system_orbit_param}, and second, I use a collection of particles to represent the outer star. The latter means that the giant's spherical symmetry is disturbed close to the pericenter and it is restored close to the apocenter. This is effectively the result of tidal interactions between the two orbits, which is a dissipative process and shrinks the outer orbit. In \cref{fig:simualtion_snapshots}, I present four snapshots of the system's evolution at $t = 3.75, \; 5, \; 6.25$ and $7.5$ yr. The envelope's deformation is evident by comparing the system at $t = 3.75$ yr, where the tertiary approaches the orbit's apoecenter to $t = 6.25$ yr, where it approaches the orbit's pericenter.
 \begin{figure}[H]
     \centering
     \begin{subfigure}[b]{0.49\textwidth}
@@ -34,16 +34,18 @@ Significant mass transfer from the tertiary towards the inner binary begins at $
     \caption{The evolution of the tertiary's mass.}
     \label{fig:accretion_inc_00_mass_loss}
 \end{figure}
-The mass flowing from the first Lagrangian point of the outer orbit to the inner binary system interacts with the paths of the binary components. As a result, instead of a circumbinary disk, a gaseous cloud, similar to a common envelope (CE) \citep{ivanova2013common}, develops around the binary, see \cref{fig:simualtion_snapshots}. 
+The mass transfer becomes progressively unstable, as expected for a donor with a convective envelope. Furthermore, the mass flowing from the first Lagrangian point of the outer orbit to the inner binary system interacts with the paths of the binary components. As a result, instead of a circumbinary disk, a gaseous cloud, similar to a common envelope (CE) \citep{ivanova2013common}, develops around the binary, see \cref{fig:simualtion_snapshots}. Part of the mass is being accreted by the inner binary and the rest escapes the system through the third Lagrangian point of the outer orbit, see \cref{fig:simualtion_snapshots}.
 
 After eight years, which corresponds to $\approx 20$ orbits of the tertiary, the system enters the unstable regime, see \cref{eq:stability_regime}, and thus I terminate the simulations. Every $\delta t_{bridge}=0.1$ day, see \cref{tab:codes_settings}, I extract the mass, position and velocity of each particle in the computational domain. These properties are used to calculate the orbital parameters of the inner and the outer orbits. More specifically, the semi-major axis and eccentricity of the inner orbit are calculated using the relative position and velocity of the inner binary components. Furthermore, the relative position and velocity of the inner binary center of mass and the tertiary are used to determine the semi-major axis and eccentricity of the outer orbit. The calculations are based on \cref{eq:semi-major_axis} and \cref{eq:eccentricity}, where $M = M_1 + M_2$ and $M = M_1 + M_2 + M_3$ for orbital parameters of the inner and outer orbit, respectively. Finally, I calculate the outer orbit's relative inclination with respect to the inner orbit, i.e. mutual inclination, as the angle between their respective orbital angular momentum the vectors.
 
+Despite being out of the scope of this work, it is worth noticing, that shortly after $t=8$ yr, the mass transfer becomes extremely unstable and a triple common envelope is encountered in all cases except for model number 3 listed in \cref{tab:simulations_settings}. For the rest models, the remainder of the tertiary's envelope engulfs the inner binary and the tertiary's core. In the case of $i_{mut} = 20^{\circ}$, the core of the tertiary is ejected from the system leaving behind a high eccentric binary. Finally, in both cases where the two orbits are initially coplanar, a direct collision completely disrupts the system.
+
 \subsection{Outer orbit}
 
-Tidal effects between the two orbits dominate the rates of change of orbital parameters up to $t \approx 4$ yr. The effect of mass transfer becomes visible after $t \approx 4$ years. A portion of the transferred mass is accreted by the binary components, while the remainder is expelled from the system.  The ejected mass carries away orbital angular momentum, hence the outer orbit shrinks, see \cref{fig:accretion_inc_00_outer_semimajor_axis}. As a result,  the outer Roche lobe shrinks as well, see \cref{eq:roche_lobe}, and an increasing amount of mass can overflow towards the inner binary, see \cref{fig:accretion_inc_00_mass_loss}. Furthermore, as the tertiary approaches the inner binary, tidal effects between the two orbits become stronger. Tides tend to circularize and flatten the outer orbit. \cref{fig:accretion_inc_00_outer_ecc} shows the former, while \cref{fig:accretion_inc_00_inc} shows the latter, where the outer orbit, which is already coplanar with the inner orbit, remains close to coplanarity.
+Tidal effects between the two orbits dominate the rates of change of orbital parameters up to $t \approx 4$ yr. The effect of mass transfer becomes visible after $t \approx 4$ years. A portion of the transferred mass is being accreted by the binary components, while the remainder is expelled from the system.  The ejected mass carries away orbital angular momentum, hence the outer orbit shrinks, see \cref{fig:accretion_inc_00_outer_semimajor_axis}. As a result,  the outer Roche lobe shrinks as well, see \cref{eq:roche_lobe}, and an increasing amount of mass can overflow towards the inner binary, see \cref{fig:accretion_inc_00_mass_loss}. 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.83\textwidth]{Thesis/graphs/inc_00/accretion_outer_inc_00_semimajor_axis.pdf}
+    \includegraphics[width=0.85\textwidth]{Thesis/graphs/inc_00/accretion_outer_inc_00_semimajor_axis.pdf}
     \caption{Evolution of the semi-major axis of the outer orbit.}
     \label{fig:accretion_inc_00_outer_semimajor_axis}
 \end{figure}
@@ -59,11 +61,12 @@ Tidal effects between the two orbits dominate the rates of change of orbital par
     \caption{Evolution of the inclination of the outer orbit relative to the inner orbit.}
     \label{fig:accretion_inc_00_inc}
 \end{figure}
+Furthermore, as the tertiary approaches the inner binary, tidal effects between the two orbits become stronger. Tides tend to circularize and flatten the outer orbit. \cref{fig:accretion_inc_00_outer_ecc} shows the former, while \cref{fig:accretion_inc_00_inc} shows the latter, where the outer orbit, which is already coplanar with the inner orbit, remains close to coplanarity.
 
 
 \subsection{Inner orbit}
 
-The binary components interact with the gas as the transferred mass intersects the inner orbit. Some of the gas is accreted and some is ejected from binary's close vicinity. In general, the inner binary is influenced by two distinct forces. First, there's the hydrodynamics, specifically the gas drag, which always tends to shrink the orbit. Second, the gravitational force of the incoming mass stream. The impact of the latter on the orbit's evolution is dependent on the initial mutual inclination and it is discussed in more detail in \cref{sec:inclination}. 
+As the transferred mass intersects the inner orbit, the binary components interact with the gas. Some of the gas is being accreted, while some is ejected from the binary's close vicinity. The inner binary is generally influenced by hydrodynamics, notably gas drag, which always tends to shrink the orbit. Furthermore, by the accretion process and the inner orbit's gravitational interaction with the incoming material stream. The effect of the later on the evolution of the orbit is complex and depends on the angle at which the mass stream crosses the inner obit. This is discussed in more detail in \cref{sec:inclination}. 
 
 In \cref{fig:accretion_inc_00_inner_semimajor_axis} and \cref{fig:accretion_inc_00_inner_ecc}, I present the evolution of the semi-major axis and eccentricity of the inner orbit, 
 respectively. Both graphs show the presence of the tertiary, which introduces the observed fluctuations with periods equal to the period of the outer orbit, $\Delta t \approx 145.5$ days.
@@ -73,7 +76,8 @@ respectively. Both graphs show the presence of the tertiary, which introduces th
     \caption{Evolution of the semi-major axis of the inner orbit.}
     \label{fig:accretion_inc_00_inner_semimajor_axis}
 \end{figure}
-In the case where the inner and outer orbit are coplanar the former seems to widen, see \cref{fig:accretion_inc_00_inner_semimajor_axis}. This is an unexpected outcome and a detailed discussion is taking place in \cref{sub:resolution}. Furthermore, the effect of mass transfer on the eccentricity of the inner orbit is negligible and the orbit remains circular. 
+In the case where the inner and outer orbit are coplanar the former seems to widen, see \cref{fig:accretion_inc_00_inner_semimajor_axis}. 
+This is an unexpected outcome, because a common envelope-like structure around the binary is encountered and a detailed discussion is taking place in \cref{sec:resolution}. Furthermore, the effect of mass transfer on the eccentricity of the inner orbit is negligible and the orbit remains circular. 
 \begin{figure}[!htb]
     \centering
     \includegraphics[width=0.9\textwidth]{Thesis/graphs/inc_00/accretion_inc_00_inner_ecc.pdf}
