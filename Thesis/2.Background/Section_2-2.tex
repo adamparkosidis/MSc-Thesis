@@ -6,15 +6,13 @@ The evolution of a star in isolation could be summarized as:
 
 Despite that seemingly straightforward picture, stars tend to form in multiple systems (see \cref{fig:stellar_companions}). Binaries particularly, which consist of two stars that orbit around a shared center of mass and are gravitationally connected to each other, are of immense importance. By nature, they reveal more about themselves, particularly their masses and diameters, than other astronomical objects. This is especially true for eclipsing binaries \citep{prvsa2016physics}, which provide us with direct knowledge regarding spatial relations inside the source. Furthermore, close binaries are unique cosmic laboratories providing useful insights regarding different physical process. For example, gravitational wave emission is widely studied in binary mergers where both stars are compact objects \citep{cutler1994gravitational,abbott2017gw170608,abbott2019gwtc}, accretion as a power source in X-ray binaries \citep{lewin1997x,reig2011x}, while stellar interactions such as mass transfer, angular momentum exchange and tidal friction in close binaries. 
 
-
-Despite the additional complexity that these stellar interactions provide to the evolution of these systems, they offer the necessary base for discussing stellar interactions in triple systems.  There are two fundamental reasons why may binaries transfer matter:
-
+Despite the additional complexity that these stellar interactions provide to the evolution of these systems, they offer the necessary base for discussing stellar interactions in triple systems. There are two fundamental reasons why binaries may transfer matter:
 \begin{enumerate}
-    \item During its evolution, one of the stars in a binary system may expand in radius (R$_{\star}$) or contract in binary separation (${\alpha}$) to the point where the companion's gravitational force can remove the outer layers of its envelope (Roche lobe overflow, RLOF).
-    \item At some point in its evolution, usually during the late post-main-sequence phase, one of the stars may release most of its mass in the form of a stellar wind; part of this material will be gravitationally trapped by the companion (stellar wind accretion). 
+    \item During its evolution, one of the stars in a binary system may expand in radius (R$_{\star}$) or contract in binary separation (${\alpha}$) to the point where the companion's gravitational force can remove the outer layers of its envelope (\ac{rlof}).
+    \item At some point in its evolution, usually during the late post-\ac{ms} phase, one of the stars may release most of its mass in the form of a stellar wind; part of this material will be gravitationally trapped by the companion (stellar wind accretion). 
 \end{enumerate}
 
-This section is mainly focused on interacting binaries via RLOF, (1). 
+This section is mainly focused on interacting binaries via \ac{rlof}, (1). 
 
 \subsection{The relative orbit}
 
@@ -94,8 +92,7 @@ where $q =M_1 / M_2$. $R_{L,2}$ is be given for $q =M_2 / M_1$. The Roche potent
 \end{figure}
 According to \cref{eq:roche_lobe}, the size of the Roche lobe is determined by the mass ratio $q$ and the orbital separation of the two stars, $\alpha$. The more massive star has a larger Roche lobe, whereas stars of equal mass have equal sized Roche lobes. Furthermore, the size of the Roche lobes is proportional to the orbital separation of the stars, so as the latter changes, so do the Roche lobes.
 
-As discussed in \cref{sec:single_star_evolution}, stars contract and expand during their evolution. Additionally, the binary separation may decrease due to the loss of orbital angular momentum from the system via stellar wind mass-loss, see \cref{sub:winds} or gravitational radiation. As a result, the physical radius of a star, $R_{\star}$, may become larger than its Roche lobe radius, $R_{L}$. This scenario is called Roche-lobe overflow (RLOF) and matter from the outer layers of the Roche-lobe-filling star can freely move through the first Lagrangian point $L_1$ to the companion star. 
-
+As discussed in \cref{sec:single_star_evolution}, stars contract and expand during their evolution. Additionally, the binary separation may decrease due to the loss of orbital angular momentum from the system via stellar wind mass-loss, see \cref{sub:winds} or gravitational radiation. As a result, the physical radius of a star, $R_{\star}$, may become larger than its \ac{rl}. In ths scenario, \ac{rlof,} matter from the outer layers of the Roche-lobe-filling star can freely move through the first Lagrangian point $L_1$ to the companion star. 
 
 Mass flow via the $L_1$ point is a relatively complicated hydrodynamical problem, but the rate of mass transfer, $\dot{M}$, through $L_1$ is highly sensitive to the donor's fractional radius excess, $\frac{\Delta R}{R}$ . A comprehensive derivation of Bernoulli's law to the gas flow through the nozzle near $L_1$ results in 
 \begin{equation}\label{eq:mass_loss_rate_anal}
@@ -111,17 +108,18 @@ Hence, the timescale of mass transfer is strongly dependent on the donor's fract
 \end{equation}
 \end{comment}
 
-According to \cref{sec:single_star_evolution}, intermediate-mass stars expand during MS on nuclear timescale and during RGB and AGB phases, on thermal timescale, see \cref{fig:HR_evolution}.  Hence, three cases of mass transfer can be distinguished:
+According to \cref{sec:single_star_evolution}, intermediate-mass stars expand during \ac{ms} on nuclear timescale and during \ac{rgb} and \ac{agb} phases, on thermal timescale, see \cref{fig:HR_evolution}.  Hence, three cases of mass transfer can be distinguished:
 \begin{enumerate}
-    \item During the MS, namely Case A
-    \item During post-MS and before helium exhaustion, namely Case B
+    \item During the \ac{ms}, namely Case A
+    \item During post-\ac{ms} and before helium exhaustion, namely Case B
     \item After helium exhaustion, namely Case C
 \end{enumerate}
-Considering that mass is the most important property for a star's evolution, see \cref{sec:single_star_evolution}, RLOF can significantly alter its evolutionary outcome. Thus, in a mass-transferring binary system, both stars are expected to deviate from the evolutionary paths they would have in the absence of mass transfer. 
+Considering that mass is the most important property for a star's evolution, see \cref{sec:single_star_evolution}, \ac{rlof} can significantly alter its evolutionary outcome.  
+Thus, in a mass-transferring binary system, both stars are expected to deviate from the evolutionary paths they would have in the absence of mass transfer.
 
 \subsection{Orbital evolution during mass transfer}\label{sub:orbit_evol_mass_loss}
 
-During mass transfer, the transferring matter carries angular momentum causing the orbital parameters of the relative orbit to change. By differentiating Eq. \eqref{eq:orbital_ang_momentum}, a general equation for the orbital evolution can be obtained:
+During mass transfer, the transferring matter carries angular momentum causing the orbital parameters of the relative orbit to change. By differentiating \cref{eq:orbital_ang_momentum}, a general equation for the orbital evolution can be obtained:
 \begin{equation}\label{eq:orb_ang_momen_derivative}
     2\frac{\dot{J}}{J} = \frac{\dot{\alpha}}{\alpha} + 2 \frac{\dot{M_1}}{M_1} + 2 \frac{\dot{M_2}}{M_2} - \frac{ \dot{M_1} + \dot{M_2}}{M_1 + M_2} - \frac{2e \dot{e}}{1-e^2},
 \end{equation}
@@ -150,7 +148,7 @@ In the ideal situation where all the transferred mass from the first star is acc
 \end{equation}    
 This the case of conservative mass transfer and a close look to \cref{eq:orb_ang_momen_derivative_cons} reveals that for a circular orbit the orbital separation shrinks as long as $M_d > M_a$, while it expands when $M_d < M_a$. Finally, the minimum orbital distance is given for $M_d = M_a$. 
 
-In the general case of RLOF, mass transfer is expected to be non-conservative meaning that  $\beta < 1$. Furthermore,
+In the general case of \ac{rlof}, mass transfer is expected to be non-conservative meaning that  $\beta < 1$. Furthermore,
 the ejected mass carries away orbital angular momentum from the system. The amount of specific angular momentum that is lost can be parameterized to be $\eta$ times the specific angular momentum of the binary:
 \begin{equation}\label{eq:orb_ang_mom_non_cons}
     \frac{\dot{J}}{J} = \eta \frac{\dot{M_{a}} + \dot{M_{d}}}{M_{a} + M_{d}}.
@@ -165,7 +163,7 @@ Assuming circular orbit, $\beta$ and $\eta$ to be constants and by ignoring the 
 \begin{equation}\label{eq:semimajor_axis_no_cons}
     \frac{\alpha}{\alpha_{0}} = \left (\frac{M_{d} M_{a}}{M_{d,0} M_{a,0}} \right)^{-2} \left (\frac{M_{d} + M_{a}}{M_{d,0}+M_{a,0}} \right)^{2\eta +1},
 \end{equation}    
-where the `0` subscript corresponds to the initial values, before RLOF.
+where the `0` subscript corresponds to the initial values, before \ac{rlof}.
     
 
 

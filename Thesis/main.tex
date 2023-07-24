@@ -109,6 +109,7 @@
 \pagenumbering{gobble}
 
 \acsetup{list-style=longtable}
+\input{Thesis/Abbrev}
 
 \begin{document}
 \begin{titlepage}
@@ -227,12 +228,8 @@
 \thispagestyle{empty}
 \printacronyms[include-classes=abbrev,name=List of Abbreviations]
 
-\DeclareAcronym{ms}{
-  short = MS ,
-  long = main-sequence,
-  tag  = abbrev}
-}
 
+}
 
 
 
@@ -254,7 +251,6 @@
 \pagenumbering{arabic}
 \setcounter{page}{1}
 
-}
 
 \parskip = 2mm
 
@@ -268,12 +264,9 @@
 
 \input{Thesis/5.Discussion_Conclusions/Intro_chapter_5}
 
+\appendix
 
-%\input{Thesis/Chapter_3/Intro_chapter_3}
-
-%\input{Thesis/Chapter_3.tex}
-
-
+\input{Thesis/Appendix}
 
 \newpage
 

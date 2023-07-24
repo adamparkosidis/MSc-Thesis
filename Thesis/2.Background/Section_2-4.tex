@@ -17,7 +17,7 @@ MESA also includes a comprehensive nuclear reaction network that describes the f
 
 A detailed documentation of GADGET-2 is out of the scope of this section. Nevertheless, GADGET-2, is the main code used in my simulations, thus the general description of the code will be followed by the basic principles behind the calculation of hydro- and collisionless dynamics.
 
-GADGET-2 (GAlaxies with Dark matter and Gas intEracT) is a smoothed particle hydrodynamics (SPH) code that simulates the gravitational and hydrodynamic evolution of collisionless and gaseous systems in astrophysical contexts \citep{springel2005cosmological}. The code is capable of modeling a wide range of physical processes, such as gas dynamics, gravity, magnetic fields, and radiative transfer. GADGET-2 is written in C++ and is publicly available under the GNU General Public License.
+GADGET-2 (GAlaxies with Dark matter and Gas intEracT) is a \ac{sph} code that simulates the gravitational and hydrodynamic evolution of collisionless and gaseous systems in astrophysical contexts \citep{springel2005cosmological}. The code is capable of modeling a wide range of physical processes, such as gas dynamics, gravity, magnetic fields, and radiative transfer. GADGET-2 is written in C++ and is publicly available under the GNU General Public License.
 
 The hydrodynamics computation in GADGET-2 is performed by solving the equations of motion for each particle in the simulation domain. The acceleration of each particle is calculated by summing the forces acting on it, including gravity, pressure gradients, and artificial viscosity. The gravity calculation uses the hybrid TreePM method \citep{bode2000tree,bagla2002treepm}, where the simulation volume is recursively subdivided into cubic cells, with each cell containing a maximum number of particles. The algorithm then builds a tree structure where each cell is treated as a node, and nodes that are spatially close are grouped together to form larger nodes. The final tree structure is used to compute the gravitational force on each particle avoiding the need to calculate the force between all pairs of particles in the system. This method reduces the computational cost from $O(N^2)$ for direct summation to $O(N\log N)$, where $N$ is the number of particles.
 
@@ -25,7 +25,7 @@ The code also includes modules for modeling magnetic fields and radiative transf
 
 \subsubsection{Hydrodynamics}
 
-The basic principle of the SPH method is that the fluid is represented as a set of particles with associated physical attributes such as density, pressure, and velocity. These properties are calculated at a given point in space, using the interpolation method. The method allows any function to be defined in terms of its values at a group of disordered points known as particles \citep{monaghan1982particle}. The integral interpolant of any function $f(r)$ is defined by:
+The basic principle of the \ac{sph} method is that the fluid is represented as a set of particles with associated physical attributes such as density, pressure, and velocity. These properties are calculated at a given point in space, using the interpolation method. The method allows any function to be defined in terms of its values at a group of disordered points known as particles \citep{monaghan1982particle}. The integral interpolant of any function $f(r)$ is defined by:
 \begin{equation}\label{eq:interpolant}
     \langle f(r) \rangle = \int f(r') W(r-r',h) dr'
 \end{equation}
@@ -53,7 +53,7 @@ where $q = \frac{r}{h}$. The kernel is smooth and has a compact support, meaning
 
 When $q \geq 2$, there is no interaction, since $W(|r|,h)$ is zero. Thus, the amount of interactions for each particle is determined by the smoothing length $h$. When $h$ is too small, there aren't enough particles to interact with, resulting in poor precision. When $h$ is too large, local characteristics are scattered out too much, resulting in low precision and sluggish computation. Hence, the selection of the smoothing kernel, as well as an appropriate smoothing duration, is critical for both accuracy and speed. 
 
-To make the most of SPH's Lagrangian nature, one must accommodate for an adaptive $h$. The smoothing length should be small in high-density regions and large in low-density regions. For example, the density estimate,  which GADGET-2 does is in the form of:
+To make the most of \ac{sph}'s Lagrangian nature, one must accommodate for an adaptive $h$. The smoothing length should be small in high-density regions and large in low-density regions. For example, the density estimate,  which GADGET-2 does is in the form of:
 \begin{equation}
     \rho_i = \sum_{j=1}^{N} m_j W(r_i -r_j,h_i),
 \end{equation}
@@ -71,7 +71,7 @@ the gas. To account for that, GADGET-2 (and SPH codes in general) adopts an arti
 
 \subsubsection{Collisionless dynamics}
 
-In self-gravitating SPH codes such as GADGET-2, the point particles represent a large amount of mass and may get arbitrarily and abnormally near in a simulation, and numerical rounding may blow up. In order to avoid particles from scattering too strongly off of one another on close approach, a softening kernel, is used to also soften gravitational forces. 
+In self-gravitating \ac{sph} codes such as GADGET-2, the point particles represent a large amount of mass and may get arbitrarily and abnormally near in a simulation, and numerical rounding may blow up. In order to avoid particles from scattering too strongly off of one another on close approach, a softening kernel, is used to also soften gravitational forces. 
 
 \begin{figure}[H]
     \centering
@@ -80,7 +80,7 @@ In self-gravitating SPH codes such as GADGET-2, the point particles represent a 
     \label{fig:smoothened_gravity}
 \end{figure}
 
-GADGET-2 employs once again the cubic spline kernel, Eq. \eqref{eq:spline_kernel}, where now $h$ refers to the softening lenght. In general the softening length can differ from the smoothing length used in the hydrodynamic calculations, but in my simulations they are equal. The basis for this is \cite{bate1997resolution} study, which demonstrated that in self-gravitating SPH simulations, employing a softening length that differs from the smoothing length might lead in unphysical results. Hence, the modified gravitational potential per unit mass is given as:
+GADGET-2 employs once again the cubic spline kernel, Eq. \eqref{eq:spline_kernel}, where now $h$ refers to the softening lenght. In general the softening length can differ from the smoothing length used in the hydrodynamic calculations, but in my simulations they are equal. The basis for this is \cite{bate1997resolution} study, which demonstrated that in self-gravitating \ac{sph} simulations, employing a softening length that differs from the smoothing length might lead in unphysical results. Hence, the modified gravitational potential per unit mass is given as:
 \begin{equation}\label{eq:softened_gravity}
    \Phi(r) = -G\sum_{i=1}^{N} m_i W(r-r_i,h)
 \end{equation}

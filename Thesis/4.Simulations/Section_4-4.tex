@@ -54,7 +54,7 @@ As the giant, approaches the inner binary, the outer orbit tends to be circular,
 
 \subsection{Inner orbit}
 
-In \cref{fig:inclination_inner_semimajor_axis} and \cref{fig:inclination_inner_ecc}, I present the evolution of the semi-major axis and eccentricity of the inner orbit for different initial mutual inclinations, respectively. The observed behavior for low inclinations, such as $i_{mut}=0^{\circ}, 20^{\circ}$, has already been described in \cref{sec:accretion}, but the case of $i_{mut}=69^{\circ}$ yields some intriguing results.
+In \cref{fig:inclination_inner_semimajor_axis} and \cref{fig:inclination_inner_ecc}, I present the evolution of the semi-major axis and eccentricity of the inner orbit for different initial mutual inclinations, respectively. The observed behavior for low inclinations, such as $i_{mut}=0^{\circ}, 20^{\circ}$, has already been described in \cref{sec:resolution}, but the case of $i_{mut}=69^{\circ}$ yields some intriguing results.
 
 Despite underestimating the gas drag, it is evident that I can still extract some valuable insights regarding the evolution of the inner orbit. The inner orbit shrinks with the greatest initial mutual inclination. The reason for this behavior is that the mass stream can successfully cross the inner orbit at high angles, draining orbital angular momentum from the latter. Additionally, because gas drag always tends to shrink the orbit, the observed behavior is qualitatively accurate. The only difference is that including gas drag, the rate of the orbit's decay will be higher or in simple words the observed slope will be steeper. 
 \begin{figure}[H]
@@ -63,7 +63,7 @@ Despite underestimating the gas drag, it is evident that I can still extract som
     \caption{Evolution of the semi-major axis of the inner orbit for different initial mutual inclination.}
     \label{fig:inclination_inner_semimajor_axis}
 \end{figure}
-The $i_{mut}=69^{\circ}$ value was selected intentionally, to test the accuracy of the coupled solver. It is clear, that the latter can resolve Lidov-Kozai cycles. The $i_{mut}=69^{\circ}$ is well inside in the regime where the Lidov-Kozai cycles are expected to occur, see \cref{sub:lidov_kozai}. The eccentricity and mutual inclination are expected to vary periodically. This behavior is evident by comparing \cref{fig:mutual_inclination} and \cref{fig:inclination_inner_semimajor_axis}, where the eccentricity increases as the mutual inclination decreases. 
+The $i_{mut}=69^{\circ}$ value was selected intentionally, to test the accuracy of the coupled solver. It is clear, that the latter can resolve Lidov-Kozai cycles. The $i_{mut}=69^{\circ}$ is well inside in the regime where the Lidov-Kozai cycles are expected to occur, see \cref{sub:lidov_kozai}. The eccentricity and mutual inclination are expected to vary periodically. This behavior is evident by comparing \cref{fig:mutual_inclination} and \cref{fig:inclination_inner_ecc}, where the eccentricity increases as the mutual inclination decreases. 
 \begin{figure}[!htb]
     \centering
     \includegraphics[width=0.9\textwidth]{Thesis/graphs/inclination_case/inclination_inner_ecc.pdf}
