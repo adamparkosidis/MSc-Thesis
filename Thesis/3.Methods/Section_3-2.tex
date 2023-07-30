@@ -6,11 +6,11 @@ When the radius of the outer star exceeds its Roche limit, the 1D stellar evolut
 
 \subsection{Stellar Interior}\label{sub:core}
 
-Because of the usage of equal-mass particles and the high concentration of stellar cores, the majority of the particles, and therefore the maximum resolution, will be in the stellar core, whereas the star's outer edge will be barely resolved. However, I want to investigate the hydrodynamical factors that dominate the star's outer layers in order to gain meaningful insights into the mass transfer process. To achieve that, I replace the stellar core with a single mass point, because the interior of the Roche lobe filling star barely affects the dynamics of the outer layers on the short-dynamical timescales associated with \ac{rlof} \citep{deupree2005structure}. This technique not only provides higher resolution of the outer layers but also helps to circumvent computational run time constraints by using less particles. This procedure is coded in the standard AMUSE routine called $star\_to\_sph.py$.
+Because of the usage of equal-mass particles and the high concentration of stellar cores, the majority of the particles, and therefore the maximum resolution, will be in the stellar core, whereas the star's outer edge will be barely resolved. However, I want to investigate the hydrodynamical factors that dominate the star's outer layers in order to gain meaningful insights into the mass transfer process. To achieve that, I replace the stellar high density interior with a single mass point, i.e. core particle, because the interior of the Roche lobe filling star barely affects the dynamics of the outer layers on the short-dynamical timescales associated with \ac{rlof} \citep{deupree2005structure}. This technique not only provides higher resolution of the outer layers but also helps to circumvent computational run time constraints by using less particles. This procedure is coded in the standard AMUSE routine called $star\_to\_sph.py$.
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.9\textwidth]{Thesis/graphs/ROLF_density_profile.pdf}
-    \caption{Radial density profile of the  $\xi$ Tau outer component at the onset of \ac{rlof} (blue line). MESA's 1D density profile of the tertiary is shown by the solid blue line. The shaded region represents 99.9\% of the star's enclosed mass. The dotted lines depict \ac{sph} models with varied core masses, M$_{core}$, which correspond to fractions of 0.1, 0.255, 0.5, and 0.75 of the overall mass of 5.5 M$_{\odot}$, while the larger points correspond to core particle densities, respectively.}
+    \caption{Radial density profile of the  $\xi$ Tau outer component at the onset of \ac{rlof} (blue line). MESA's 1D density profile of the tertiary is shown by the solid blue line. The shaded region represents 99.9\% of the star's enclosed mass. The dotted lines depict \ac{sph} models with varied core particle masses, M$_{core}$. The core particles' mass correspond to fractions of 0.1, 0.255, 0.5, and 0.75 of the overall mass of 5.5 M$_{\odot}$, respectively. The core particle of each model is depicted by a larger point at it respective color.}
     \label{fig:stellar_density_ROLF}
 \end{figure}
 The core particle's mass is unrelated to the mass of the hydrogen-exhausted stellar core, but rather a solution to the computational challenges of modeling big stars without changing the stellar envelope's behavior. Furthermore, it as a pure gravitational point mass with no pressure or internal energy. I investigate core masses corresponding to different percentages of the star's mass at the onset of \ac{rlof}, which are listed in \cref{tab:core_masses_ROLF}. 
@@ -91,7 +91,7 @@ Low-mass, thus cold, stars have convective envelopes during their evolution, whi
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.9\textwidth]{Thesis/graphs/density_profile_radiative_envelope.pdf}
-    \caption{Radial density profile of the  $\xi$ Tau outer component at $t=78.3$ Myr (blue line), when the star is in its helium-burning phase and has a fully radiative envelope. MESA's 1D density profile of the tertiary is shown by the solid blue line. The shaded region represents 99.9\% of the star's enclosed mass. The dotted lines depict \ac{sph} models with varied core masses, M$_{core}$, which correspond to fractions of 0.1, 0.255, 0.5, and 0.75 of the overall mass of 5.5 M$_{\odot}$, while the larger points correspond to core particle densities, respectively.}
+    \caption{Radial density profile of the  $\xi$ Tau outer component at $t=78.3$ Myr (blue line), when the star is in its helium-burning phase and has a fully radiative envelope. MESA's 1D density profile of the tertiary is shown by the solid blue line. The shaded region represents 99.9\% of the star's enclosed mass. The dotted lines depict \ac{sph} models with varied core particle masses, M$_{core}$. The core particles' mass correspond to fractions of 0.1, 0.255, 0.5, and 0.75 of the overall mass of 5.5 M$_{\odot}$, respectively. The core particle of each model is depicted by a larger point at it respective color.}
     \label{fig:density_profile_radiative}
 \end{figure}
 The density within a convective envelope falls of with pressure $\rho \propto P^{1/\gamma_{ad}}$, see \cref{eq:adiabatic_eos}. If the envelope is stable against convection, the density gradient must vary more steeply with pressure than for an adiabatic change by definition. This means that radiative envelopes are less dense in the outer layers and more centrally concentrated than convective envelopes \cite{pols2011stellar}. This is reflected in \cref{fig:density_profile_radiative}, where I plot the tertiary's radial density profile at $t=78.3$ Myr, when the star is in its helium-burning phase and has a fully radiative envelope, see \cref{fig:kippen_plot}.
@@ -102,9 +102,3 @@ The problematic steepness of the density profile becomes more severe for high-ma
 
 In conclusion, the method is preferable for modeling low- and intermediate-mass stars with convective envelopes. For high-mass stars, even if the thermodynamic properties of the gas are defined properly, the intrinsic steepness of the density profile will remain.  Hence, a very high number of \ac{sph} particles are needed to resolve the stellar envelope, which result in very long computational times. 
 
-
-
-
-\begin{comment}
-    This parameter will be important in order to adjust correctly thermodynamic properties of the gas inside the softened zone.
-\end{comment}

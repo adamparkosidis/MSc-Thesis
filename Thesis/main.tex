@@ -151,7 +151,7 @@
 {\large  \emph{\today}}\\ % month + year in which the thesis was concluded
 %\DTMlangsetup{showdayofmonth=true}
 {\large  \emph{60 ECTS}}\\ % 'this many' ects that are rewarded for the thesis
-{\large  \emph{01/11/2022 - 30/07/2023}}\\[1.8cm] % period in which the research was carried out
+{\large  \emph{01/11/2022 - 31/07/2023}}\\[1.8cm] % period in which the research was carried out
 
 % -----
 % Supervisor, etc.
@@ -168,7 +168,7 @@
 ~
 \begin{minipage}{0.4\textwidth}
 \begin{flushright} \large
-\emph{Examiners} \\
+\emph{Examiners:} \\
 \large{Dr. Silvia Toonen} \\
 \large{Dr. Oliver Porth} % Examiner's Name
 \end{flushright}
@@ -208,40 +208,27 @@
 \newpage
 \thispagestyle{empty}
 \mbox{}
-\newpage
+%\newpage
 
 \listoffigures
 
 \newpage
 \thispagestyle{empty}
 \mbox{}
-\newpage
+%\newpage
 
 \listoftables
 
-\newpage
-\thispagestyle{empty}
-\mbox{}
-\newpage
+%\newpage
+%\thispagestyle{empty}
+%\mbox{}
+%\newpage
 
 \mbox{}
 \thispagestyle{empty}
 \printacronyms[include-classes=abbrev,name=List of Abbreviations]
-
-
 }
 
-
-
-
-
-
-%\DeclareAcronym{he}{
-%  short=HE,
-%  long=Hydrostatic Equilibrium,
-%}
-
-%\end{comment}
 
 \newpage
 \thispagestyle{empty}
@@ -264,15 +251,13 @@
 
 \input{Thesis/5.Discussion_Conclusions/Intro_chapter_5}
 
-\appendix
-
-\input{Thesis/Appendix}
+\input{Thesis/Acknowledgements}
 
 \newpage
 
 \bibliographystyle{plainnat}
 \bibliography{refs}
-
+\input{Thesis/Appendix}
 %## IMPORTANT#############################################
 \acuseall
 %## IMPORTANT#############################################

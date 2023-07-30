@@ -1,36 +1,9 @@
-\chapter{Simulations \& Results}\label{simulations}
+\chapter{Results}\label{simulations}
 
 \epigraph{The consciousness of AC encompassed all of what had been a Universe and brooded over what was now Chaos. Step by step, it must be done. And AC said, "LET THERE BE LIGHT!"And there was light--”}{Isaac Asimov}
 
+In this chapter, I present the results of the simulations listed in \cref{tab:simulations_settings}. First I I discuss model number 1 and highlight some points that are similar for all models. In \cref{sec:resolution}, I speculate over the simulations' resolution and its effect on the simulations' outcome. In the next section, I explicitly compare models 1 and 4, to investigate the effect of the accretion, see \cref{sec:goal}. Finally, in the last section, I compare models 1, 2 and 3 to examine the effect of the initial mutual inclination between the two orbits, see \cref{sec:goal}.
 
-Mass transfer in hierarchical triple
-systems and more specifically, the case of \ac{rlof} by the outer star is expected to be considerably different than mass transfer in an ordinary binary system. One reason is that the mass cannot simply be accreted by the inner
-object, but may be expelled via a slingshot effect due to the inner binary rotation. During mass transfer, the inner binary evolves as well, and both stars interact with the gas provided by the outer star and may accrete part of it. The non-accreted material may form a circumbinary disk or being expelled from the system, carrying away angular momentum, see \cref{sub:orbit_evol_mass_loss}. Simultaneously, orbital angular momentum exchange may influence the eccentricity of the inner orbit through the Lidov-Kozai cycles, see \cref{sub:lidov_kozai}. As a result, the semi-major axes ratio of the two orbits is expected to change, potentially making the system unstable, see \cref{sub:stability_triples}, increasing close encounters and even result to stellar mergers \citep{antonini2017binary,silsbee2017lidov,vigna2021massive}.
-
-I perform in total four simulations. In order to include accretion, I use sink particles which comove with the point masses representing the inner binary stars. Each sink has a characteristic sink radius, which defines the size of the accretion region around the position of each star. If a \ac{sph} particle finds its position inside this sink radius, the particle is accreted by the sink. Hence, the \ac{sph} particle's mass and momentum are added to the sink particle, which updates the mass and velocity of the star in the computational domain.
-
-The simulations are divided into two groups based on the sink particles' accretion radii, see \cref{tab:simulations_settings}. In the first case, the accretion radii are four times larger than the physical stellar radii. These accretion radii are slightly smaller than the Roche lobe radii of the inner binary components as they defined by the initial configuration, see inner Roche lobes in \cref{fig:triple_equop}. Here, I approximate the case of maximum accretion. In the second case, the accretion radii correspond to the physical radii of the binary components effectively representing the case of minimum accretion. As a result, the first three simulations investigate the effect of the initial mutual inclination between the two orbits, see \cref{sec:goal}, while a comparison between simulations 1 with 4, the effect of accretion, see \cref{sec:goal}. 
-
-%Finally, I perform one more simulation, number 5 in \cref{tab:simulations_settings}, which effectively corresponds to a retrograde rotation of the inner orbit with respect to the outer orbit.
-
-\begin{table}[H]
-    \centering
-    \begin{tabular}{| c | c | c |}
-     \hline
-     &Mutual Inclination, $i_{mut}$ & Accretion radius \\
-    \hline
-     1&$0^{\circ}$ & $R_{sink} = 4R_{\star}$\\
-     2&$20^{\circ}$ & $R_{sink} = 4R_{\star}$ \\
-     3&$69^{\circ}$ & $R_{sink} = 4R_{\star}$ \\
-     \hline
-     4&$0^{\circ}$ & $R_{sink} = R_{\star}$ \\
-     %5&$180^{\circ}$ & $R_{sink} = R_{\star}$ \\
-     \hline
-    \end{tabular}
-    \caption{ Varying parameters of the twelve simulations performed.}
-\label{tab:simulations_settings}
-\end{table}
-In all models, I start the coupled gravity-hydrodynamics simulations, when the radius of the star exceeds its Roche lobe, $R_{\star} = 1.1 \times R_L$, see \cref{eq:roche_lobe}, effectively increasing the average mass-loss rate, see \cref{eq:mass_loss_rate_anal}, of the tertiary. On one hand,  all consecutive rates of change of orbital parameters are overestimated. On the other hand, I better resolve the process of \ac{rlof}. Thus, the rates of change should be interpreted qualitatively, but their between relations can be reliably examined.
 
 \begin{comment}
     

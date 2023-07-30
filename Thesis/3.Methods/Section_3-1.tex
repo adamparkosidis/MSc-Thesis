@@ -1,9 +1,9 @@
 \section{Stellar evolution}\label{sec:stellar_evolution}
 
 The stellar evolution calculations in this work are performed using the normal AMUSE parameters for MESA, with solar metallicity as the input.
-MESA allows me to track the independent evolution of the triple system components and obtain estimations of their properties at the beginning of \ac{rlof}. In this work, I allow the tertiary to evolve until $R_{stop} = 1.1 \times R_{L}$, see \cref{eq:roche_lobe}. The consequence of this choice will be discussed in detail in \cref{simulations}.
+MESA allows me to track the independent evolution of the triple system components and obtain estimations of their properties at the beginning of \ac{rlof}. In this work, I allow the three stars of the system to evolve until the tertiary overfill it's Roche lobe, such as $R_{stop} = 1.1 \times R_{L}$, see \cref{eq:roche_lobe}. The consequence of this choice will be discussed in detail in \cref{simulations}.
 
-By the time the outer star approaches the radius of its Roche lobe, all three stars have lost some mass, while the tertiary's radius is much bigger than when it was formed. In order to accurately evaluate the Roche lobe sizes,  I need to estimate the masses of the stars at the \ac{rlof} moment. Unfortunately, $\xi$ Tau's age is not known, but mass-loss via winds during the main sequence is expected to be unimportant for low- and intermediate- mass stars, see \cref{sub:winds}.
+By the time the outer star approaches the radius of its Roche lobe, all three stars have lost some mass via stellar winds, while the tertiary's radius is much bigger than when it was formed. In order to accurately evaluate the Roche lobe sizes, I need to estimate the masses of the stars at the \ac{rlof} moment. Unfortunately, $\xi$ Tau's age is not known, but mass-loss via winds during the main sequence is expected to be unimportant for low- and intermediate- mass stars, see \cref{sub:winds}.
 
 Despite that, I track the evolution of the tertiary's mass and radius profile. As expected, radiation-driven mass-loss proved negligible in this mass regime. For cold winds, I utilize Reimer's, see \cref{eq:reimer}, and Blocker's, see \cref{eq:blocker}, mass-loss prescriptions using commonly used scaling factors of $\eta = 0.5$ and $\eta = 0.1$, respectively. 
 \begin{figure}[H]
@@ -29,7 +29,7 @@ In \cref{fig:HR_ROLF}, I present the evolution of the tertiary on the \ac{hrd} u
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.9\textwidth]{Thesis/graphs/HR_1-1ROLF.pdf}
-    \caption{Evolution of 5.5 M$_{\odot}$ at solar metallicity until the moment of \ac{rlof}. \ac{zams} and \ac{tams} are noted by black circles, while the start and end of helium burning by black squares. The evolutionary phases have categorized in different colors similar to \cref{fig:HR_evolution}. I calculate the track using MESA \citep{paxton2010modules,paxton2013modules,paxton2015modules,paxton2019modules}. The dashed lines show lines of constant radii by means of the Stefan–Boltzmann law.}
+    \caption{Evolution of 5.5 M$_{\odot}$ at solar metallicity until the moment of \ac{rlof}. \ac{zams} and \ac{tams} are noted by black circles, while the start and end of helium burning by black squares. The evolutionary phases are categorized in different colors similar to \cref{fig:HR_evolution}. I calculate the track using MESA \citep{paxton2010modules,paxton2013modules,paxton2015modules,paxton2019modules}. The dashed lines show lines of constant radii by means of the Stefan–Boltzmann law.}
     \label{fig:HR_ROLF}
 \end{figure}
 \begin{table}[H]
@@ -45,16 +45,16 @@ In \cref{fig:HR_ROLF}, I present the evolution of the tertiary on the \ac{hrd} u
     \caption{ $\xi$ Tau parameters at the beginning of \ac{rlof}. From top to bottom the tertiary's mass, radius, luminosity and age.}
     \label{tab:tertiary_param_ROLF}
 \end{table}
-The tertiary is expected to overflow its Roche lobe during the early \ac{agb} phase, after helium exhaustion, leading to a type C mass transfer. Hence, I expect that the envelope will be convective, see \cref{sec:single_star_evolution}.
+The tertiary overflows its Roche lobe during the early \ac{agb} phase, see \cref{fig:HR_ROLF}, after helium exhaustion, leading to a type C mass transfer. \cref{fig:HR_ROLF} shows that when \ac{rlof} occurs, $T_{eff} < 10^{3.7} K$. For such low temperature the envelope's opacity can be high enough so that that the later will be unstable against convection, see \cref{sec:convection}. 
 
-In order to verify that, I present a Kippenhahn diagram of the tertiary, see \cref{fig:kippen_plot}. This diagram displays the structural evolution of the star from the core to the photosphere. The vertical axis represents the position within the star in terms of enclosed mass and the horizontal axis represents the number of the models, which are translated to stellar age (hence the x-axis is not linear). In this diagram, one can see how different regions are discerned: The white parts are the radiative regions, the stripped parts represent the convective regions, and the variation of the color represent the intensity of the energy generation at various regions in arbitrary units. Darker color indicate that more energy is produced.
+I present a Kippenhahn diagram of the tertiary, see \cref{fig:kippen_plot}. This diagram displays the structural evolution of the star from the core to the photosphere. The vertical axis represents the position within the star in terms of enclosed mass and the horizontal axis represents the number of the models, which are translated to stellar age (hence the x-axis is not linear). In this diagram, one can see how different regions are discerned: The white parts are the radiative regions, the stripped parts represent the convective regions, and the variation of the color represent the intensity of the energy generation at various regions in arbitrary units. Darker color indicate that more energy is produced.
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.9\textwidth]{Thesis/graphs/Kippen_ROLF_Schw.pdf}
     \caption{Kippenhahn diagram of $\xi$ Tau outer component until the onset of \ac{rlof} using Schwarzwild criterion, see \cref{eq:Schwarzwild_criterion}. The vertical axis represents the position within the star in terms of enclosed mass and the horizontal axis represents the number of the models which are translated to stellar age. The white parts are radiative regions, the stripped parts represent convective regions, and the variation of the color represent the intensity of the energy generation at various regions in arbitrary units. Darker color indicate that more energy is produced. I create the graph using MESA \citep{paxton2010modules,paxton2013modules,paxton2015modules,paxton2019modules}.}
     \label{fig:kippen_plot}
 \end{figure}
-At the moment of \ac{rlof}, the convective envelope has penetrated deep inside the star close to the actual core. Hence, in this case, convection defines the mechanical structure of the envelope. This is critical for the 3D hydrodynamical model and it is discussed in detail in \cref{sec:1D_to_3D}. 
+\cref{fig:kippen_plot} shows that at the moment of \ac{rlof}, the convective envelope has penetrated deep inside the star close to the actual core. Hence, convective mixing is expected to enrich the outer layers of the star with metal-rich material. Additionally, in this case, convection defines the mechanical structure of the envelope. This is critical for the 3D hydrodynamical model and it is discussed in detail in \cref{sec:1D_to_3D}. 
 
 Given the parameters in \cref{tab:tertiary_param_ROLF}, I also calculate the relevant characteristic timescales of the tertiary, see \cref{sec:timescales}, which are listed in \cref{tab:tertiary_timescale_ROLF}.
 \begin{table}[H]

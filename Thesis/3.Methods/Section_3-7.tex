@@ -1,0 +1,32 @@
+\section{Simulations}\label{simulations}
+
+Mass transfer in hierarchical triple
+systems and more specifically, the case of \ac{rlof} by the outer star is expected to be considerably different than mass transfer in an ordinary binary system. One reason is that the mass cannot simply be accreted by the inner
+objects, but may be expelled via a slingshot effect due to the inner binary rotation. During mass transfer, the inner binary evolves as well, and both stars interact with the gas provided by the outer star and may accrete part of it. The non-accreted material may form a circumbinary disk or being expelled from the system, carrying away angular momentum, see \cref{sub:orbit_evol_mass_loss}. Simultaneously, orbital angular momentum exchange may influence the eccentricity of the inner orbit through the Lidov-Kozai cycles, see \cref{sub:lidov_kozai}. As a result, the semi-major axes ratio of the two orbits is expected to change, potentially making the system unstable, see \cref{sub:stability_triples}, increasing close encounters and even result to stellar mergers \citep{antonini2017binary,silsbee2017lidov,vigna2021massive}.
+
+I perform in total four simulations. In order to include accretion, I use sink particles which comove with the point masses representing the inner binary stars. Each sink has a characteristic sink radius, which defines the size of the accretion region around the position of each star. If a \ac{sph} particle finds its position inside this sink radius, the particle is accreted by the sink. Hence, the \ac{sph} particle's mass and momentum are added to the sink particle, which updates the mass and velocity of the star in the computational domain.
+
+The simulations are divided into two groups based on the sink particles' accretion radii, see \cref{tab:simulations_settings}. In the first case, the accretion radii are four times larger than the physical stellar radii. The stellar radii are calculated by MESA as each star in the system evolves until the tertiary fill its Roche lobe, see \cref{sec:stellar_evolution}. These accretion radii are slightly smaller than the Roche lobe radii of the inner binary components as they defined by the initial configuration, see inner Roche lobes in \cref{fig:triple_equop}. Here, I approximate the case of maximum accretion. In the second case, the accretion radii correspond to the physical radii of the binary components effectively representing the case of minimum accretion.
+
+%Finally, I perform one more simulation, number 5 in \cref{tab:simulations_settings}, which effectively corresponds to a retrograde rotation of the inner orbit with respect to the outer orbit.
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{| c | c | c |}
+     \hline
+     &Mutual Inclination, $i_{mut}$ & Accretion radius \\
+    \hline
+     1&$0^{\circ}$ & $R_{sink} = 4R_{\star}$\\
+     2&$20^{\circ}$ & $R_{sink} = 4R_{\star}$ \\
+     3&$69^{\circ}$ & $R_{sink} = 4R_{\star}$ \\
+     \hline
+     4&$0^{\circ}$ & $R_{sink} = R_{\star}$ \\
+     %5&$180^{\circ}$ & $R_{sink} = R_{\star}$ \\
+     \hline
+    \end{tabular}
+    \caption{ Varying parameters of the twelve simulations performed.}
+\label{tab:simulations_settings}
+\end{table}
+In all models, I start the coupled gravity-hydrodynamics simulations, when the radius of the star exceeds its Roche lobe, $R_{\star} = 1.1 \times R_L$, see \cref{eq:roche_lobe}, effectively increasing the average mass-loss rate, see \cref{eq:mass_loss_rate_anal}, of the tertiary. On the one hand, all consecutive rates of change of orbital parameters are overestimated. On the other hand, I better resolve the process of \ac{rlof}. Thus, the rates of change presented in the next chapter, should be interpreted qualitatively, but their between relations can be reliably examined.
+
+The simulations cover an eight-years period, which corresponds to $\approx 20$ orbits of the tertiary. After $t=8$ yr, the system enters the unstable regime, see \cref{eq:stability_regime}, and thus I terminate the simulations. Every $\delta t_{bridge}=0.1$ day, see \cref{tab:codes_settings}, I extract the mass, position and velocity of each particle in the computational domain. These properties are used to calculate the orbital parameters of the inner and the outer orbits. More specifically, the semi-major axis and eccentricity of the inner orbit are calculated using the relative position and velocity of the inner binary components. Furthermore, the relative position and velocity of the inner binary center of mass and the tertiary are used to determine the semi-major axis and eccentricity of the outer orbit. The calculations are based on \cref{eq:semi-major_axis} and \cref{eq:eccentricity}, where $M = M_1 + M_2$ and $M = M_1 + M_2 + M_3$ for orbital parameters of the inner and outer orbit, respectively. Finally, I calculate the outer orbit's relative inclination with respect to the inner orbit, i.e. mutual inclination, as the angle between their respective orbital angular momentum vectors.
